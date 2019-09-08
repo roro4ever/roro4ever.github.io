@@ -7,18 +7,18 @@
   
   <title>博文测试 | 桑园巷</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。">
+  <meta name="description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。折腾了一天终于能够 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱进行替换，期间尝试了 github 的选项： keep my email address private，这个选项也对后后面">
 <meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博文测试">
 <meta property="og:url" content="https://roro4ever.github.io/2019/09/09/博文测试/index.html">
 <meta property="og:site_name" content="桑园巷">
-<meta property="og:description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。">
+<meta property="og:description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。折腾了一天终于能够 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱进行替换，期间尝试了 github 的选项： keep my email address private，这个选项也对后后面">
 <meta property="og:locale" content="Chinese">
-<meta property="og:updated_time" content="2019-09-08T14:38:50.573Z">
+<meta property="og:updated_time" content="2019-09-08T16:28:57.359Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博文测试">
-<meta name="twitter:description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。">
+<meta name="twitter:description" content="第一篇博文用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。折腾了一天终于能够 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱进行替换，期间尝试了 github 的选项： keep my email address private，这个选项也对后后面">
   
     <link rel="alternate" href="/atom.xml" title="桑园巷" type="application/atom+xml">
   
@@ -91,7 +91,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="第一篇博文"><a href="#第一篇博文" class="headerlink" title="第一篇博文"></a>第一篇博文</h1><p>用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。</p>
+        <h1 id="第一篇博文"><a href="#第一篇博文" class="headerlink" title="第一篇博文"></a>第一篇博文</h1><p>用hexo+github写博客，是一直欠下的债，从年初拖到现在9月，才终于下决心完成这个配置。<br>折腾了一天终于能够 deploy 到 github 并显示出来了。</p>
+<p>其中遇到很多障碍：</p>
+<ol>
+<li><p>Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱进行替换，期间尝试了 github 的选项： keep my email address private，这个选项也对后后面的 deploy 造成障碍，于是又关闭了该选项。</p>
+</li>
+<li><p>nodej.js 和 git 是年初安装的，现在想看看 npm 已经安全过哪些东西，于是查阅了如何查看“ npm全局安装过的包”，指令如下：<br><code>npm list -g --depth 0</code></p>
+</li>
+<li><p>安装 hexo-deployer-git 时报错：<br><code>npm install hexo-deployer-git --save</code><br>npm WARN deprecated <a href="mailto:swig@1.4.2" target="_blank" rel="noopener">swig@1.4.2</a>: This package is no longer maintained<br>npm WARN saveError ENOENT: no such file or directory, open ‘/Users/irene.liu/package.json’<br>npm WARN enoent ENOENT: no such file or directory, open ‘/Users/irene.liu/package.json’<br>npm WARN irene.liu No description<br>npm WARN irene.liu No repository field.<br>npm WARN irene.liu No README data<br>npm WARN irene.liu No license field.</p>
+</li>
+</ol>
+<p>原因：必须在hexo初始化的那个目录下执行安装！</p>
+<ol start="4">
+<li>hexo g 命令后出错：<br>FATAL can not read a block mapping entry; a multiline key may not be an implicit key at line 8, column 12:<br>description:<br>^<br>YAMLException: can not read a block mapping entry; a multiline key may not be an implicit key at line 8, column 12:<br>description:</li>
+</ol>
+<p>原因：yml 配置文件中，键值对的冒号后少了空格</p>
+<ol start="5">
+<li>hexo g -d 后，网页显示404</li>
+</ol>
+<p>原因: github 库中缺少 index .html<br>按照  <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a> 的步骤，是手工在 github 的库中创建了 index.html， 因此后续的 hexo deploy 没有问题。<br>另一种解决办法是<br><code>npm install hexo-generator-index --save</code>，也会生成 index.html 文件。</p>
+<ol start="6">
+<li>在 <code>_config.yml</code> 中用中文书写 title 和 subtitle ，显示为乱码。<br>原因： _config.yml 使用 utf-8 编码保存即可。</li>
+</ol>
+<p>最后还有一些疑惑，比如：<br>今天花了很大功夫配置SSH key 来访问 github，但后续 hexo g -d 时弹出账号密码框。</p>
 
       
     </div>
