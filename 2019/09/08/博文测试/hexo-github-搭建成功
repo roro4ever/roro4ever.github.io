@@ -5,16 +5,20 @@
   
 
   
-  <title>桑园巷</title>
+  <title>Hexo + gitHub 搭建成功 | 桑园巷</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
-<meta property="og:type" content="website">
-<meta property="og:title" content="桑园巷">
-<meta property="og:url" content="https://roro4ever.github.io/index.html">
+  <meta name="description" content="用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。 本地搭建，参考了 超详细Hexo+Github Page搭建技术博客教程，以及 Hexo的帮助文档。具体搭建过程不再复述。 折腾了一天，终于能 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo + gitHub 搭建成功">
+<meta property="og:url" content="https://roro4ever.github.io/2019/09/08/博文测试/hexo-github-搭建成功">
 <meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。 本地搭建，参考了 超详细Hexo+Github Page搭建技术博客教程，以及 Hexo的帮助文档。具体搭建过程不再复述。 折腾了一天，终于能 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试">
 <meta property="og:locale" content="Chinese">
+<meta property="og:updated_time" content="2019-11-16T12:03:59.338Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="桑园巷">
+<meta name="twitter:title" content="Hexo + gitHub 搭建成功">
+<meta name="twitter:description" content="用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。 本地搭建，参考了 超详细Hexo+Github Page搭建技术博客教程，以及 Hexo的帮助文档。具体搭建过程不再复述。 折腾了一天，终于能 deploy 到 github 并显示出来了。 其中遇到很多障碍：  Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试">
   
     <link rel="alternate" href="/atom.xml" title="桑园巷" type="application/atom+xml">
   
@@ -65,9 +69,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-博文测试" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-博文测试" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/08/博文测试/hexo-github-搭建成功" class="article-date">
   <time datetime="2019-09-08T14:36:38.000Z" itemprop="datePublished">2019-09-08</time>
@@ -80,8 +82,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/08/博文测试/hexo-github-搭建成功">Hexo + gitHub 搭建成功</a>
+    <h1 class="article-title" itemprop="name">
+      Hexo + gitHub 搭建成功
     </h1>
   
 
@@ -134,11 +136,9 @@
     </footer>
   </div>
   
-</article>
-
-
+    
   
-
+</article>
 
 </section>
         
