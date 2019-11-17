@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>1.3 计算机网络的分类</title>
+    <url>/2019/11/17/1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="1-3-1-按拓扑类型"><a href="#1-3-1-按拓扑类型" class="headerlink" title="1.3.1 按拓扑类型"></a>1.3.1 按拓扑类型</h2><p>网络拓扑：  指网络的形状，或者说网络在物理上的连通性。</p>
+<p>网络拓扑包括：</p>
+<ul>
+<li>星型  </li>
+<li>总线型</li>
+<li>环形</li>
+<li>树形</li>
+<li>混合型</li>
+<li>网型<a id="more"></a>
+
+</li>
+</ul>
+<p>选择哪一种拓扑类型，与传输介质、介质访问控制方法有关。<br>选择网络拓扑类型时，应考虑以下因素：  </p>
+<ul>
+<li>可靠性：保证所有的数据能够准确送达目的节点。</li>
+<li>可维护性：便于故障检测、故障隔离</li>
+<li>费用：信道费用、安装费用</li>
+<li>灵活性：便于添加、删除节点，易于配置拓扑结构</li>
+<li>响应时间：尽可能短</li>
+<li>吞吐量：尽可能大</li>
+</ul>
+<p>网络拓扑根据通信子网中的信道类型可分为：</p>
+<ul>
+<li>点对点信道：每条信道连接一对节点。包括：  <ul>
+<li>星型</li>
+<li>环形</li>
+<li>树形</li>
+<li>网型</li>
+</ul>
+</li>
+<li>广播信道：多个网络节点共享一个公共信道。<ul>
+<li>总线型</li>
+<li>环形</li>
+<li>树形</li>
+<li>无线通信</li>
+<li>卫星通信</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-星型拓扑"><a href="#1-星型拓扑" class="headerlink" title="1.星型拓扑"></a>1.星型拓扑</h4><p>星型拓扑，是由<strong>中央节点</strong>，和通过“点对点通信链路”连接到中央节点的<strong>周边节点</strong>，组成。</p>
+<p>中央节点往往是一个集线器(hub)。</p>
+<p>集中式通信控制策略：<br>中央节点执行集中式通信控制策略，因此中央节点的负担较重，而周边节点处理通信的负担很轻。</p>
+<p>优点：</p>
+<ul>
+<li>控制简单：任一周边节点只与中央节点相连，因此介质访问控制方法简单，访问协议简单，网络监控简单。</li>
+<li>故障检测、隔离简单：单个周边连接点的隔离很容易，便于检测故障，即使发生故障，也可以直接隔离，不会影响其他节点。</li>
+<li>方便服务：中央节点可以方便的对周边节点提供服务，以及重新配置网络。</li>
+</ul>
+<p>缺点：  </p>
+<ul>
+<li>电缆长度、安装量客观：</li>
+<li>中央节点负担太重，形成瓶颈：一旦中央节点故障，则全网瘫痪。</li>
+<li>周边节点的分布处理能力低下</li>
+</ul>
+<h4 id="总线拓扑"><a href="#总线拓扑" class="headerlink" title="总线拓扑"></a>总线拓扑</h4><p>总线拓扑：所有节点都接入一条传输介质上，该传输介质作为共享的公共信道——称为总线。</p>
+<p>分布式通信控制策略：<br>任何一个节点发送的数据都会沿着总线传输，其他节点都可以接受该数据。<br>为了防止多个站点同时发送数据造成信道拥堵，总线拓扑采用分布式通信控制策略：一个时点只允许一个节点发送数据。</p>
+<p>优点：  </p>
+<ul>
+<li>需要的电缆数量少：</li>
+<li>结构简单，又是无源工作，可靠性较高：</li>
+<li>增加、删除节点比较方便</li>
+</ul>
+<p>缺点：  </p>
+<ul>
+<li>总线的传输距离有限，网络规模受限</li>
+<li>故障诊断、隔离较困难</li>
+<li>分布式通信控制协议不能保证数据的及时传输，不具有实时功能，业务量越大网络速度就越慢。</li>
+<li>节点必须是智能的，要有介质访问控制功能，增加了站点的硬件和软件开销。</li>
+</ul>
+<h4 id="环形拓扑"><a href="#环形拓扑" class="headerlink" title="环形拓扑"></a>环形拓扑</h4><p>环形拓扑：由节点和节点间的链路构成的一个闭合环。  </p>
+<p>工作方式：<br>每个节点可以接受来自于链路的数据，并可以将数据通过链路发送到下一个节点。<br>链路可以是单向的（数据总是沿着固定方向传输），也可以是双向的（数据传输方向不固定）。<br>数据是以分组的形式发送的，每个分组除了数据，还有一些控制信息，包括源和目的地址。</p>
+<p>环形拓扑采用分布式通信控制策略。</p>
+<p>优点：  </p>
+<ul>
+<li>电缆长度短：其长度与总线型拓扑一样</li>
+<li>可使用光纤： </li>
+<li>所有节点都公平的访问网络的其他部分（通信子网、资源子网），网络性能稳定。</li>
+</ul>
+<p>缺点：  </p>
+<ul>
+<li>任一节点故障会引起全网故障：</li>
+<li>增加、删除节点较复杂</li>
+<li>介质访问控制协议采用令牌传递，在负载很低时，信道利用率就很低。</li>
+</ul>
+<h4 id="树形拓扑"><a href="#树形拓扑" class="headerlink" title="树形拓扑"></a>树形拓扑</h4><p>树形拓扑：可以看做是总线型和星型的结合，根节点的分叉，就像星型拓扑，每条分支上有多个节点共享该信道。</p>
+<p>工作方式：<br>某一个结点发出数据后，会发给根节点，根节点收到数据后在全网广播。目的节点收到广播数据后，复制一份给自己处理。</p>
+<p>优点：  </p>
+<ul>
+<li>易于扩展：增加新分支、新节点都比较容易。</li>
+<li>易于隔离故障：隔离某分支、某个结点都比较容易。</li>
+</ul>
+<p>缺点：<br>可靠性比较差：各节点对树根的依赖太大，如果树根发生故障，则全网瘫痪。其可靠性类似于星型拓扑。</p>
+<h4 id="混合型拓扑"><a href="#混合型拓扑" class="headerlink" title="混合型拓扑"></a>混合型拓扑</h4><p>将前述的几种拓扑结构混合在一起组网，形成混合型拓扑结构。</p>
+<p>比如：  </p>
+<ul>
+<li>星型拓扑+ 总线型拓扑 = 星总拓扑</li>
+<li>星型拓扑+ 环形拓扑 = 星环拓扑</li>
+</ul>
+<p>混合型拓扑的总线、环形上的节点往往是集中器，连接了若干主机。</p>
+<p>优点：  </p>
+<ul>
+<li>故障诊断、隔离较方便：通过诊断、隔离某个集中器，即可隔离该集中器子网</li>
+<li>易于扩展：要增加主机时，一种办法是在总线、环形上增加集中器，另一种办法是扩展集中器的接入口</li>
+<li>安装方便：总线、环形只要连通这些集中器即可，和安装电话系统相似。</li>
+</ul>
+<p>缺点：  </p>
+<ul>
+<li>需要智能集中器：方便网络故障自动诊断、故障节点的隔离</li>
+<li>集中器到各节点的电缆长度较长、安装量较大</li>
+</ul>
+<h4 id="网形拓扑"><a href="#网形拓扑" class="headerlink" title="网形拓扑"></a>网形拓扑</h4><p>网形拓扑：广泛的应用于广域网，而非局域网。</p>
+<p>优点：没有瓶颈，网络冗余度高，可靠性高，失效可能小。</p>
+<p>缺点：结构复杂，成本高，网络协议较复杂。</p>
+<h2 id="1-3-2-按网络交换分式"><a href="#1-3-2-按网络交换分式" class="headerlink" title="1.3.2 按网络交换分式"></a>1.3.2 按网络交换分式</h2><ul>
+<li>电路交换(Circuit Switching)：通信前，必须建立一条从发送端到目的端的物理信道，且通信期间双方始终占用该信道。类似于传统电话。</li>
+<li>报文交换(Message Switching)：信道中传输的是发送方的完整报文，无长度限制，中间节点存储-转发该报文，接收方接受完整报文。类似于送信。</li>
+<li>分组交换(Packet Switching)：也称为“包交换方式”，发送端先将报文分割为一个个等长的分组，各中间节点采用存储-转发方式传输分组到目的端，目的端再整合分组为一个完整的报文。<br>因为每个分组都很小，所以中间节点可以在内存中存储-转发分组，从而大大提高了传输速度。</li>
+</ul>
+<h2 id="1-3-3-按覆盖范围"><a href="#1-3-3-按覆盖范围" class="headerlink" title="1.3.3 按覆盖范围"></a>1.3.3 按覆盖范围</h2><p>按地理的覆盖范围分类：</p>
+<ul>
+<li>广域网（WAN,Wide Area Network，也称远程网)：分布范围几百~几千KM，可覆盖国家、洲，形成国际性的远程网络。通信子网通常是：卫星通信网、无线分组交换网、公用分组交换网。</li>
+<li>城域网(MAN, Metropolitan Area Network）：将几十公里范围内的企业、机关、公司的局域网互连在一起。</li>
+<li>局域网(LAN, Local Area Network)：覆盖极小的区域，提供高速、低误码率的高质量数据传输。</li>
+</ul>
+<h2 id="1-3-4-按网络传输技术"><a href="#1-3-4-按网络传输技术" class="headerlink" title="1.3.4 按网络传输技术"></a>1.3.4 按网络传输技术</h2><ul>
+<li>广播式：所有节点共享一个信道，所有节点都能“听到”分组，各节点根据分组的目的地址来决定是接受还是丢弃。<br>在广播式网络中，分组的目的地址有3种：单播、多播、广播。</li>
+<li>点对点式：每条物理线路连接了一对节点。如果源节点和目的节点没有直接的链路，就需要中间节点对分组存储-转发，并且可能存在多条通信线路，需要节点进行路由选择计算。</li>
+</ul>
+<p>广播式和点对点式的区别：点对点式需要“存储转发”和“路由选择”。</p>
+<p>资源子网负责信息处理，通信子网负责信息传递。</p>
+<p>PSE : packet switching exchanger，分组交换设备<br>pad: packet assembler dissassebler, 分组组装/拆卸设备<br>NCC: network control center<br>C：concentrator，集中器<br>G: gateway</p>
+<p>imp : interface message processor , 接口信息处理机，是对PSE , PAD NCC C G 的统称。</p>
+]]></content>
+      <categories>
+        <category>计算机网络原理</category>
+        <category>1.计算机网络概述</category>
+      </categories>
+      <tags>
+        <tag>网络拓扑</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机网络中容易搞混的知识点</title>
+    <url>/2019/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[<p>可以从不同的角度对网络进行区分(不同角度得到的分类可能出现重叠)。</p>
+<h4 id="按通信服务类型"><a href="#按通信服务类型" class="headerlink" title="按通信服务类型"></a>按通信服务类型</h4><ul>
+<li>面向连接服务：<pre><code>从数据交换方式来看，包括：电路交换、虚电路分组交换</code></pre></li>
+<li>无连接服务<pre><code>从数据交换方式来看，包括：报文交换、数据报分组交换</code></pre><a id="more"></a>       
+
+</li>
+</ul>
+<h4 id="按通信子网中信道类型（或者叫拓扑类型）"><a href="#按通信子网中信道类型（或者叫拓扑类型）" class="headerlink" title="按通信子网中信道类型（或者叫拓扑类型）"></a>按通信子网中信道类型（或者叫拓扑类型）</h4><ul>
+<li>广播信道：多个网络节点共享公共信道</li>
+<li>点对点信道：每条物理线路连接一对节点</li>
+</ul>
+<h4 id="按通信子网的传输方式"><a href="#按通信子网的传输方式" class="headerlink" title="按通信子网的传输方式"></a>按通信子网的传输方式</h4><p>数据传输方式：从整个通信子网看数据流。  </p>
+<p>数据在通信子网内是广播传输，还是存储转发+路由选择传输。</p>
+<ul>
+<li>广播式传输：</li>
+<li>点对点式传输：</li>
+</ul>
+<p>注意：  </p>
+<ol>
+<li>电路交换是接受后立即发送到下一个节点，网络节点无法存储数据，因此不属于点对点传输，而且电路交换占据专用物理通道，无法实现广播、多播，也不属于广播式传输。  </li>
+<li>报文交换，可以实现多播、广播，也一定会采用存储转发+路由选择，因此报文传输既可能是广播式传输，也可能是点对点式传输。</li>
+<li>分组交换，既可能是广播式传输，也可能是点对点式传输。</li>
+</ol>
+<p>结论：通信子网的传输方式与中间节点的交换技术并无关联。</p>
+<h4 id="按中间节点的交换技术"><a href="#按中间节点的交换技术" class="headerlink" title="按中间节点的交换技术"></a>按中间节点的交换技术</h4><p>就单个中间节点来看。</p>
+<p>中间节点并不关心数据内容，只是提供一种交换能力：将数据从一个节点传到另一个节点。</p>
+<ul>
+<li>电路交换：</li>
+<li>报文交换：</li>
+<li>分组交换<ul>
+<li>虚电路分组交换</li>
+<li>数据报分组交换</li>
+</ul>
+</li>
+</ul>
+<h6 id="端到端"><a href="#端到端" class="headerlink" title="端到端"></a>端到端</h6><p>端到端，有2种理解：</p>
+<ol>
+<li>源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。</li>
+<li>源主机的某端口-目的主机的某端口：专用于传输层。</li>
+</ol>
+<h6 id="数据包，数据报"><a href="#数据包，数据报" class="headerlink" title="数据包，数据报"></a>数据包，数据报</h6><p>数据包：packet，即分组。</p>
+<p>数据报：datagram ,即无连接服务中的分组。</p>
+<p>一个数据报，包含了一个TCP段，它可能只有一个分组，也可能被分片成多个分组。</p>
+<p>换句话说，MSS数据部分，可能被分片成多个分组。</p>
+<h6 id="ovehead-，额外开销，虚耗"><a href="#ovehead-，额外开销，虚耗" class="headerlink" title="ovehead ，额外开销，虚耗"></a>ovehead ，额外开销，虚耗</h6><h6 id="拥塞控制和流量控制的差异"><a href="#拥塞控制和流量控制的差异" class="headerlink" title="拥塞控制和流量控制的差异"></a>拥塞控制和流量控制的差异</h6><p>拥塞控制：防止过多的数据注入到网络中，这样可以使网络中的路由器或链路不致过载。拥塞控制所要做的都有一个前提：网络能够承受现有的网络负荷。拥塞控制是一个全局性的过程，涉及到所有的主机、路由器，以及与降低网络传输性能有关的所有因素。</p>
+<p>流量控制：指点对点通信量的控制，是端到端的问题。流量控制所要做的就是抑制发送端发送数据的速率，以便使接收端来得及接收。</p>
+]]></content>
+      <categories>
+        <category>计算机网络原理</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hexo + gitHub 搭建成功</title>
+    <url>/2019/09/08/%E5%8D%9A%E6%96%87%E6%B5%8B%E8%AF%95/hexo-github-%E6%90%AD%E5%BB%BA%E6%88%90%E5%8A%9F/</url>
+    <content><![CDATA[<p>用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。</p>
+<p>折腾了一天，终于能 deploy 到 github 并显示出来了。具体搭建过程不再复述。</p>
+<a id="more"></a>
+
+<p>本次搭建，参考了 <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a>，以及 <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo的帮助文档</a>。  </p>
+<p>其中遇到很多障碍：</p>
+<ol>
+<li><p>Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试了 github 的选项: keep my email address private。<br>结果这个选项对后面的 deploy 造成障碍，于是关闭了该选项。</p>
+</li>
+<li><p>nodej.js 和 git 是年初安装的，现在想看看 npm 已经安装过哪些东西，于是查阅了 ”如何查看 npm全局安装过的包”，指令如下：<br><code>npm list -g --depth 0</code></p>
+</li>
+<li><p>安装 hexo-deployer-git 时报错：<br><code>npm install hexo-deployer-git --save</code></p>
+</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">deprecated</span> <span class="string">swig@1.4.2:</span> <span class="string">This</span> <span class="string">package</span> <span class="string">is</span> <span class="literal">no</span> <span class="string">longer</span> <span class="string">maintained</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">saveError</span> <span class="attr">ENOENT:</span> <span class="literal">no</span> <span class="string">such</span> <span class="string">file</span> <span class="string">or</span> <span class="string">directory,</span> <span class="string">open</span> <span class="string">'/Users/irene.liu/package.json'</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">enoent</span> <span class="attr">ENOENT:</span> <span class="literal">no</span> <span class="string">such</span> <span class="string">file</span> <span class="string">or</span> <span class="string">directory,</span> <span class="string">open</span> <span class="string">'/Users/irene.liu/package.json'</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">description</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">repository</span> <span class="string">field.</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">README</span> <span class="string">data</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">license</span> <span class="string">field.</span></span><br></pre></td></tr></table></figure>
+
+<p>原因：必须在hexo初始化的那个目录下执行安装！</p>
+<ol start="4">
+<li>hexo g 命令后出错：<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">FATAL can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br><span class="line">^</span><br><span class="line">YAMLException: can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>原因：yml 配置文件中，键值对的冒号后少了空格</p>
+<ol start="5">
+<li>hexo g -d 后，网页显示404</li>
+</ol>
+<p>原因: github 库中缺少 index .html</p>
+<p>解决办法：  </p>
+<ul>
+<li>按照  <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a> 的步骤，手工在 github 的库中创建 index.html  </li>
+<li><code>npm install hexo-generator-index --save</code>，也会生成 index.html 文件。</li>
+</ul>
+<ol start="6">
+<li>在 <code>_config.yml</code> 中用中文书写 title 和 subtitle ，显示为乱码。</li>
+</ol>
+<p>解决办法： _config.yml 使用 utf-8 编码保存即可。</p>
+<p>最后还有一些疑惑，比如：<br>今天花了很大功夫配置SSH key 来访问 github，但后续 hexo g -d 时弹出账号密码框。</p>
+]]></content>
+  </entry>
+</search>
