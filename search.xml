@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>用 Hexo-Console-Rename 修改文件名</title>
+    <url>/2019/11/28/-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/%E7%94%A8-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/</url>
+    <content><![CDATA[<p>我们通常使用<code>hexo new [layout] &quot;title&quot;</code> 来新建博文，但常常会在创建博文后对又对原标题 <code>title</code> 不满意，如果仅仅修改内文标题，就会造成 <code>source/_post</code>(假设layout= post) 下的文件名 <code>oldFileName.md</code> 和内文标题 <code>title</code>不一致的情况。</p>
+<p>手工的方法是将<code>oldFilename</code> 修改为和 front-matter 中的 <code>title</code> 一致。 </p>
+<p>如果站点配置文件 _config.yml 中<code>post_asset_folder: true</code>，则需要修改 oldFileName.md 对应的 source/oldFileName 文件夹的名称。</p>
+<p>如果 <code>new_post_name: :year_:month_:date_:title.md</code> ，那么修改时更容易出错。</p>
+<p>当然，另一个解决办法是：新建新标题博文，将老博文内容复制过来，删除老博文。</p>
+<p>但总之而言，hexo 改名都不容易。</p>
+<p>好在有插件可以解决这个问题, <a href="https://github.com/timnew/hexo-console-rename" target="_blank" rel="noopener">hexo-console-rename</a> ，它可以根据 md 文件的 front-matter 中的 <code>title</code> 修改文件名，支持单个文件改名、批量文件改名等操作，我们仅需要修改 <code>title</code> 属性为我们想要的标题，再执行 hexo rename source/_post/oldFileName.md。</p>
+<p>具体用法参见 github 即可，不多废话。</p>
+<p>这里要说下几个遇到的问题。</p>
+<p>1.npm 安装后无法使用。<br>原因是 npm 安装时没有把 lib 放入 node_module/hexo-console-rename 文件夹，解决办法是新建 lib 文件夹,从 github 下载 lib 中的所有 .js 文件，手工拷入即可。</p>
+<p>2.利用 <code>hexo rename source/**/*.md</code> 对所有源文件批量改名后，会导致 <code>source/categories/index.md</code> , <code>source/tags/index.md</code>, <code>source/404/index.md</code> 这些 page layout 的 md 文件名被修改,造成这些页面无法访问，这是个 bug 。<br>解决办法：运行批量改名后，将这些 md 文件的名称改回来。</p>
+]]></content>
+      <categories>
+        <category>应用软件</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo 插入图片的多种方法</title>
     <url>/2019/11/28/hexo-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95/hexo-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>在Hexo 中插入图片，可以使用传统 Markdown 语法</p>
