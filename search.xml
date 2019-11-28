@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>在Chrome中管理同一网站的多个账号</title>
+    <url>/2019/11/28/%E5%9C%A8Chrome%E4%B8%AD%E7%AE%A1%E7%90%86%E5%90%8C%E4%B8%80%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/%E5%9C%A8chrome%E4%B8%AD%E7%AE%A1%E7%90%86%E5%90%8C%E4%B8%80%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/</url>
+    <content><![CDATA[<p>有时，我们会在同一个网站注册多个账号，即所谓的小号。  </p>
+<p>对一个网站来说，同一时刻同一浏览器只能登录一个账号，要登录另一个账号必须退出当前在线的账号。</p>
+<p>但在chrome中，可以利用<strong>用户管理</strong>实现同时登录多个账号。</p>
+<p>其原理是通过在 chrome 中建立多个<strong>用户</strong>，每个用户的数据、设置都是完全独立的，包括书签、历史、设置、插件、网页应用、Cookie等。每个用户可以独占一个Chrome窗口，这样就可以在不同的窗口（用户）中，用不同的账号同时登陆同一个网站。</p>
+<p>具体操作很简单：  </p>
+<p>1.点击右上角的头像图标<br><img src="2019-11-28-%E5%9C%A8Chrome%E4%B8%AD%E7%AE%A1%E7%90%86%E5%90%8C%E4%B8%80%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/20191128152704735_4830.png" alt></p>
+<p>2.在下拉菜单中选择“管理用户”，<br><img src="2019-11-28-%E5%9C%A8Chrome%E4%B8%AD%E7%AE%A1%E7%90%86%E5%90%8C%E4%B8%80%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/20191128152858105_5362.png" alt></p>
+<p>弹出“添加用户”、“以访客身份浏览”的界面。<br><img src="2019-11-28-%E5%9C%A8Chrome%E4%B8%AD%E7%AE%A1%E7%90%86%E5%90%8C%E4%B8%80%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/20191128161700196_30050.png" alt><br>在这里可以添加新用户，或切换到访客身份。</p>
+<p>新用户可以是本地账户(不关联google账户，数据和设置仅存储在本地)，也可以是google账户(通过gmail关联，允许将设置和数据同步到google服务器，当然也可以不同步)。</p>
+]]></content>
+      <categories>
+        <category>应用软件</category>
+      </categories>
+  </entry>
+  <entry>
     <title>1.4 数据模型</title>
     <url>/2019/11/18/1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="第四节-数据模型"><a href="#第四节-数据模型" class="headerlink" title="第四节 数据模型"></a>第四节 数据模型</h1><p>模型(model)，通过对”现实世界事物的特征“进行抽象，实现模拟。</p>
@@ -214,6 +231,10 @@
 <p>有效性：对数据是否正确的测试标准。</p>
 <p>相容性：描述同一事实的两个数据应相同，称为两个数据相容，否则两个数据不相容。比如一个人不能有2个性别。</p>
 ]]></content>
+      <categories>
+        <category>数据系统原理</category>
+        <category>第一章 数据系统概述</category>
+      </categories>
   </entry>
   <entry>
     <title>第一节 数据库基本概念</title>
