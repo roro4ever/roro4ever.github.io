@@ -248,7 +248,7 @@
 <p>相容性：描述同一事实的两个数据应相同，称为两个数据相容，否则两个数据不相容。比如一个人不能有2个性别。</p>
 ]]></content>
       <categories>
-        <category>数据系统原理</category>
+        <category>数据库系统原理</category>
         <category>第一章 数据系统概述</category>
       </categories>
   </entry>
