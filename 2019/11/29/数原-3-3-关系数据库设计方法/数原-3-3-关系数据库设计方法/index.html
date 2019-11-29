@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一、关系数据库设计过程与各级模式 关系数据库设计的各阶段，会形成数据库的各级模式。  二、概念结构设计方法 关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：   1. 建立局部信息结构  2. 将局部信息结构，合并为全局信息结构，并优化  1.ER图的表示方法 略  (1)两个实体型之间的联系 设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数原 3.3 关系数据库设计方法">
+<meta property="og:url" content="https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="一、关系数据库设计过程与各级模式 关系数据库设计的各阶段，会形成数据库的各级模式。  二、概念结构设计方法 关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：   1. 建立局部信息结构  2. 将局部信息结构，合并为全局信息结构，并优化  1.ER图的表示方法 略  (1)两个实体型之间的联系 设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-29T07:11:57.384Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数原 3.3 关系数据库设计方法">
+<meta name="twitter:description" content="一、关系数据库设计过程与各级模式 关系数据库设计的各阶段，会形成数据库的各级模式。  二、概念结构设计方法 关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：   1. 建立局部信息结构  2. 将局部信息结构，合并为全局信息结构，并优化  1.ER图的表示方法 略  (1)两个实体型之间的联系 设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>数原 3.3 关系数据库设计方法 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数原 3.3 关系数据库设计方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 10:27:00 / 修改时间：15:11:57" itemprop="dateCreated datePublished" datetime="2019-11-29T10:27:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第三章-数据库设计/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 数据库设计</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一关系数据库设计过程与各级模式">一、关系数据库设计过程与各级模式</h2>
+<p>关系数据库设计的各阶段，会形成数据库的各级模式。</p>
+<h2 id="二概念结构设计方法">二、概念结构设计方法</h2>
+<p>关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：</p>
+<ol type="1">
+<li>建立局部信息结构</li>
+<li>将局部信息结构，合并为全局信息结构，并优化</li>
+</ol>
+<h3 id="er图的表示方法">1.ER图的表示方法</h3>
+<p>略</p>
+<h4 id="两个实体型之间的联系">(1)两个实体型之间的联系</h4>
+<p>设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集A中的每 1 个实体，在实体集B中至多有 1 个实体与之联系。<br>
+反过来，实体集B中的每 1 个实体，在实体集A中至多有 1 个实体与之联系。</p>
+<h5 id="对多联系1n">1对多联系(1:N)</h5>
+<p>如果实体集A中的每 1 个实体，在实体集B中有 N 个实体与之联系。<br>
+实体集B中的每 1 个实体，在实体集A中至多有 1 个与之联系。</p>
+<h5 id="多对多联系mn">多对多联系(M:N)</h5>
+<p>如果实体集A中的每 1 个实体，在实体集B中有 N 个实体与之联系。<br>
+实体集B中的每 1 个实体，在实体集A中有 M 个实体与之联系。</p>
+<h4 id="两个以上实体型之间的联系">(2)两个以上实体型之间的联系</h4>
+<p>也存在 1：1， 1：N， M：N 的联系。</p>
+<h4 id="单个实体型内的联系">(3)单个实体型内的联系</h4>
+<p>同一个实体型内的各实体之间也可以存在上诉3种关系。</p>
+<p>比如：职工实体型内部，一个职工可以”领导“多名职工，任意一名职工至多只能被一名职工直接领导。因此属于 1：N 联系。</p>
+<h3 id="局部信息结构设计">2.局部信息结构设计</h3>
+<p>局部信息结构：不同的用户视图范围内的信息结构。</p>
+<p>局部信息结构的设计步骤：</p>
+<ol type="1">
+<li>确定局部范围：根据需求分析报告中标明的用户视图范围来确定，用户视图范围=子模式（外模式）</li>
+<li>选择实体：在局部范围内选择合适的信息单位，作为局部信息结构的基本实体。</li>
+<li>选择实体的标识属性（主码）：实体依赖于主码的存在，确定了主码就确定了实体。</li>
+<li>确定实体间的联系：试行匹配法可以分析实体间是否存在联系——在视图范围内，逐一取出实体与其他实体逐个匹配，探讨两者间是否存在联系（比如某任务同时使用了它们）。</li>
+<li>确定实体的说明属性（非主属性）：说明属性描述了实体的一般特征。属性分配到某个实体是否合理，取决于该属性是否可通过该实体的主码找到，并且它们之间在应用中具有某种联系。有可能多个实体的主码都能联系到同一说明属性，此时可将该属性分配到使用频率最高的实体中去。</li>
+</ol>
+<h3 id="全局信息结构设计">3.全局信息结构设计</h3>
+<p>全局信息结构设计：将所有的局部信息结构，合并成一个全局信息结构。</p>
+<p>合并，是一个不断发现和解决冲突的过程。</p>
+<p>冲突包含了：属性冲突、命名冲突、结构冲突。</p>
+<h4 id="属性冲突">1.属性冲突</h4>
+<ul>
+<li>属性域的冲突：年龄，有的局部信息结构用出生日期，有的用多少岁表示。</li>
+<li>属性单位的冲突：身高，有的局部信息结构用cm，有的用 m。</li>
+</ul>
+<h4 id="命名冲突">2.命名冲突</h4>
+<ul>
+<li>同名异议：不同意义的实体型、联系型，在不同的局部信息结构中使用了相同的名字。</li>
+<li>异名同义：相同意义的实体型、联系型，在不同的局部应用中使用了不同的名字。</li>
+</ul>
+<h4 id="结构冲突">3.结构冲突</h4>
+<ul>
+<li>同一对象，在一个局部ER图中是实体，在另一个局部ER图中是属性</li>
+<li>同一实体，在不同的局部ER图中的属性个数和类型不同。</li>
+<li>相同两个实体之间的联系，在不同的局部ER图中是不同的类型。</li>
+</ul>
+<p>解决办法：<br>
+属性冲突、命令冲突，通过协商、讨论来解决。<br>
+结构冲突，通过技术手段解决。<br>
+比如：把实体转为属性，或者属性转为实体，使同一对象具有统一的抽象。<br>
+比如：取不同局部ER图中属性的并集，做为全局信息结构中同一实体的属性集，并统一属性的数据类型。</p>
+<p>全局ER图的三个目标：</p>
+<ol type="1">
+<li>实体型尽可能少</li>
+<li>属性尽可能少</li>
+<li>实体型之间的联系无冗余</li>
+</ol>
+<h2 id="三逻辑结构设计方法">三、逻辑结构设计方法</h2>
+<p>逻辑结构设计的任务：把概念模型，转换为，具体的DBMS所支持的逻辑数据模型（模式和外模式）。</p>
+<p>在关系数据库中，逻辑结构设计的任务：把概念设计阶段得到的ER图，转换为，关系DBMS支持的关系模型，通常包括3项工作：</p>
+<ol type="1">
+<li>将ER图转为关系数据模型</li>
+<li>优化关系数据模型</li>
+<li>设计各用户的外模式</li>
+</ol>
+<h3 id="er图转换为关系模型">1. ER图转换为关系模型</h3>
+<p>ER图转换为关系模型的原则：</p>
+<ul>
+<li>一个实体转换为一个关系模式：实体的属性 --&gt; 关系的属性，实体的主码 --&gt; 关系的主码。</li>
+<li>1:1联系：
+<ul>
+<li>转换为独立的关系模式：”相连实体的主码 + 联系本身的属性“ --&gt; 独立关系的属性，每个实体的主码 --&gt; 独立关系的候选码，独立关系自行决定哪个候选码作为主码。</li>
+<li>与任意一端实体对应的关系模式合并：在选做合并端实体的关系中，加入”另一个实体的主码 + 联系自身的属性“。</li>
+</ul></li>
+<li>1:N联系：
+<ul>
+<li>转换为独立的关系模式：”相连实体的主码 + 联系自身的属性“--&gt; 独立关系的属性，N端实体的主码 --&gt; 独立关系的主码。</li>
+<li>与N端对应的关系模式合并：在N端实体对应的关系中，加入联系自身的属性。</li>
+</ul></li>
+<li>M:N联系：只能转为独立关系，”相连实体的主码 + 联系自身的属性“ --&gt; 关系的属性，相连实体主码的组合 --&gt; 关系的主码</li>
+<li>二个以上实体型的联系：同 M:N 联系</li>
+<li>具有相同主码的关系模式可以合并。</li>
+</ul>
+<p>注意：ER图转换时，不仅要考虑主码、属性，还应该考虑外键，从而实现参照完整性。</p>
+<h3 id="数据模型的优化">2.数据模型的优化</h3>
+<p>逻辑设计的结果不是唯一的，因此可以通过修改、调整逻辑模型，进一步提高性能或满足实际需要，这就是逻辑模型的优化。</p>
+<p>关系数据模型的优化理论基础是：关系规范化理论，方法如下：</p>
+<ul>
+<li>消除各关系模式之间的冗余联系</li>
+<li>确定关系模式内，各属性间的函数依赖关系</li>
+<li>判断每个关系模式的范式，根据实际需要确定合适的范式</li>
+<li>通过模式分解，提高数据操作的效率、存储空间的利用率</li>
+</ul>
+<h3 id="设计用户子模式">3.设计用户子模式</h3>
+<p>利用视图，设计用户子模式。</p>
+<p>数据库全局逻辑模式是从系统的时间效率、空间效率、易维护等角度出发的，而用户的外模式更注重用户的习惯和方便。</p>
+<p>定义外模式：</p>
+<ul>
+<li>利用视图机制，重新定义某些属性的别名，使其符合用户的习惯。</li>
+<li>不同级别的用户，定义不同的视图，保证系统的安全性</li>
+<li>简化用户对系统的使用：将复杂的查询事先定义为视图，用户选择不同的视图进行查询，从而简化用户操作。</li>
+</ul>
+<h2 id="四物理设计方法">四、物理设计方法</h2>
+<p>关系数据库的存取路径对用户透明，好处是用户无需关心存储结构和存取方法，缺点是缺乏控制存取效率的手段。而物理设计就提供了改善存取效率的方法：索引和聚集。</p>
+<p>物理设计的任务：通过对关系建立索引和聚集，来实现与应用相关数据的逻辑连接和物理聚集。</p>
+<h3 id="建立索引">1.建立索引</h3>
+<p>索引会增加DBMS对索引的维护开销（保持索引与关系的一致性）。 因此，建立索引的数据对象，只能有低频率的插入、修改、删除操作。<br>
+而建立索引的属性，应该是所在关系中高频使用的属性。</p>
+<p>建立索引的方式分为：</p>
+<ul>
+<li>静态建立索引：预先在数据库中建立的索引，之后，应用程序都可以直接使用，适合于用户较多、使用周期较长的数据。</li>
+<li>动态建立索引：临时由应用程序或在数据库建立的索引，适合于满足单个用户需要、临时使用。</li>
+</ul>
+<h3 id="建立聚集">2.建立聚集</h3>
+<p>将相关数据<strong>集中存放</strong>，从而提高相关数据的IO数据命中率，改善存取速度的物理存储技术，称为聚集。</p>
+<p>相关数据：在一个或多个关系中，在垂直（属性组）或水平（元组集合）上，把经常一起使用的数据分为一组。</p>
+<p>集中存放：把相关数据放在一个物理块、磁道、柱面中，或相邻的物理区域中。</p>
+<p>只有数据使用频率高、数据量大、更新操作较少的数据，才有必要建立聚集。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/" title="数原 3.3 关系数据库设计方法">https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/29/数原-3-2-数据库设计的基本步骤/数原-3-2-数据库设计的基本步骤/" rel="next" title="数原 3.2 数据库设计的基本步骤">
+                  <i class="fa fa-chevron-left"></i> 数原 3.2 数据库设计的基本步骤
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/29/数原-4-1-SQL概述/数原-4-1-sql概述/" rel="prev" title="数原 4.1 SQL概述">
+                  数原 4.1 SQL概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一关系数据库设计过程与各级模式"><span class="nav-text">一、关系数据库设计过程与各级模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二概念结构设计方法"><span class="nav-text">二、概念结构设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#er图的表示方法"><span class="nav-text">1.ER图的表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#两个实体型之间的联系"><span class="nav-text">(1)两个实体型之间的联系</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#对多联系1n"><span class="nav-text">1对多联系(1:N)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#多对多联系mn"><span class="nav-text">多对多联系(M:N)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个以上实体型之间的联系"><span class="nav-text">(2)两个以上实体型之间的联系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单个实体型内的联系"><span class="nav-text">(3)单个实体型内的联系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部信息结构设计"><span class="nav-text">2.局部信息结构设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局信息结构设计"><span class="nav-text">3.全局信息结构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性冲突"><span class="nav-text">1.属性冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名冲突"><span class="nav-text">2.命名冲突</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结构冲突"><span class="nav-text">3.结构冲突</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三逻辑结构设计方法"><span class="nav-text">三、逻辑结构设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#er图转换为关系模型"><span class="nav-text">1. ER图转换为关系模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据模型的优化"><span class="nav-text">2.数据模型的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计用户子模式"><span class="nav-text">3.设计用户子模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四物理设计方法"><span class="nav-text">四、物理设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建立索引"><span class="nav-text">1.建立索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立聚集"><span class="nav-text">2.建立聚集</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">28 分钟</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: 'e4c95ea3996ab37788691adcf69720ca',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

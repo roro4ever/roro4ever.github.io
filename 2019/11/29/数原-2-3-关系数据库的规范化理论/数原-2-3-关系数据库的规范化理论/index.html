@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="规范化理论研究的是：   * 关系模式中属性间的依赖关系，  * 属性间的依赖关系对关系模式的性能的影响。  * 好的关系模式应该具备的哪些性质  * 好的关系模式的设计算法  关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。  P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。  一、关系模式中可能存在的">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数原 2.3 关系数据库的规范化理论">
+<meta property="og:url" content="https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="规范化理论研究的是：   * 关系模式中属性间的依赖关系，  * 属性间的依赖关系对关系模式的性能的影响。  * 好的关系模式应该具备的哪些性质  * 好的关系模式的设计算法  关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。  P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。  一、关系模式中可能存在的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-29T07:45:29.126Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数原 2.3 关系数据库的规范化理论">
+<meta name="twitter:description" content="规范化理论研究的是：   * 关系模式中属性间的依赖关系，  * 属性间的依赖关系对关系模式的性能的影响。  * 好的关系模式应该具备的哪些性质  * 好的关系模式的设计算法  关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。  P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。  一、关系模式中可能存在的">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>数原 2.3 关系数据库的规范化理论 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数原 2.3 关系数据库的规范化理论
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 09:34:00 / 修改时间：15:45:29" itemprop="dateCreated datePublished" datetime="2019-11-29T09:34:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第二章-关系数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">第二章 关系数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>规范化理论研究的是：</p>
+<ul>
+<li>关系模式中属性间的依赖关系，</li>
+<li>属性间的依赖关系对关系模式的性能的影响。</li>
+<li>好的关系模式应该具备的哪些性质</li>
+<li>好的关系模式的设计算法</li>
+</ul>
+<p>关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。</p>
+<p>P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。</p>
+<h2 id="一关系模式中可能存在的冗余和异常问题">一、关系模式中可能存在的冗余和异常问题</h2>
+<ul>
+<li>数据冗余：由完全依赖导致的非主属性的重复存储。</li>
+<li>更新异常：由数据冗余导致的潜在的不一致性</li>
+<li>插入异常：主码有多个属性，而插入行的主码中部分属性有空值，不允许插入</li>
+<li>删除异常：示例中用一个表来记录供应商基本信息和供货信息，所以会出现这种情况。</li>
+</ul>
+<p>这些问题都与数据依赖有关。</p>
+<p>数据依赖：是关系中的属性，在现实世界中的语义之间的约束关系。<br>
+比如：假设每个供应商只有一个地址，给定了供应商名字后，就可以确定其地址。</p>
+<p>数据依赖有很多种，最重要的是函数依赖(FD, Functional Dependancy)和多值依赖(MVD, Multi-Valued Dependancy)。</p>
+<h2 id="二函数依赖与关键字">二、函数依赖与关键字</h2>
+<p>函数依赖：在关系R中，对属性X的每个值，属性Y都只有唯一值与之对应，称“X函数决定Y”、“Y函数依赖X”，记作 <span class="math inline">\(X \rightarrow Y\)</span>。</p>
+<p>换句话说，确定了属性X的某个值，就确定了属性Y的值（1对1），就称为Y函数依赖于X。</p>
+<p>属性X称为决定因素。</p>
+<p>如果X不能函数决定Y，或叫，Y不能函数依赖X，记作 <span class="math inline">\(X \nrightarrow Y\)</span></p>
+<h3 id="完全函数依赖">（1）完全函数依赖</h3>
+<p>任意关系R，X,Y是属性集，X' 是 X 的任意真子集，<span class="math inline">\(X \rightarrow Y\)</span>，但 <span class="math inline">\(X&#39; \nrightarrow Y\)</span>），此时称：X 完全函数决定 Y，或称：Y 完全函数依赖于 X。</p>
+<p>注意：X 不一定就是候选码，函数依赖是属性间的关系，不是属性集和元组的关系。 ### （2）部分函数依赖 任意关系R，X,Y是属性集，X' 是 X 的某个真子集，<span class="math inline">\(X \rightarrow Y\)</span>，且 <span class="math inline">\(X&#39; \rightarrow Y\)</span>），此时称：X 部分函数决定 Y，或称：Y 部分函数依赖于 X。</p>
+<p>注意：X 不一定就是超码，函数依赖是属性间的关系，不是属性集和元组的关系。 ### （3）传递函数依赖 任意关系R，X,Y,Z是不同的属性集，<span class="math inline">\(X \rightarrow Y\)</span>，<span class="math inline">\(Y \nrightarrow X\)</span>，而 <span class="math inline">\(Y \rightarrow Z\)</span>，那么 <span class="math inline">\(X \rightarrow Z\)</span>，此时称：X 传递函数决定 Z，或称：Z 传递函数依赖于 X。</p>
+<p>比如：有关系模式 书基本信息（书的ISBN，出版社名称，出版社地址），书ISBN可以决定出版社名称，但出版社名称无法决定书ISBN（因为一个出版社不止出一本书），出版社名称可以决定出版社地址，因此知道了书ISBN，就知道了出版社地址，称：出版社地址传递函数依赖于书ISBN。</p>
+<h6 id="更严格的候选码的定义">更严格的候选码的定义</h6>
+<p>可以根据函数依赖的定义，推导出更严格的关键字的定义：<br>
+任意关系R，全部属性集合为U，X是U的子集，若 <span class="math inline">\(X \rightarrow U\)</span>，则 X 是关系R的一个候选码。</p>
+<h2 id="三范式与关系规范化过程">三、范式与关系规范化过程</h2>
+<p>范式：规范形式，Normal Form，规范性要求。</p>
+<p>根据要求的不同，范式包括：第一范式(1NF)、第二范式(2NF)、第三范式(3NF)、BC范式(BCNF)等等。</p>
+<p>关系数据库中存储的各种关系，它们的关系模式必须在不同程度满足范式。<br>
+比如某些关系模式满足1NF，某些满足2NF。</p>
+<p>规范化(Normalization)：满足较低层次范式的关系模式，可以通过模式分解，分解出：几个满足高一级范式的关系模式。</p>
+<p>现实生活中的很多数据，是不符合任何范式的。<br>
+而关系数据库通常要求关系模式必须符合1NF。<br>
+因此，必须通过规范化过程，才能将现实世界的数据存储到关系数据库中，同时，也消除了数据冗余、更新异常、插入异常、删除异常。</p>
+<h3 id="第一范式">（1）第一范式</h3>
+<p>关系数据库中的关系模式，至少应满足1NF。</p>
+<p>1NF：关系R的每一列具有原子性，不可再分。</p>
+<p>教材上讲：列和元组都不可再分，实际上不严谨。包括举的例子也不好。</p>
+<p>满足了1NF，可能存在非主属性部分函数依赖候选码的情况，由此可能导致数据冗余、插入异常、删除异常等问题。</p>
+<p>解决办法：消除非主属性对候选码的部分函数依赖——将部分函数依赖的属性分离出去组成新关系，原关系中仅保留完全函数依赖的非主属性。</p>
+<h3 id="第二范式">（2）第二范式</h3>
+<p>2NF：关系R为1NF，且其所有的非主属性都完全函数依赖于候选码。</p>
+<p>满足2NF的关系模式，可能存在非主属性传递函数依赖于候选码的问题，仍然可能产生插入异常、删除异常等问题。</p>
+<p>解决办法：消除非主属性对候选码的传递函数依赖。</p>
+<h3 id="第三范式">（3）第三范式</h3>
+<p>3NF：关系R为2NF，且其所有非主属性都不传递函数依赖于候选码。</p>
+<p>但满足3NF的关系，有时仍然存在插入异常、删除异常等问题。比如：当主属性间存在函数依赖时。</p>
+<p>解决办法：在 3NF 的基础上消除主属性对于码的部分与传递函数依赖。</p>
+<h3 id="bc范式">（4）BC范式</h3>
+<p>BCNF：关系R是3NF，其所有的决定因素都包含一个候选码。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/" title="数原 2.3 关系数据库的规范化理论">https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/29/数原-2-1-关系数据库概述/数原-2-1-关系数据库概述/" rel="next" title="数原 2.1 关系数据库概述">
+                  <i class="fa fa-chevron-left"></i> 数原 2.1 关系数据库概述
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/29/数原-3-1-数据库设计概述/数原-3-1-数据库设计概述/" rel="prev" title="数原 3.1 数据库设计概述">
+                  数原 3.1 数据库设计概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一关系模式中可能存在的冗余和异常问题"><span class="nav-text">一、关系模式中可能存在的冗余和异常问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二函数依赖与关键字"><span class="nav-text">二、函数依赖与关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#完全函数依赖"><span class="nav-text">（1）完全函数依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#更严格的候选码的定义"><span class="nav-text">更严格的候选码的定义</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三范式与关系规范化过程"><span class="nav-text">三、范式与关系规范化过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一范式"><span class="nav-text">（1）第一范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二范式"><span class="nav-text">（2）第二范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三范式"><span class="nav-text">（3）第三范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bc范式"><span class="nav-text">（4）BC范式</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">28 分钟</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '4a9f28907b781a54cb4aed069609d186',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

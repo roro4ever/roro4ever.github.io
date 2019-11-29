@@ -44,25 +44,25 @@
     },
     localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
     path: 'search.xml',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法  传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方。">
+  <meta name="description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法 ### 传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方">
 <meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo 插入图片的多种方法">
 <meta property="og:url" content="https://roro4ever.github.io/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/index.html">
 <meta property="og:site_name" content="桑园巷">
-<meta property="og:description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法  传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方。">
+<meta property="og:description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法 ### 传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.viemu.com/vi-vim-cheat-sheet.gif">
 <meta property="og:image" content="https://roro4ever.github.io/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/SpellCheck.png">
 <meta property="og:updated_time" content="2019-11-28T15:25:01.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo 插入图片的多种方法">
-<meta name="twitter:description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法  传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方。">
+<meta name="twitter:description" content="在Hexo 中插入图片，可以使用传统 Markdown 语法 ### 传统的Markdown 语法 ![text](imgpath)  但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。  hexo 资源文件夹中的本地图片（不能设定显示尺寸）   但在实践中，仍然有一些需要注意的地方">
 <meta name="twitter:image" content="http://www.viemu.com/vi-vim-cheat-sheet.gif">
 
 <link rel="canonical" href="https://roro4ever.github.io/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/">
@@ -123,7 +123,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -290,7 +290,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>263</span>
+              <span>266</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -309,19 +309,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在Hexo 中插入图片，可以使用传统 Markdown 语法</p>
-<h3 id="传统的Markdown-语法"><a href="#传统的Markdown-语法" class="headerlink" title="传统的Markdown 语法"></a>传统的Markdown 语法</h3><p><code>![text](imgpath)</code></p>
+        <p>在Hexo 中插入图片，可以使用传统 Markdown 语法 ### 传统的Markdown 语法 <code>![text](imgpath)</code></p>
 <p>但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。</p>
-<h3 id="hexo-资源文件夹中的本地图片（不能设定显示尺寸）"><a href="#hexo-资源文件夹中的本地图片（不能设定显示尺寸）" class="headerlink" title="hexo 资源文件夹中的本地图片（不能设定显示尺寸）"></a>hexo 资源文件夹中的本地图片（不能设定显示尺寸）</h3><p><code></code></p>
+<h3 id="hexo-资源文件夹中的本地图片不能设定显示尺寸">hexo 资源文件夹中的本地图片（不能设定显示尺寸）</h3>
+<p><code></code></p>
 <p>但在实践中，仍然有一些需要注意的地方。</p>
-<ol>
+<ol type="1">
 <li>图片应放入文章对应的资源文件夹中</li>
 <li>严格按照  进行书写</li>
 <li>图片的文件名大小写敏感！</li>
 <li>不需要另起一行（markdown 代码语法 <code></code> 则需要另起一行）</li>
 </ol>
-<h3 id="网络图片（可以设定显示尺寸）"><a href="#网络图片（可以设定显示尺寸）" class="headerlink" title="网络图片（可以设定显示尺寸）"></a>网络图片（可以设定显示尺寸）</h3><p><code><img src="http://www.viemu.com/vi-vim-cheat-sheet.gif" width="200" height="400" title="vi-vim-cheat-sheet"></code></p>
-<h3 id="使用-HTML-语法"><a href="#使用-HTML-语法" class="headerlink" title="使用 HTML 语法"></a>使用 HTML 语法</h3><img src="SpellCheck.png" width="50%" height="50%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+<h3 id="网络图片可以设定显示尺寸">网络图片（可以设定显示尺寸）</h3>
+<p><code><img src="http://www.viemu.com/vi-vim-cheat-sheet.gif" width="200" height="400" title="vi-vim-cheat-sheet"></code></p>
+<h3 id="使用-html-语法">使用 HTML 语法</h3>
+<p><img src="SpellCheck.png" width="50%" height="50%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+
     </div>
 
     
@@ -361,15 +364,15 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/" rel="next" title="利用Chrome同时登录某网站的多个账号">
-                  <i class="fa fa-chevron-left"></i> 利用Chrome同时登录某网站的多个账号
+                <a href="/2019/11/28/利用Chrome同时登录网站的多个账号/利用chrome同时登录网站的多个账号/" rel="next" title="利用Chrome同时登录网站的多个账号">
+                  <i class="fa fa-chevron-left"></i> 利用Chrome同时登录网站的多个账号
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/28/-hexo-console-rename-修改文件名/用-hexo-console-rename-修改文件名/" rel="prev" title="用 Hexo-Console-Rename 修改文件名">
+                <a href="/2019/11/28/用-hexo-console-rename-修改文件名/用-hexo-console-rename-修改文件名/" rel="prev" title="用 Hexo-Console-Rename 修改文件名">
                   用 Hexo-Console-Rename 修改文件名 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -411,7 +414,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#传统的Markdown-语法"><span class="nav-text">传统的Markdown 语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-资源文件夹中的本地图片（不能设定显示尺寸）"><span class="nav-text">hexo 资源文件夹中的本地图片（不能设定显示尺寸）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络图片（可以设定显示尺寸）"><span class="nav-text">网络图片（可以设定显示尺寸）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-HTML-语法"><span class="nav-text">使用 HTML 语法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo-资源文件夹中的本地图片不能设定显示尺寸"><span class="nav-text">hexo 资源文件夹中的本地图片（不能设定显示尺寸）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络图片可以设定显示尺寸"><span class="nav-text">网络图片（可以设定显示尺寸）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-html-语法"><span class="nav-text">使用 HTML 语法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -427,14 +430,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -482,12 +485,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">13k</span>
+    <span title="站点总字数">31k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">11 分钟</span>
+    <span title="站点阅读时长">28 分钟</span>
 </div>
   <div class="addthis_inline_share_toolbox">
     <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
@@ -538,9 +541,7 @@
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/utils.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
 
@@ -568,6 +569,54 @@
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

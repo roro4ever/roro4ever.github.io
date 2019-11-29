@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="数据管理 数据管理包括2个方面：   1. 针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）  2. 依靠数据管理技术，集中控制管理数据。（本节的主要内容）  与计算机技术结合的数据管理包括：   * 收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；  * 组织：将收集来的数据进行适当的构造 * 逻">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数原 1.2 数据管理技术的发展">
+<meta property="og:url" content="https://roro4ever.github.io/2019/11/18/数原-1-2-数据管理技术的发展/数原-1-2-数据管理技术的发展/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="数据管理 数据管理包括2个方面：   1. 针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）  2. 依靠数据管理技术，集中控制管理数据。（本节的主要内容）  与计算机技术结合的数据管理包括：   * 收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；  * 组织：将收集来的数据进行适当的构造 * 逻">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-29T07:10:21.050Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数原 1.2 数据管理技术的发展">
+<meta name="twitter:description" content="数据管理 数据管理包括2个方面：   1. 针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）  2. 依靠数据管理技术，集中控制管理数据。（本节的主要内容）  与计算机技术结合的数据管理包括：   * 收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；  * 组织：将收集来的数据进行适当的构造 * 逻">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/11/18/数原-1-2-数据管理技术的发展/数原-1-2-数据管理技术的发展/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>数原 1.2 数据管理技术的发展 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/18/数原-1-2-数据管理技术的发展/数原-1-2-数据管理技术的发展/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数原 1.2 数据管理技术的发展
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-18 17:44:52" itemprop="dateCreated datePublished" datetime="2019-11-18T17:44:52+08:00">2019-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-29 15:10:21" itemprop="dateModified" datetime="2019-11-29T15:10:21+08:00">2019-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第一章-数据系统概述/" itemprop="url" rel="index">
+                    <span itemprop="name">第一章 数据系统概述</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h6 id="数据管理">数据管理</h6>
+<p>数据管理包括2个方面：</p>
+<ol type="1">
+<li>针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）</li>
+<li>依靠数据管理技术，集中控制管理数据。（本节的主要内容）</li>
+</ol>
+<p>与计算机技术结合的数据管理包括：</p>
+<ul>
+<li>收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；</li>
+<li>组织：将收集来的数据进行适当的构造
+<ul>
+<li>逻辑组织：用户或应用程序所见到的数据结构形式</li>
+<li>物理组织：数据在物理存储设备上的结构形式</li>
+</ul></li>
+<li>归类存储：正在使用的数据，和作为备份的数据。</li>
+<li>提供检索方法：便于用户快速获取信息</li>
+<li>存取：建立规则和执行规则的过程，控制数据的存取，从而保护数据的正确性和安全性</li>
+<li>维护：数据的规模和结构可能发生变化，需要维护。</li>
+</ul>
+<p>数据管理的任务（目的）：通过数据的收集、组织、控制、存储、选取、维护，实现在适当的时刻、以适当的形式、向适当的人提供适当的数据。</p>
+<h6 id="数据处理">数据处理</h6>
+<p>数据管理是数据处理的中心问题，数据处理比数据管理的概念更宽泛。</p>
+<p>数据处理：对各种数据进行收集、存储、加工、传播的活动。</p>
+<h2 id="数据管理技术">数据管理技术</h2>
+<h3 id="人工管理阶段">1.人工管理阶段</h3>
+<p>特点：</p>
+<ul>
+<li>数据无法保存在计算机中：没有磁盘等存储设备，输入数据和输出只能放在纸带上，程序执行完毕后，数据空间随程序空间一起被释放。</li>
+<li>应用程序管理数据：没有操作系统也没有数据管理软件，数据由应用程序执行负责，数据的逻辑结构、物理结构（读写纸带）、存取方法都由应用程序编写人员来完成。数据和应用程序高度依赖。</li>
+<li>数据面向应用：一组数据只能用于一个程序，多个程序要无法使用同一组数据，只能分别定义，数据冗余度非常高，数据独立性差。</li>
+</ul>
+<h3 id="文件系统阶段">2.文件系统阶段</h3>
+<p>数据的物理独立性：文件系统分离了数据的逻辑结构（文件的内容，即数据）和物理结构（文件在文件系统中如何存放），应用程序读写数据的逻辑结构，文件系统管理文件的物理结构。<br>
+即使物理结构发生了改变，比如：把磁盘从一种文件系统转换为另一种文件系统，或者将文件从一台机器拷入另一台具有不同文件系统的机器，就不需要修改应用程序——因为文件的内容，即逻辑结构没有改变。</p>
+<p>特点：</p>
+<ul>
+<li>数据可以长期保存在计算机中：有了磁盘、磁鼓等直接存取设备。</li>
+<li>数据以文件的形式由文件系统管理：有了操作系统，以及专门的数据管理软件——文件系统</li>
+<li>实现了数据的物理独立性：使数据的逻辑结构和物理结构分离开来。</li>
+<li>实现了文件级的数据共享：一个文件可以为多个应用程序服务。也可以抽取多个文件的内容，组织成新的文件，形成新的数据。</li>
+</ul>
+<p>缺点：<br>
+只实现了文件级的共享，没有实现记录级的共享。应用程序和数据之间仍然存在依赖关系，仍然可能需要构建新的文件来满足应用程序的需要，从而导致数据冗余。</p>
+<h3 id="数据库系统阶段">3.数据库系统阶段</h3>
+<ul>
+<li>数据集成：数据被集成到DBMS中，得到最大程度的共享，冗余最小。</li>
+<li>数据共享度高：多个用户可以共同使用相同的数据，而且可以同时并发存取同一数据。</li>
+<li>数据冗余小：冗余不应该完全消除，为了合法性检验、数据存取效率等原因，受控的冗余是应该的。</li>
+<li>数据一致性：冗余的多个副本没有同时得到更新，导致失去一致性。维持一致性是数据库系统的任务。</li>
+<li>数据独立性高：数据和应用程序分离。在文件系统中，修改数据的定义、存取数据的逻辑，都需要修改应用程序(修改数据的定义后，文件的读取会受到影响，应用程序就需要修改）。
+<ul>
+<li>数据的逻辑独立：如果应用程序只修改视图，就不会影响数据；在一定范围内修改数据的定义，也可能不需要修改应用程序（修改部分可能不涉及应用程序读取的部分）。</li>
+<li>数据的物理独立：改变数据的存储结构、存取方法，无需修改应用程序。（应用程序关心的是数据的逻辑结构）</li>
+</ul></li>
+<li>实施统一管理和控制：DBMS 可以实现对数据的统一管理和控制，包括：
+<ul>
+<li>安全性：每个用户只能按照规定的方式访问数据，比如权限管理，防止了泄密和破坏。</li>
+<li>完整性：保证输入到数据库的数据满足约束，数据之间满足一定的关系，数据只在一定范围内有效（比如性别只能男和女）。</li>
+<li>并发控制：DBMS需要对并发访问进行控制、协调，避免得到错误结果，或破坏数据库的完整性。</li>
+<li>故障恢复：将数据库恢复到某个已知的正确状态。</li>
+</ul></li>
+<li>减少应用程序开发和维护的工作量：数据的共享性和独立性促成。</li>
+</ul>
+<h6 id="补充资料">补充资料</h6>
+<p>数据的完整性：是对数据的正确性、有效性、和相容性的要求。</p>
+<p>有效性：对数据是否正确的测试标准。</p>
+<p>相容性：描述同一事实的两个数据应相同，称为两个数据相容，否则两个数据不相容。比如一个人不能有2个性别。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/11/18/数原-1-2-数据管理技术的发展/数原-1-2-数据管理技术的发展/" title="数原 1.2 数据管理技术的发展">https://roro4ever.github.io/2019/11/18/数原-1-2-数据管理技术的发展/数原-1-2-数据管理技术的发展/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/18/数原-1-1-数据库基本概念/数原-1-1-数据库基本概念/" rel="next" title="数原 1.1 数据库基本概念">
+                  <i class="fa fa-chevron-left"></i> 数原 1.1 数据库基本概念
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/18/数原-1-4-数据模型/数原-1-4-数据模型/" rel="prev" title="数原 1.4 数据模型">
+                  数原 1.4 数据模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#数据管理"><span class="nav-text">数据管理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据处理"><span class="nav-text">数据处理</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据管理技术"><span class="nav-text">数据管理技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#人工管理阶段"><span class="nav-text">1.人工管理阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统阶段"><span class="nav-text">2.文件系统阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库系统阶段"><span class="nav-text">3.数据库系统阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#补充资料"><span class="nav-text">补充资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">28 分钟</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '538f7e1990c7bd8d61560bedfca664c5',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

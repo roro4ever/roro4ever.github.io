@@ -44,7 +44,7 @@
     },
     localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
     path: 'search.xml',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
@@ -116,7 +116,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -232,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/28/-hexo-console-rename-修改文件名/用-hexo-console-rename-修改文件名/">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/otePad2打开文件乱码的原因和解决/notepad2打开文件乱码的原因和解决/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
@@ -246,112 +246,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/28/-hexo-console-rename-修改文件名/用-hexo-console-rename-修改文件名/" class="post-title-link" itemprop="url">用 Hexo-Console-Rename 修改文件名</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-28 23:46:00" itemprop="dateCreated datePublished" datetime="2019-11-28T23:46:00+08:00">2019-11-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-29 00:24:02" itemprop="dateModified" datetime="2019-11-29T00:24:02+08:00">2019-11-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/应用软件/" itemprop="url" rel="index">
-                    <span itemprop="name">应用软件</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>861</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          我们通常使用hexo new [layout] "title" 来新建博文，但常常会在创建博文后对又对原标题 title 不满意，如果仅仅修改内文标题，就会造成 source/_post(假设layout= post) 下的文件名 oldFileName.md 和内文标题 title不一致的情况。
-
-手工的方法是将oldFilename 修改为和 front-matter 中的 title 一致。 
-
-如果站点配置文件 _config.yml 中post_asset_folder: true，则需要修改 oldFileName.md 对应的 source/oldFileName 文件夹的名称。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/28/-hexo-console-rename-修改文件名/用-hexo-console-rename-修改文件名/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-<div>
-  
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
-      <meta itemprop="name" content="roro">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="桑园巷">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/" class="post-title-link" itemprop="url">Hexo 插入图片的多种方法</a>
+            <a href="/2019/11/29/otePad2打开文件乱码的原因和解决/notepad2打开文件乱码的原因和解决/" class="post-title-link" itemprop="url">NotePad2打开文件乱码的原因和解决</a>
         </h1>
 
         <div class="post-meta">
@@ -362,7 +257,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-28 16:57:39 / 修改时间：23:25:01" itemprop="dateCreated datePublished" datetime="2019-11-28T16:57:39+08:00">2019-11-28</time>
+              <time title="创建时间：2019-11-29 15:29:00 / 修改时间：15:37:11" itemprop="dateCreated datePublished" datetime="2019-11-29T15:29:00+08:00">2019-11-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -382,7 +277,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>263</span>
+              <span>250</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -401,27 +296,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          在Hexo 中插入图片，可以使用传统 Markdown 语法
+          TotalCommander 的插件 Universal Viewer Pro 自带的F4编辑器 Notepad2 ，在打开某些中文文档时会出现类似韩文的乱码。
 
-传统的Markdown 语法
-![text](imgpath)
+原因在于：
+notepad2自动检测文本编码格式时有问题，如果中文文档不包含任何单字节的英文字符或数字，自动检测时就会出错。
 
-但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。
+解决办法： 按 F8，尝试各种编码。
 
-hexo 资源文件夹中的本地图片（不能设定显示尺寸）
-
-
-但在实践中，仍然有一些需要注意的地方。
-
- 1. 图片应放入文章对应的资源文件夹中
- 2. 严格按照 进行书写
- 3. 图片的文件名大小写敏感！
- 4. 不需要另起一行（markdown 代码语法 则需要另起一行）
-
-网络图片（可以设定显示尺
+也可以关闭 Notepad2 的自动检测功能，固定为预设的编码：
+选择菜单“文件”-“编码”-“默认”，会弹出“选择编码”对话框，选择“跳过Unicode自动检测”和“不解释编码标识”，最后按F7保存设置。
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/28/hexo-插入图片的多种方法/hexo-插入图片的多种方法/#more" rel="contents">
+              <a class="btn" href="/2019/11/29/otePad2打开文件乱码的原因和解决/notepad2打开文件乱码的原因和解决/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -449,7 +335,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-4-4-数据更新/数原-4-4-数据更新/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
@@ -463,7 +349,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/" class="post-title-link" itemprop="url">利用Chrome同时登录某网站的多个账号</a>
+            <a href="/2019/11/29/数原-4-4-数据更新/数原-4-4-数据更新/" class="post-title-link" itemprop="url">数原 4.4 数据更新</a>
         </h1>
 
         <div class="post-meta">
@@ -474,125 +360,8 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-28 15:18:00 / 修改时间：23:25:41" itemprop="dateCreated datePublished" datetime="2019-11-28T15:18:00+08:00">2019-11-28</time>
+              <time title="创建时间：2019-11-29 10:40:00 / 修改时间：15:12:42" itemprop="dateCreated datePublished" datetime="2019-11-29T10:40:00+08:00">2019-11-29</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/应用软件/" itemprop="url" rel="index">
-                    <span itemprop="name">应用软件</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>388</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          有时，我们会在同一个网站注册多个账号，即所谓的小号。 
-
-对一个网站来说，同一时刻同一浏览器只能登录一个账号，要登录另一个账号必须退出当前在线的账号。
-
-但在chrome中，可以利用用户管理实现同时登录多个账号。
-
-其原理是通过在 chrome 中建立多个用户，每个用户的数据、设置都是完全独立的，包括书签、历史、设置、插件、网页应用、Cookie等。每个用户可以独占一个Chrome窗口，这样就可以在不同的窗口（用户）中，用不同的账号同时登陆同一个网站。
-
-具体操作很简单： 
-
-1.点击右上角的头像图标 
-
-2.在下拉菜单中选择“管理用户”， 
-
-弹出“添加用户”、“以访客身份浏览”的界面。
-
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-<div>
-  
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/18/1-4-数据模型/1-4-数据模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
-      <meta itemprop="name" content="roro">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="桑园巷">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/18/1-4-数据模型/1-4-数据模型/" class="post-title-link" itemprop="url">1.4 数据模型</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-11-18 17:45:28" itemprop="dateCreated datePublished" datetime="2019-11-18T17:45:28+08:00">2019-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-28 16:44:59" itemprop="dateModified" datetime="2019-11-28T16:44:59+08:00">2019-11-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -605,8 +374,8 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库系统原理/第一章-数据系统概述/" itemprop="url" rel="index">
-                    <span itemprop="name">第一章 数据系统概述</span>
+                  <a href="/categories/数据库系统原理/第四章-SQL与关系数据库基本操作/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 SQL与关系数据库基本操作</span>
                   </a>
                 </span>
             </span>
@@ -617,7 +386,599 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
+              <span>881</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          插入数据
+insert into tbname values(val1,val2,...),(val21,val22,...),...
+可以插入多条记录
+
+insert ... set
+只能插入一条记录
+
+insert ... select
+把子查询的结果集插入表中。
+
+删除数据
+delete from tbname where
+
+更新数据
+update tbname set col1=val1,col2=val2,... where
+
+select case when condition1 then expr1 when condition2 then expr2 else expr3 en
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/29/数原-4-4-数据更新/数原-4-4-数据更新/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+<div>
+  
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-4-3-数据定义/数原-4-3-数据定义/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/29/数原-4-3-数据定义/数原-4-3-数据定义/" class="post-title-link" itemprop="url">数原 4.3 数据定义</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 10:39:00 / 修改时间：15:12:32" itemprop="dateCreated datePublished" datetime="2019-11-29T10:39:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第四章-SQL与关系数据库基本操作/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 SQL与关系数据库基本操作</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          RDMBS支持的三级模式结构(模式、外模式、内模式）包含的数据库对象有： 数据库模式(schema)、表、索引、视图等，相应的，SQL就应当提供这些基本对象的定义功能。
+
+标准SQL提供的功能有限，更多的是具体的RDBMS扩展的功能。
+
+MYSQL数据库命令行分号不能结束语句的问题解决办法
+
+一、数据库模式定义（创建数据库/模式）
+数据库模式的定义包括：
+
+create database | schema if not exists db_name character set = charset_name colloate = collation_name;
+
+选择数据库:
+use datab
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/29/数原-4-3-数据定义/数原-4-3-数据定义/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+<div>
+  
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-4-2-Mysql基础/数原-4-2-mysql基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/29/数原-4-2-Mysql基础/数原-4-2-mysql基础/" class="post-title-link" itemprop="url">数原 4.2 Mysql基础</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 10:38:00 / 修改时间：15:12:23" itemprop="dateCreated datePublished" datetime="2019-11-29T10:38:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第四章-SQL与关系数据库基本操作/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 SQL与关系数据库基本操作</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>876</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          二、MYSQL中的SQL
+MYSQL支持关系数据库的三级模式结构：
+
+ * 外模式：视图、部分基本表
+ * 模式：基本表，一个表可以有多个索引，索引也在存储文件中。
+ * 内模式：若干存储文件，存储文件的逻辑结构组成了内模式，存储文件的物理结构对用户透明。
+
+一个关系对应一个基本表，一个或多个基本表对应一个存储文件。
+视图是从一个或多个基本表导出的虚表，数据库只存储视图的定义，不需要存储其数据。
+视图上可以再定义视图。
+
+MYSQL还在SQL标准的基础上增加了一些语言要素：
+
+(1)常量
+ * 字符串常量：使用单引号或双引号括起来的字符序列。(建议一直使用单引号, When to use si
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/29/数原-4-2-Mysql基础/数原-4-2-mysql基础/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+<div>
+  
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-4-1-SQL概述/数原-4-1-sql概述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/29/数原-4-1-SQL概述/数原-4-1-sql概述/" class="post-title-link" itemprop="url">数原 4.1 SQL概述</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 10:36:00 / 修改时间：15:12:12" itemprop="dateCreated datePublished" datetime="2019-11-29T10:36:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第四章-SQL与关系数据库基本操作/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 SQL与关系数据库基本操作</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>327</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          三、SQL的组成
+1.数据定义语言 DDL：创建、修改、删除各种数据库对象。
+
+ * create
+ * Alter
+ * Drop
+
+数据库的对象有：
+
+ * 表
+ * 视图
+ * 触发器
+ * 存储过程
+ * 默认约束
+ * 规则
+
+2.数据操纵语言 DML：操纵各种数据库对象
+
+ * select
+ * insert
+ * update
+ * delete
+
+3.数据控制语言 DCL：用于安全管理
+
+ * revoke：收回用户或角色的权限，但用户仍然可以从其所属角色中继承权限。
+ * grant：把执行语句的权限、数据对象的可操作权限，赋予用户或角色。
+
+4.嵌入式SQL、动态SQL（
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/29/数原-4-1-SQL概述/数原-4-1-sql概述/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+<div>
+  
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/" class="post-title-link" itemprop="url">数原 3.3 关系数据库设计方法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 10:27:00 / 修改时间：15:11:57" itemprop="dateCreated datePublished" datetime="2019-11-29T10:27:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第三章-数据库设计/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 数据库设计</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          一、关系数据库设计过程与各级模式
+关系数据库设计的各阶段，会形成数据库的各级模式。
+
+二、概念结构设计方法
+关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：
+
+ 1. 建立局部信息结构
+ 2. 将局部信息结构，合并为全局信息结构，并优化
+
+1.ER图的表示方法
+略
+
+(1)两个实体型之间的联系
+设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集A中的每 1 个实体，在实体集B中至多有 1 个实体与之联系。
+反过来，实体集B中的每 1 个实体，在实体集A中至多有 1 个实体与之联系。
+
+1对多联系(1:N)
+如果实体集A中的每 1 个实体，在
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/29/数原-3-3-关系数据库设计方法/数原-3-3-关系数据库设计方法/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+<div>
+  
+</div>
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-3-2-数据库设计的基本步骤/数原-3-2-数据库设计的基本步骤/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/29/数原-3-2-数据库设计的基本步骤/数原-3-2-数据库设计的基本步骤/" class="post-title-link" itemprop="url">数原 3.2 数据库设计的基本步骤</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-11-29 09:37:00 / 修改时间：15:11:48" itemprop="dateCreated datePublished" datetime="2019-11-29T09:37:00+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统原理/第三章-数据库设计/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 数据库设计</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -636,26 +997,27 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
     <div class="post-body" itemprop="articleBody">
 
       
-          第四节 数据模型
-模型(model)，通过对”现实世界事物的特征“进行抽象，实现模拟。
+          本节主要讨论数据库结构设计所涉及的几个基本步骤（需求分析、概念结构设计、逻辑结构设计、物理结构设计、数据库实施、数据库的运行和维护），而不讨论数据库的行为设计，因为行为设计和程序设计的区别不大。
 
-数据模型(Data Model)，也是对”现实世界中数据的特征“进行了抽象，从而模拟了现实世界的数据。
+一、需求分析
+需求分析分为4个步骤：
 
-一、数据特征与数据模型组成要素
-现实世界中的数据具有两种特征：
+ * 确定数据库范围
+ * 分析数据应用过程
+ * 收集与分析数据
+ * 编写需求分析报告
 
- 1. 静态特征：数据的基本结构、数据间的联系、对数据的约束（比如取值范围）
- 2. 动态特征：对数据可以进行的、符合一定规则的操作。
+1.确定数据库范围
+理想情况：数据库范围尽可能覆盖现在和将来的、组织中所有的应用领域。
 
-对数据进行抽象的数据模型，自然就需要描述数据的静态特征和动态行为，并为数据的表示和操作提供框架。
+现实情况：首先考虑当前组织所必须的应用要求。
 
-数据模型的定义：
-描述数据的静态结构，定义可对数据执行的操作和数据间约束的一组概念。
+借助 “机构与职能关系图” 来确定数据库应该支持的哪些功能，及功能的主次序列。
 
-数据模型的三
+机构与职能关系图，还可以帮助概念设计的局部化处理
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/18/1-4-数据模型/1-4-数据模型/#more" rel="contents">
+              <a class="btn" href="/2019/11/29/数原-3-2-数据库设计的基本步骤/数原-3-2-数据库设计的基本步骤/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -683,7 +1045,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/18/1-3-数据系统的结构/1-3-数据系统的结构/">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-3-1-数据库设计概述/数原-3-1-数据库设计概述/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
@@ -697,7 +1059,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/18/1-3-数据系统的结构/1-3-数据系统的结构/" class="post-title-link" itemprop="url">1.3 数据系统的结构</a>
+            <a href="/2019/11/29/数原-3-1-数据库设计概述/数原-3-1-数据库设计概述/" class="post-title-link" itemprop="url">数原 3.1 数据库设计概述</a>
         </h1>
 
         <div class="post-meta">
@@ -706,16 +1068,10 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-18 17:45:12" itemprop="dateCreated datePublished" datetime="2019-11-18T17:45:12+08:00">2019-11-18</time>
+              <time title="创建时间：2019-11-29 09:36:00 / 修改时间：15:11:38" itemprop="dateCreated datePublished" datetime="2019-11-29T09:36:00+08:00">2019-11-29</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-28 16:44:44" itemprop="dateModified" datetime="2019-11-28T16:44:44+08:00">2019-11-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -728,8 +1084,8 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库系统原理/第一章-数据系统概述/" itemprop="url" rel="index">
-                    <span itemprop="name">第一章 数据系统概述</span>
+                  <a href="/categories/数据库系统原理/第三章-数据库设计/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 数据库设计</span>
                   </a>
                 </span>
             </span>
@@ -740,7 +1096,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>554</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -759,30 +1115,36 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
     <div class="post-body" itemprop="articleBody">
 
       
-          第三节 数据库系统的结构
-在一个数据库系统中，不同的用户从不同的角度看待数据库，会形成不同的视图结构。
-
- * 从DBA的角度来看， 数据库系统分为： * 内部系统结构： * 模式
-       * 外模式
-       * 内模式
-      
-      
-    * 外部系统结构： * 集中式结构
-       * 分布式结构
-       * 并行结构
-      
-      
+          一、数据库的生命周期
+ * 数据库分析和设计阶段 * 需求分析
+    * 概念设计
+    * 逻辑设计
+    * 物理设计
    
    
- * 从数据库系统的用户（如应用程序开发人员）来看——数据系统的运行和应用结构 * 客户/服务器结构，CS
-    * 浏览器/服务器结构，BS
+ * 数据库实现和操作阶段 * 数据库的实现
+    * 操作与监督
+    * 修改与调整
    
    
 
-一、数据库系统的三级模式结构
+二、数据库设计的目标
+ * 满足应用功能需求
+ * 良好的数据库性能
+
+三、数据库设计的内容
+ * 数据库结构设计：静态的，根据应用环境设计数据库的模式结构。 * 概念结构设计
+    * 逻辑结构设计
+    * 物理结构设计
+   
+   
+ * 数据库行为设计：动态的，确定数据库用户的行为和动作。
+
+四、数据库设计的方法
+数据库设计方
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/18/1-3-数据系统的结构/1-3-数据系统的结构/#more" rel="contents">
+              <a class="btn" href="/2019/11/29/数原-3-1-数据库设计概述/数原-3-1-数据库设计概述/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -810,7 +1172,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/18/1-2-数据管理技术的发展/1-2-数据管理技术的发展/">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
@@ -824,7 +1186,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/18/1-2-数据管理技术的发展/1-2-数据管理技术的发展/" class="post-title-link" itemprop="url">1.2 数据管理技术的发展</a>
+            <a href="/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/" class="post-title-link" itemprop="url">数原 2.3 关系数据库的规范化理论</a>
         </h1>
 
         <div class="post-meta">
@@ -833,16 +1195,10 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-18 17:44:52" itemprop="dateCreated datePublished" datetime="2019-11-18T17:44:52+08:00">2019-11-18</time>
+              <time title="创建时间：2019-11-29 09:34:00 / 修改时间：15:45:29" itemprop="dateCreated datePublished" datetime="2019-11-29T09:34:00+08:00">2019-11-29</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-28 16:33:39" itemprop="dateModified" datetime="2019-11-28T16:33:39+08:00">2019-11-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -855,8 +1211,8 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库系统原理/第一章-数据系统概述/" itemprop="url" rel="index">
-                    <span itemprop="name">第一章 数据系统概述</span>
+                  <a href="/categories/数据库系统原理/第二章-关系数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">第二章 关系数据库</span>
                   </a>
                 </span>
             </span>
@@ -867,7 +1223,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -886,25 +1242,25 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
     <div class="post-body" itemprop="articleBody">
 
       
-          第二节 数据管理技术的发展
-数据管理
-数据管理包括2个方面：
+          规范化理论研究的是：
 
- 1. 针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）
- 2. 依靠数据管理技术，集中控制管理数据。（本节的主要内容）
+ * 关系模式中属性间的依赖关系，
+ * 属性间的依赖关系对关系模式的性能的影响。
+ * 好的关系模式应该具备的哪些性质
+ * 好的关系模式的设计算法
 
-与计算机技术结合的数据管理包括：
+关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。
 
- * 收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；
- * 组织：将收集来的数据进行适当的构造 * 逻辑组织：用户或应用程序所见到的数据结构形式
-    * 物理组织：数据在物理存储设备上的结构形式
-   
-   
- * 归类存储：正在使用的数据，和作为备份的数据。
+P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。
+
+一、关系模式中可能存在的冗余和异常问题
+ * 数据冗余：由完全依赖导致的非主属性的重复存储。
+ * 更新异常：由数据冗余导致的潜在的不一致性
+ * 插入异常：主码有多个属性，而插入行的主码中部分属性有空值，不允许插入
  * 
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/18/1-2-数据管理技术的发展/1-2-数据管理技术的发展/#more" rel="contents">
+              <a class="btn" href="/2019/11/29/数原-2-3-关系数据库的规范化理论/数原-2-3-关系数据库的规范化理论/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -932,7 +1288,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/18/1-1-数据库基本概念/1-1-数据库基本概念/">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/29/数原-2-1-关系数据库概述/数原-2-1-关系数据库概述/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
@@ -946,7 +1302,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/11/18/1-1-数据库基本概念/1-1-数据库基本概念/" class="post-title-link" itemprop="url">1.1 数据库基本概念</a>
+            <a href="/2019/11/29/数原-2-1-关系数据库概述/数原-2-1-关系数据库概述/" class="post-title-link" itemprop="url">数原 2.1 关系数据库概述</a>
         </h1>
 
         <div class="post-meta">
@@ -955,16 +1311,10 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-18 17:39:00" itemprop="dateCreated datePublished" datetime="2019-11-18T17:39:00+08:00">2019-11-18</time>
+              <time title="创建时间：2019-11-29 09:32:00 / 修改时间：15:11:05" itemprop="dateCreated datePublished" datetime="2019-11-29T09:32:00+08:00">2019-11-29</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-28 23:24:01" itemprop="dateModified" datetime="2019-11-28T23:24:01+08:00">2019-11-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -977,8 +1327,8 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库系统原理/第一章-数据系统概述/" itemprop="url" rel="index">
-                    <span itemprop="name">第一章 数据系统概述</span>
+                  <a href="/categories/数据库系统原理/第二章-关系数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">第二章 关系数据库</span>
                   </a>
                 </span>
             </span>
@@ -989,7 +1339,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>949</span>
+              <span>1</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -1008,391 +1358,10 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
     <div class="post-body" itemprop="articleBody">
 
       
-          第一章 数据系统概述
-第一节 数据库基本概念
-1.数据
-数据是描述事物的符号记录，是用物理符号记录下来的、可以鉴别的信息。
-
-人们通常抽取事物的某些特征或属性来描述事物。
-此时仅有数据，没有对数据的解释就无法理解数据的意义。
-
-语义：数据所蕴含的信息，是对数据的解释。
-
-数据和语义密不可分。
-
-没有语义的数据是无意义的，不完整的。
-
-2.数据库
-数据库(DataBase,DB)：长期存储在计算机中的，有组织、可共享的数据集合。
-
-数据库中的数据具有下列特点：
-
- * 按一定的数据模型组织、描述、存储
- * 具有较小的冗余度
- * 较高的数据独立性
- * 可以被多个用户共享
-
-3. 数据库管理系
+          略
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/11/18/1-1-数据库基本概念/1-1-数据库基本概念/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-<div>
-  
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/17/1-3-计算机网络的分类/1-3-计算机网络的分类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
-      <meta itemprop="name" content="roro">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="桑园巷">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/17/1-3-计算机网络的分类/1-3-计算机网络的分类/" class="post-title-link" itemprop="url">1.3 计算机网络的分类</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-17 10:58:44 / 修改时间：15:08:09" itemprop="dateCreated datePublished" datetime="2019-11-17T10:58:44+08:00">2019-11-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机网络原理</span>
-                  </a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机网络原理/1-计算机网络概述/" itemprop="url" rel="index">
-                    <span itemprop="name">1.计算机网络概述</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          1.3.1 按拓扑类型
-网络拓扑： 指网络的形状，或者说网络在物理上的连通性。
-
-网络拓扑包括：
-
- * 星型 
- * 总线型
- * 环形
- * 树形
- * 混合型
- * 网型
-
-选择哪一种拓扑类型，与传输介质、介质访问控制方法有关。
-选择网络拓扑类型时，应考虑以下因素： 
-
- * 可靠性：保证所有的数据能够准确送达目的节点。
- * 可维护性：便于故障检测、故障隔离
- * 费用：信道费用、安装费用
- * 灵活性：便于添加、删除节点，易于配置拓扑结构
- * 响应时间：尽可能短
- * 吞吐量：尽可能大
-
-网络拓扑根据通信子网中的信道类型可分为：
-
- * 点对点信道：每条信道连接一对节点。包括：  
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/17/1-3-计算机网络的分类/1-3-计算机网络的分类/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-<div>
-  
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/11/17/计算机网络中容易搞混的知识点/计算机网络中容易搞混的知识点/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
-      <meta itemprop="name" content="roro">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="桑园巷">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/17/计算机网络中容易搞混的知识点/计算机网络中容易搞混的知识点/" class="post-title-link" itemprop="url">计算机网络中容易搞混的知识点</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-17 10:45:04 / 修改时间：15:08:50" itemprop="dateCreated datePublished" datetime="2019-11-17T10:45:04+08:00">2019-11-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机网络原理</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>880</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          可以从不同的角度对网络进行区分(不同角度得到的分类可能出现重叠)。
-
-按通信服务类型
- * 面向连接服务：从数据交换方式来看，包括：电路交换、虚电路分组交换
-   
-   
- * 无连接服务从数据交换方式来看，包括：报文交换、数据报分组交换
-   
-   
-
-按通信子网中信道类型（或者叫拓扑类型）
- * 广播信道：多个网络节点共享公共信道
- * 点对点信道：每条物理线路连接一对节点
-
-按通信子网的传输方式
-数据传输方式：从整个通信子网看数据流。 
-
-数据在通信子网内是广播传输，还是存储转发+路由选择传输。
-
- * 广播式传输：
- * 点对点式传输：
-
-注意： 
-
- 1. 电路交换是接受后立即发
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/17/计算机网络中容易搞混的知识点/计算机网络中容易搞混的知识点/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-<div>
-  
-</div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/09/08/Hexo-gitHub-搭建成功/hexo-github-搭建成功/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
-      <meta itemprop="name" content="roro">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="桑园巷">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/08/Hexo-gitHub-搭建成功/hexo-github-搭建成功/" class="post-title-link" itemprop="url">Hexo + gitHub 搭建成功</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-08 22:36:38" itemprop="dateCreated datePublished" datetime="2019-09-08T22:36:38+08:00">2019-09-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-28 16:30:55" itemprop="dateModified" datetime="2019-11-28T16:30:55+08:00">2019-11-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/应用软件/" itemprop="url" rel="index">
-                    <span itemprop="name">应用软件</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。
-
-折腾了一天，终于能 deploy 到 github 并显示出来了。具体搭建过程不再复述。
-
-本次搭建，参考了 超详细Hexo+Github Page搭建技术博客教程，以及 Hexo的帮助文档。 
-
-其中遇到很多障碍：
-
- 1. Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试了 github 的选项: keep my email address private。
-    结果这个选项对后面的 deploy 造成障碍，于是关闭了该选项。
-    
-    
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/09/08/Hexo-gitHub-搭建成功/hexo-github-搭建成功/#more" rel="contents">
+              <a class="btn" href="/2019/11/29/数原-2-1-关系数据库概述/数原-2-1-关系数据库概述/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1419,6 +1388,9 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   </div>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1463,14 +1435,14 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1518,12 +1490,12 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">13k</span>
+    <span title="站点总字数">31k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">11 分钟</span>
+    <span title="站点阅读时长">28 分钟</span>
 </div>
   <div class="addthis_inline_share_toolbox">
     <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
@@ -1574,9 +1546,7 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   <script src="/lib/anime.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/utils.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
 
@@ -1604,6 +1574,54 @@ hexo 资源文件夹中的本地图片（不能设定显示尺寸）
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 

@@ -1,10 +1,1013 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>NotePad2打开文件乱码的原因和解决</title>
+    <url>/2019/11/29/otePad2%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B9%B1%E7%A0%81%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%A7%A3%E5%86%B3/notepad2%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E4%B9%B1%E7%A0%81%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%92%8C%E8%A7%A3%E5%86%B3/</url>
+    <content><![CDATA[<p>TotalCommander 的插件 Universal Viewer Pro 自带的F4编辑器 Notepad2 ，在打开某些中文文档时会出现类似韩文的乱码。</p>
+<p>原因在于：<br>
+notepad2自动检测文本编码格式时有问题，如果中文文档不包含任何单字节的英文字符或数字，自动检测时就会出错。</p>
+<p>解决办法： 按 F8，尝试各种编码。</p>
+<p>也可以关闭 Notepad2 的自动检测功能，固定为预设的编码：<br>
+选择菜单“文件”-“编码”-“默认”，会弹出“选择编码”对话框，选择“跳过Unicode自动检测”和“不解释编码标识”，最后按F7保存设置。</p>
+]]></content>
+      <categories>
+        <category>应用软件</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 4.4 数据更新</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-4-4-%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/%E6%95%B0%E5%8E%9F-4-4-%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[<h2 id="插入数据">插入数据</h2>
+<h3 id="insert-into-tbname-valuesval1val2...val21val22......">insert into tbname values(val1,val2,...),(val21,val22,...),...</h3>
+<p>可以插入多条记录</p>
+<h3 id="insert-...-set">insert ... set</h3>
+<p>只能插入一条记录</p>
+<h3 id="insert-...-select">insert ... select</h3>
+<p>把子查询的结果集插入表中。</p>
+<h2 id="删除数据">删除数据</h2>
+<p>delete from tbname where</p>
+<h2 id="更新数据">更新数据</h2>
+<p>update tbname set col1=val1,col2=val2,... where</p>
+<p>select case when condition1 then expr1 when condition2 then expr2 else expr3 end as colalias</p>
+<p>聚合函数：</p>
+<p>如果使用了group by ,结果是多条记录，即多个分组，每个分组的聚合。</p>
+<p>如果没有group by ，结果是一条记录，是对所有记录的聚合。</p>
+<h2 id="四where-子句和条件查询">四、Where 子句和条件查询</h2>
+<h3 id="比较运算">1. 比较运算</h3>
+<ul>
+<li>两个值都不为NULL：结果为 TRUE /FALSE</li>
+<li>其中一个值为NULL或都为NULL：比较结果为 UNKNOWN</li>
+<li>&lt;=&gt;：两个值相等，或，都为NULL，结果为 TRUE，否则 FALSE ### 2. 范围</li>
+<li>between ... and ：闭区间 , [ ]</li>
+<li>in (枚举)</li>
+</ul>
+<h3 id="判断是不是空值">3. 判断是不是空值</h3>
+<ul>
+<li>colname IS [NOT] NULL</li>
+</ul>
+<h3 id="子查询">4. 子查询</h3>
+<p>select * from tb_student where studentno in (select studentno from tbscore where score&gt;=80)</p>
+<p>select * from tb_student stu inner join tb_score sco on stu.studentno = sco.studentno where sco.score&gt;80</p>
+<p>expression <比较运算符> all | any | some (subquery)</比较运算符></p>
+<ul>
+<li>all : expr 需要与子查询的每个结果进行比较</li>
+<li>some/any: 只要子查询有值满足比较，即可。</li>
+</ul>
+<p>exist (subquery): 判断 subquery 的结果集是否为空。</p>
+<h2 id="五group-by-子句分组数据">五、group by 子句，分组数据</h2>
+<p>select * from customers group by</p>
+<p>group by 是对 select 选择的列组成的结果集，再做分组。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第四章 SQL与关系数据库基本操作</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 4.3 数据定义</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-4-3-%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89/%E6%95%B0%E5%8E%9F-4-3-%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p>RDMBS支持的三级模式结构(模式、外模式、内模式）包含的数据库对象有： 数据库模式(schema)、表、索引、视图等，相应的，SQL就应当提供这些基本对象的定义功能。</p>
+<p>标准SQL提供的功能有限，更多的是具体的RDBMS扩展的功能。</p>
+<p><a href="https://blog.csdn.net/aa8568849/article/details/62043039" target="_blank" rel="noopener">MYSQL数据库命令行分号不能结束语句的问题解决办法</a></p>
+<h2 id="一数据库模式定义创建数据库模式">一、数据库模式定义（创建数据库/模式）</h2>
+<p>数据库模式的定义包括：</p>
+<p>create database | schema if not exists db_name character set = charset_name colloate = collation_name;</p>
+<p>选择数据库:<br>
+use database;</p>
+<p>修改数据库：<br>
+alter database|schema db_name alter_specification ...</p>
+<p>drop database|schema if exists db_name;</p>
+<p>列出mysql中的数据库 show databases|schemas;</p>
+<h2 id="二表定义">二、表定义</h2>
+<p>临时表：创建表时，可以使用 temporary 关键字。</p>
+<p>临时表与用户会话有关，会话完成后，临时表会被MYSQL删除。<br>
+而且临时表只对会话用户可见，因此不同用户可以使用同名的临时表。<br>
+临时表甚至可以和持久表同名。</p>
+<ul>
+<li>数值型：int, double, bool(tinyint 的同义词,mysql没有内置的布尔类型，只能用整型来代替)</li>
+<li>日期和时间型：date, time, timestamp</li>
+<li>字符串型: char , varchar</li>
+<li>空间数据类型：</li>
+</ul>
+<p>自增列：auto_increment。<br>
+每个表只能有一个自增列，且必须被索引。<br>
+插入数据时，该列可以用 NULL 或 0 来占位，系统会自动纠正该值，也可以指定一个未使用的值，以后在该基础上自增。</p>
+<p>default 默认值：插入数据时，如果未指定该列的值，则DBMS自动赋予的一个值。<br>
+如果没有为列指定DEFAULT约束，插入数据时，如果该列不允许为NULL，则DBMS会自动取该类型的0值，否则就填入NULL。</p>
+<h3 id="更新表">更新表</h3>
+<ul>
+<li>add [column] 添加列。</li>
+</ul>
+<p>alter table tb_name add column cust_city char(50) not null default 'wuhan' [after cust_sex]|[first];</p>
+<p>还可以用 add primary key , add foreign key , add index 等子句。</p>
+<ul>
+<li>change [column]，<strong>修改列的所有属性</strong>，包括列名、数据类型、列约束。</li>
+</ul>
+<p>alter table change [column] cust_sex sex char(1) null default 'M';</p>
+<p>从一种数据类型A改为另一种数据类型B，如果AB不兼容，会失败。类型兼容时，可能数据被截断。</p>
+<ul>
+<li>alter [column]，<strong>修改列的默认值</strong>。</li>
+</ul>
+<p><code>alter table alter column colName set default newDefaultValue;</code><br>
+注意关键字是 alter column ... set default ...</p>
+<ul>
+<li>modify [column]，<strong>修改列的数据类型</strong>，以及通过 first /after 修改列的位置。</li>
+</ul>
+<p>alter table modify column cust_name char(20) frist;</p>
+<p>drop [column], 删除列，该列数据也被删除。<br>
+类似的，drop primary key , drop foreign key , drop index</p>
+<p>修改表名的2种方法：</p>
+<ul>
+<li>alter table tbname rename [to] newname, 修改表名</li>
+<li>rename table oldname TO newname;</li>
+</ul>
+<p>列出数据库中的表，<br>
+<code>show tables [from| in dbname];</code></p>
+<p>列出指定表的结构， <code>show columns from|in tbname</code></p>
+<p><code>describe|desc tbname [colname|wild]</code></p>
+<h2 id="三索引">三、索引</h2>
+<p>索引：建立了行号和记录值之间的对应关系。</p>
+<p>查询数据时，根据输入的记录值，可以在索引中直接定位记录，实现快速查询。<br>
+否则，没有索引的情况下，需要逐行读取记录值进行对比，明显慢得多。</p>
+<p>索引虽然可以提供查询速度，但也存在一些弊端：</p>
+<ul>
+<li>空间问题，索引文件的增长速度可能比表快，从而更快的达到最大文件限制：一个表的所有索引都存放在一个索引文件中。</li>
+<li>速度问题，索引会降低更新表的速度：对表执行写入操作时，DBMS需要同步更新索引，以保持索引和数据的一致性。索引越多，更新速度越慢。</li>
+</ul>
+<p>索引的分类：</p>
+<ul>
+<li>普通索引：index</li>
+<li>唯一索引：unique index, 被索引的列具有唯一值，但允许至多有一个NULL值。</li>
+<li>主键：主键也是一种唯一索引，不允许有NULL值。一个表只能有一个主键。可以在创建表时建立主键，也可以在之后添加 alter table add primary key...</li>
+</ul>
+<p>索引还可以分为：</p>
+<ul>
+<li>单列索引: 只包含一个数据列。</li>
+<li>多列索引（复合索引/组合索引）：包括多个数据列</li>
+</ul>
+<p>多列索引实际上可以按照最左前缀法则拆分为多个，比如 (col1,col2,col3) 实际上包含了 (col1) ,(col1,col2), (col1,col2,col3) 3个索引。</p>
+<h3 id="创建索引">创建索引</h3>
+<h4 id="单独创建索引">1. 单独创建索引</h4>
+<p><code>create [unique] index idxname on tbname(colname(length) asc|desc,...)</code></p>
+<p>[unique] 用于创建唯一索引。<br>
+colname是建立索引的列，通常使用<em>查询语句中where子句 或 join子句中的列</em> 。 length 指定使用列的前 length 个字符来创建索引，即使用列的一部分创建索引，从而缩小索引文件的体积。</p>
+<h4 id="create-table的同时创建索引">2.create table的同时，创建索引</h4>
+<p>可以在 create table 语句中使用以下一项或几项，以创建索引：</p>
+<ul>
+<li>主键<code>[constraint [symbol]] PRIMARY KEY (col1,col2,...)</code>: 主键是不允许NULL值的唯一索引。</li>
+<li>外键<code>[constraint [symbol]] Foreign key [index_name] (col1,col2,...)</code>：外键也是一种索引。</li>
+<li>普通索引 <code>{index|key} [index_name] (col1,col2,...)</code>：</li>
+<li>唯一索引 <code>[constraint [symbol]] UNIQUE [INDEX|KEY] [index_name] (col1,col2,...)</code></li>
+</ul>
+<p>说明：<br>
+{}表示必须出现的内容。<br>
+KEY 和 INDEX是等价的。(因而，Primary key 和 foreign key 都是索引)</p>
+<p>create table时，有几种指定主键的方法：</p>
+<ul>
+<li>在列约束后，使用 primary key 关键字指定它为主键：当主键由多列组成时，不能使用。</li>
+<li>列定义的最后，添加一个 [constrain [symbol]] primary key(col1,cols2) ：即上面介绍的方法。</li>
+</ul>
+<h4 id="使用-alter-table-创建索引">3. 使用 alter table 创建索引</h4>
+<p>语法和 create table 时完全一样，仅仅多了 add 。</p>
+<ul>
+<li><code>add primary key(col1,col2,...)</code></li>
+<li><code>add foreign key [index_name] (col1,col2,...)</code></li>
+<li><code>add {index|key} [index_name] (col1,col2,...)</code></li>
+<li><code>add unique [index|key] [index_name] (col1,col2,...)</code></li>
+</ul>
+<h3 id="查看索引">查看索引</h3>
+<p><code>show index |indexs | keys from|in tbname [from dbname]</code></p>
+<h3 id="删除索引">删除索引</h3>
+<p>有两种方法删除索引：</p>
+<ul>
+<li><code>drop index index_name on tbname</code></li>
+<li>在 alter table中使用下列子句，来删除主键、外键、索引
+<ul>
+<li>drop primary key</li>
+<li>drop foreign key</li>
+<li>drop index</li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第四章 SQL与关系数据库基本操作</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 4.2 Mysql基础</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-4-2-Mysql%E5%9F%BA%E7%A1%80/%E6%95%B0%E5%8E%9F-4-2-mysql%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="二mysql中的sql">二、MYSQL中的SQL</h2>
+<p>MYSQL支持关系数据库的三级模式结构：</p>
+<ul>
+<li>外模式：视图、部分基本表</li>
+<li>模式：基本表，一个表可以有多个索引，索引也在存储文件中。</li>
+<li>内模式：若干存储文件，存储文件的逻辑结构组成了内模式，存储文件的物理结构对用户透明。</li>
+</ul>
+<p>一个关系对应一个基本表，一个或多个基本表对应一个存储文件。<br>
+视图是从一个或多个基本表导出的虚表，数据库只存储视图的定义，不需要存储其数据。<br>
+视图上可以再定义视图。</p>
+<p>MYSQL还在SQL标准的基础上增加了一些语言要素：</p>
+<h3 id="常量">(1)常量</h3>
+<ul>
+<li>字符串常量：使用单引号或双引号括起来的字符序列。(建议一直使用单引号, <a href="https://stackoverflow.com/questions/11321491/when-to-use-single-quotes-double-quotes-and-backticks-in-mysql" target="_blank" rel="noopener">When to use single quotes, double quotes, and backticks in MySQL</a>)
+<ul>
+<li>Ascii字符串常量: 'ABCD'</li>
+<li>Unicode字符串常量: N'ABCD'</li>
+</ul></li>
+<li>数值常量：
+<ul>
+<li>整型常量: 34, 89</li>
+<li>浮点型常量: 1.45 6.37</li>
+</ul></li>
+<li>十六进制常量：默认类型是字符串！！可以使用函数转为数字处理 cast(... as unsigned)。字符串或数值也可以用 hex()转为16进制常量。通常以字符串常量的形式书写，0x'4D7953514C'，每2个十六进制数字可以被转换为一个Ascii字符(4D-&gt;M, 79-&gt;y)，其最前面有大写字母"X"或小写的"x"，也可以用0x4D7953...的形式书写，此时不需要单引号。</li>
+<li>日期时间常量：单引号括起来的字符串。'2019-10-10'</li>
+<li>位字段值(BIT列的值)：b'value'的形式书写，value是二进制序列。</li>
+<li>布尔值：TRUE = 1 / FALSE =0</li>
+<li>NULL值</li>
+</ul>
+<h3 id="变量">(2)变量</h3>
+<ul>
+<li>用户变量: <span class="citation" data-cites="UserVar">@UserVar</span></li>
+<li>系统变量: @<span class="citation" data-cites="systemVar">@systemVar</span></li>
+</ul>
+<h3 id="运算符">(3)运算符</h3>
+<ul>
+<li>算数运算符: + - * / %</li>
+<li>位运算符: &amp;, | ,^ ,~ ,&gt;&gt; ,&lt;&lt;</li>
+<li>比较运算符：=, &gt;, &lt;, &gt;=, &lt;=, &lt;&gt;, !=, &lt;=&gt;(当两个值都为NULL时，结果为1，否则为0)</li>
+<li>逻辑运算符：NOT/! , OR/||, AND/&amp;&amp;, XOR</li>
+</ul>
+<h3 id="表达式">(4)表达式</h3>
+<h3 id="内置函数">(5)内置函数</h3>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第四章 SQL与关系数据库基本操作</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 4.1 SQL概述</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-4-1-SQL%E6%A6%82%E8%BF%B0/%E6%95%B0%E5%8E%9F-4-1-sql%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<h2 id="三sql的组成">三、SQL的组成</h2>
+<p>1.数据定义语言 DDL：创建、修改、删除各种数据库对象。</p>
+<ul>
+<li>create</li>
+<li>Alter</li>
+<li>Drop</li>
+</ul>
+<p>数据库的对象有：</p>
+<ul>
+<li>表</li>
+<li>视图</li>
+<li>触发器</li>
+<li>存储过程</li>
+<li>默认约束</li>
+<li>规则</li>
+</ul>
+<p>2.数据操纵语言 DML：操纵各种数据库对象</p>
+<ul>
+<li>select</li>
+<li>insert</li>
+<li>update</li>
+<li>delete</li>
+</ul>
+<p>3.数据控制语言 DCL：用于安全管理</p>
+<ul>
+<li>revoke：收回用户或角色的权限，但用户仍然可以从其所属角色中继承权限。</li>
+<li>grant：把执行语句的权限、数据对象的可操作权限，赋予用户或角色。</li>
+</ul>
+<p>4.嵌入式SQL、动态SQL（不做介绍）</p>
+<ul>
+<li>在高级语言中使用SQL的方法</li>
+</ul>
+<p>5.SQL 调用规则，SQL会话规则（本书不做介绍）</p>
+<ul>
+<li>SQL调用：一个SQL源文件，调用另一个SQL源文件</li>
+<li>SQL会话：应用程序连接到多个SQL服务器中的某一个，并与之交互。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第四章 SQL与关系数据库基本操作</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 3.3 关系数据库设计方法</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-3-3-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95/%E6%95%B0%E5%8E%9F-3-3-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="一关系数据库设计过程与各级模式">一、关系数据库设计过程与各级模式</h2>
+<p>关系数据库设计的各阶段，会形成数据库的各级模式。</p>
+<h2 id="二概念结构设计方法">二、概念结构设计方法</h2>
+<p>关系数据库的概念模型设计，采用自顶向下法，具有2个步骤：</p>
+<ol type="1">
+<li>建立局部信息结构</li>
+<li>将局部信息结构，合并为全局信息结构，并优化</li>
+</ol>
+<h3 id="er图的表示方法">1.ER图的表示方法</h3>
+<p>略</p>
+<h4 id="两个实体型之间的联系">(1)两个实体型之间的联系</h4>
+<p>设有实体集A B，它们所属的两个实体型之间的联系有 ##### 1对1联系(1:1) 如果实体集A中的每 1 个实体，在实体集B中至多有 1 个实体与之联系。<br>
+反过来，实体集B中的每 1 个实体，在实体集A中至多有 1 个实体与之联系。</p>
+<h5 id="对多联系1n">1对多联系(1:N)</h5>
+<p>如果实体集A中的每 1 个实体，在实体集B中有 N 个实体与之联系。<br>
+实体集B中的每 1 个实体，在实体集A中至多有 1 个与之联系。</p>
+<h5 id="多对多联系mn">多对多联系(M:N)</h5>
+<p>如果实体集A中的每 1 个实体，在实体集B中有 N 个实体与之联系。<br>
+实体集B中的每 1 个实体，在实体集A中有 M 个实体与之联系。</p>
+<h4 id="两个以上实体型之间的联系">(2)两个以上实体型之间的联系</h4>
+<p>也存在 1：1， 1：N， M：N 的联系。</p>
+<h4 id="单个实体型内的联系">(3)单个实体型内的联系</h4>
+<p>同一个实体型内的各实体之间也可以存在上诉3种关系。</p>
+<p>比如：职工实体型内部，一个职工可以”领导“多名职工，任意一名职工至多只能被一名职工直接领导。因此属于 1：N 联系。</p>
+<h3 id="局部信息结构设计">2.局部信息结构设计</h3>
+<p>局部信息结构：不同的用户视图范围内的信息结构。</p>
+<p>局部信息结构的设计步骤：</p>
+<ol type="1">
+<li>确定局部范围：根据需求分析报告中标明的用户视图范围来确定，用户视图范围=子模式（外模式）</li>
+<li>选择实体：在局部范围内选择合适的信息单位，作为局部信息结构的基本实体。</li>
+<li>选择实体的标识属性（主码）：实体依赖于主码的存在，确定了主码就确定了实体。</li>
+<li>确定实体间的联系：试行匹配法可以分析实体间是否存在联系——在视图范围内，逐一取出实体与其他实体逐个匹配，探讨两者间是否存在联系（比如某任务同时使用了它们）。</li>
+<li>确定实体的说明属性（非主属性）：说明属性描述了实体的一般特征。属性分配到某个实体是否合理，取决于该属性是否可通过该实体的主码找到，并且它们之间在应用中具有某种联系。有可能多个实体的主码都能联系到同一说明属性，此时可将该属性分配到使用频率最高的实体中去。</li>
+</ol>
+<h3 id="全局信息结构设计">3.全局信息结构设计</h3>
+<p>全局信息结构设计：将所有的局部信息结构，合并成一个全局信息结构。</p>
+<p>合并，是一个不断发现和解决冲突的过程。</p>
+<p>冲突包含了：属性冲突、命名冲突、结构冲突。</p>
+<h4 id="属性冲突">1.属性冲突</h4>
+<ul>
+<li>属性域的冲突：年龄，有的局部信息结构用出生日期，有的用多少岁表示。</li>
+<li>属性单位的冲突：身高，有的局部信息结构用cm，有的用 m。</li>
+</ul>
+<h4 id="命名冲突">2.命名冲突</h4>
+<ul>
+<li>同名异议：不同意义的实体型、联系型，在不同的局部信息结构中使用了相同的名字。</li>
+<li>异名同义：相同意义的实体型、联系型，在不同的局部应用中使用了不同的名字。</li>
+</ul>
+<h4 id="结构冲突">3.结构冲突</h4>
+<ul>
+<li>同一对象，在一个局部ER图中是实体，在另一个局部ER图中是属性</li>
+<li>同一实体，在不同的局部ER图中的属性个数和类型不同。</li>
+<li>相同两个实体之间的联系，在不同的局部ER图中是不同的类型。</li>
+</ul>
+<p>解决办法：<br>
+属性冲突、命令冲突，通过协商、讨论来解决。<br>
+结构冲突，通过技术手段解决。<br>
+比如：把实体转为属性，或者属性转为实体，使同一对象具有统一的抽象。<br>
+比如：取不同局部ER图中属性的并集，做为全局信息结构中同一实体的属性集，并统一属性的数据类型。</p>
+<p>全局ER图的三个目标：</p>
+<ol type="1">
+<li>实体型尽可能少</li>
+<li>属性尽可能少</li>
+<li>实体型之间的联系无冗余</li>
+</ol>
+<h2 id="三逻辑结构设计方法">三、逻辑结构设计方法</h2>
+<p>逻辑结构设计的任务：把概念模型，转换为，具体的DBMS所支持的逻辑数据模型（模式和外模式）。</p>
+<p>在关系数据库中，逻辑结构设计的任务：把概念设计阶段得到的ER图，转换为，关系DBMS支持的关系模型，通常包括3项工作：</p>
+<ol type="1">
+<li>将ER图转为关系数据模型</li>
+<li>优化关系数据模型</li>
+<li>设计各用户的外模式</li>
+</ol>
+<h3 id="er图转换为关系模型">1. ER图转换为关系模型</h3>
+<p>ER图转换为关系模型的原则：</p>
+<ul>
+<li>一个实体转换为一个关系模式：实体的属性 --&gt; 关系的属性，实体的主码 --&gt; 关系的主码。</li>
+<li>1:1联系：
+<ul>
+<li>转换为独立的关系模式：”相连实体的主码 + 联系本身的属性“ --&gt; 独立关系的属性，每个实体的主码 --&gt; 独立关系的候选码，独立关系自行决定哪个候选码作为主码。</li>
+<li>与任意一端实体对应的关系模式合并：在选做合并端实体的关系中，加入”另一个实体的主码 + 联系自身的属性“。</li>
+</ul></li>
+<li>1:N联系：
+<ul>
+<li>转换为独立的关系模式：”相连实体的主码 + 联系自身的属性“--&gt; 独立关系的属性，N端实体的主码 --&gt; 独立关系的主码。</li>
+<li>与N端对应的关系模式合并：在N端实体对应的关系中，加入联系自身的属性。</li>
+</ul></li>
+<li>M:N联系：只能转为独立关系，”相连实体的主码 + 联系自身的属性“ --&gt; 关系的属性，相连实体主码的组合 --&gt; 关系的主码</li>
+<li>二个以上实体型的联系：同 M:N 联系</li>
+<li>具有相同主码的关系模式可以合并。</li>
+</ul>
+<p>注意：ER图转换时，不仅要考虑主码、属性，还应该考虑外键，从而实现参照完整性。</p>
+<h3 id="数据模型的优化">2.数据模型的优化</h3>
+<p>逻辑设计的结果不是唯一的，因此可以通过修改、调整逻辑模型，进一步提高性能或满足实际需要，这就是逻辑模型的优化。</p>
+<p>关系数据模型的优化理论基础是：关系规范化理论，方法如下：</p>
+<ul>
+<li>消除各关系模式之间的冗余联系</li>
+<li>确定关系模式内，各属性间的函数依赖关系</li>
+<li>判断每个关系模式的范式，根据实际需要确定合适的范式</li>
+<li>通过模式分解，提高数据操作的效率、存储空间的利用率</li>
+</ul>
+<h3 id="设计用户子模式">3.设计用户子模式</h3>
+<p>利用视图，设计用户子模式。</p>
+<p>数据库全局逻辑模式是从系统的时间效率、空间效率、易维护等角度出发的，而用户的外模式更注重用户的习惯和方便。</p>
+<p>定义外模式：</p>
+<ul>
+<li>利用视图机制，重新定义某些属性的别名，使其符合用户的习惯。</li>
+<li>不同级别的用户，定义不同的视图，保证系统的安全性</li>
+<li>简化用户对系统的使用：将复杂的查询事先定义为视图，用户选择不同的视图进行查询，从而简化用户操作。</li>
+</ul>
+<h2 id="四物理设计方法">四、物理设计方法</h2>
+<p>关系数据库的存取路径对用户透明，好处是用户无需关心存储结构和存取方法，缺点是缺乏控制存取效率的手段。而物理设计就提供了改善存取效率的方法：索引和聚集。</p>
+<p>物理设计的任务：通过对关系建立索引和聚集，来实现与应用相关数据的逻辑连接和物理聚集。</p>
+<h3 id="建立索引">1.建立索引</h3>
+<p>索引会增加DBMS对索引的维护开销（保持索引与关系的一致性）。 因此，建立索引的数据对象，只能有低频率的插入、修改、删除操作。<br>
+而建立索引的属性，应该是所在关系中高频使用的属性。</p>
+<p>建立索引的方式分为：</p>
+<ul>
+<li>静态建立索引：预先在数据库中建立的索引，之后，应用程序都可以直接使用，适合于用户较多、使用周期较长的数据。</li>
+<li>动态建立索引：临时由应用程序或在数据库建立的索引，适合于满足单个用户需要、临时使用。</li>
+</ul>
+<h3 id="建立聚集">2.建立聚集</h3>
+<p>将相关数据<strong>集中存放</strong>，从而提高相关数据的IO数据命中率，改善存取速度的物理存储技术，称为聚集。</p>
+<p>相关数据：在一个或多个关系中，在垂直（属性组）或水平（元组集合）上，把经常一起使用的数据分为一组。</p>
+<p>集中存放：把相关数据放在一个物理块、磁道、柱面中，或相邻的物理区域中。</p>
+<p>只有数据使用频率高、数据量大、更新操作较少的数据，才有必要建立聚集。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第三章 数据库设计</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 3.2 数据库设计的基本步骤</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-3-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4/%E6%95%B0%E5%8E%9F-3-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<p>本节主要讨论数据库结构设计所涉及的几个基本步骤（需求分析、概念结构设计、逻辑结构设计、物理结构设计、数据库实施、数据库的运行和维护），而不讨论数据库的行为设计，因为行为设计和程序设计的区别不大。</p>
+<h2 id="一需求分析">一、需求分析</h2>
+<p>需求分析分为4个步骤：</p>
+<ul>
+<li>确定数据库范围</li>
+<li>分析数据应用过程</li>
+<li>收集与分析数据</li>
+<li>编写需求分析报告</li>
+</ul>
+<h3 id="确定数据库范围">1.确定数据库范围</h3>
+<p>理想情况：数据库范围尽可能覆盖现在和将来的、组织中所有的应用领域。</p>
+<p>现实情况：首先考虑当前组织所必须的应用要求。</p>
+<p>借助 “机构与职能关系图” 来确定数据库应该支持的哪些功能，及功能的主次序列。</p>
+<p>机构与职能关系图，还可以帮助概念设计的局部化处理和子模式处理。</p>
+<h3 id="应用过程分析">2.应用过程分析</h3>
+<p>数据应用过程分析：分析数据与数据处理间的关系。</p>
+<p>分析每个部门或功能要用到哪些数据、数据使用的顺序、对数据作何处理、处理的结果等。</p>
+<p>应用过程分析的结果是数据库结构设计的重要依据，从中可以初步得出：</p>
+<ul>
+<li>哪些数据要存入数据库中</li>
+<li>哪些数据仅作为报告输出，不需存入数据库</li>
+<li>看出数据的增删查改权限和共享范围</li>
+<li>作为应用程序编写的依据</li>
+</ul>
+<p>应用过程分析的产物是数据流程图，有多种形式。<br>
+数据流程图应以局部部门或相对独立的功能为单位，从而将问题局部化，利于分块设计。</p>
+<h3 id="收集与分析数据">3.收集与分析数据</h3>
+<p>了解并分析数据的组成格式和操作特征、数据内部的数据元素的语义及相互关系，收集整理归档。</p>
+<p>收集与分析的对象：数据流程图所涉及的数据，包括报表、文件、单据、各种原始资料，可以从三个方面开展工作：静态结构、动态结构、数据约束，设计人员可以按部门或职能划分去收集数据。</p>
+<h4 id="静态结构">(1)静态结构</h4>
+<p>不施加应用操作时，数据的状态。</p>
+<h5 id="i.数据分类表">i.数据分类表</h5>
+<p>描述了客观存在的、具有独立意义的一类数据（一种报表、一种文件、一种票据）的总体情况。</p>
+<h5 id="ii.数据元素表">ii.数据元素表</h5>
+<p>即某类数据的属性，或叫数据项、数据元素。</p>
+<h4 id="动态结构">(2)动态结构</h4>
+<p>应用操作施加之后，数据的状态。</p>
+<h5 id="i.任务分类表">i.任务分类表</h5>
+<p>根据数据流程图，可以把业务处理流程划分成不同的任务。</p>
+<p>任务：为完成某个处理功能的、相对独立的操作序列。如处理某项业务、查询业务数据、统计报表等。</p>
+<h5 id="ii.数据操作特征表">ii.数据操作特征表</h5>
+<p>描述了任务和数据之间的关系。<br>
+任务分类表中的每个任务，和，数据分类表中的与该任务有关的每类数据，都应该在操作特征表中有一条记录来反映其关系。</p>
+<p>数据操作特征表，为分析数据的共享性、时间响应要求、数据的操作权限提供了重要依据。</p>
+<h4 id="数据约束">(3)数据约束</h4>
+<p>使用数据时的要求，包括：</p>
+<ul>
+<li>安全保密性：权限</li>
+<li>完整性：正确性、相容性、一致性</li>
+<li>响应时间：读写的时间限制</li>
+<li>数据恢复：</li>
+</ul>
+<h3 id="编写需求分析报告">4.编写需求分析报告</h3>
+<p>需求分析报告，是在需求分析过程中逐渐形成的，是对需求分析的总结。也是业务人员和设计人员的共同语言。</p>
+<p>需求分析报告应该包括：</p>
+<ul>
+<li>数据库的应用功能目标：数据库的应用范围，和，应覆盖的功能。</li>
+<li>明确不同用户的视图范围：根据机构职能图、数据流程图、任务分类表，明确不同部门或不同功能的视图范围。</li>
+<li>应用处理过程说明：包括数据流程图、任务分类表、数据操作特征表，以及操作过程说明书（说明各任务的逻辑执行步骤）</li>
+<li>数据字典：用于存储和检索各种数据描述，即元数据。通常包括：数据分类表、数据元素表、各类原始资料。</li>
+<li>数据量：根据数据分类表中的静态数据量，和，操作特征表中的动态数据量，进行统计计算，求出数据总量。</li>
+<li>数据约束：同前述。</li>
+</ul>
+<h2 id="二概念结构设计">二、概念结构设计</h2>
+<p>在需求分析报告的基础上，按照某种方法，建立与软硬件无关的、理想的信息结构——概念模型。</p>
+<p>概念结构设计的方法有：自顶向下（ER图），自底向上（不需要学习）。</p>
+<h2 id="三逻辑结构设计">三、逻辑结构设计</h2>
+<p>目标：将概念层数据模型，转换为，特定DBMS的逻辑层数据模型（层状、网状、关系，对象）。</p>
+<p>这里的”特定“并不是指具体的、实际的DBMS，而是按支持的逻辑层数据模型分类的一大类DBMS，比如层状模型DBMS、网状模型DBMS、关系模型DBMS、对象模型DBMS。</p>
+<h3 id="逻辑结构设计的输入与输出信息">逻辑结构设计的输入与输出信息</h3>
+<p>逻辑结构设计的输入信息：</p>
+<ul>
+<li>概念设计阶段得到的概念模型，独立于特定DBMS</li>
+<li>数据约束：响应时间、权限、完整性、数据恢复的要求</li>
+<li>数据量和使用频率</li>
+<li>特定DBMS的特性：DBMS支持的数据模型、数据定义语言等</li>
+</ul>
+<p>逻辑结构设计的输出信息：</p>
+<ul>
+<li>特定DBMS的逻辑层数据模型（</li>
+<li>不同用户的外部视图（外模式），或称子模式</li>
+<li>物理设计说明：包括存入数据库的数据量、使用频率、时间响应要求</li>
+<li>程序设计说明：各程序名、执行步骤、存取数据的名称顺序操作特征（增删查改）</li>
+</ul>
+<h3 id="逻辑结构设计的步骤">逻辑结构设计的步骤</h3>
+<ul>
+<li>模型转换：将概念层数据模型，转换为，特定DBMS的逻辑数据模型（层状、网状、关系、对象）</li>
+<li>子模式设计：抽取不同用户看到的子模式（外模式）</li>
+<li>编制应用程序设计说明：为应用程序设计提供依据和指导</li>
+<li>设计评价：通过程序设计说明中的程序执行步骤，在子模式中模拟执行，来考察模式和子模式是否满足需求，有无遗漏，进一步评估数据容量、存取效率，为物理设计提供参考</li>
+</ul>
+<h2 id="四物理设计">四、物理设计</h2>
+<p>根据特定数据库的逻辑数据模型，构造物理层数据模型。</p>
+<p>需要确定：<br>
+存储结构、存取方法、建立索引和聚集、物理块的大小、缓冲区数量和大小、是否压缩数据等。</p>
+<h2 id="五数据库实施">五、数据库实施</h2>
+<p>在实际的DBMS中建立数据库并运行。</p>
+<p>实施工作包括：</p>
+<ul>
+<li>加载数据：由人工完成数据的收集、分类、整理，由输入程序完成数据的校验和输入。</li>
+<li>应用程序设计：应用程序的设计，是跟随数据库结构设计的进展而并行前进的。
+<ul>
+<li>需求分析阶段，了解了任务的分类、功能、处理流程及与数据的联系。</li>
+<li>逻辑设计阶段，根据模型和子模型，具体划分应用程序的功能模块，进一步明确了各模块的名称、执行逻辑及与数据的联系，从而基本确定了应用程序的框架。</li>
+<li>物理设计阶段，根据物理模型，进一步修改和完善应用程序设计说明。</li>
+</ul></li>
+<li>数据库试运行：可以模拟生产环境，进行试运行。</li>
+</ul>
+<h2 id="六数据库运行和维护">六、数据库运行和维护</h2>
+<p>经过试运行，确认系统无故障或暂未发现故障后，系统即可投入实际运行。</p>
+<p>重组：当空间利用率和存取效率下降时，调整数据的存储位置，整理了碎片，从而提高空间利用率和存取效率。</p>
+<p>重构：因为应用需求的变化、拓展，或当初的设计考虑不周，部分修改数据库的逻辑结构、物理结构。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第三章 数据库设计</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 3.1 数据库设计概述</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-3-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0/%E6%95%B0%E5%8E%9F-3-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<h2 id="一数据库的生命周期">一、数据库的生命周期</h2>
+<ul>
+<li>数据库分析和设计阶段
+<ul>
+<li>需求分析</li>
+<li>概念设计</li>
+<li>逻辑设计</li>
+<li>物理设计</li>
+</ul></li>
+<li>数据库实现和操作阶段
+<ul>
+<li>数据库的实现</li>
+<li>操作与监督</li>
+<li>修改与调整</li>
+</ul></li>
+</ul>
+<h2 id="二数据库设计的目标">二、数据库设计的目标</h2>
+<ul>
+<li>满足应用功能需求</li>
+<li>良好的数据库性能</li>
+</ul>
+<h2 id="三数据库设计的内容">三、数据库设计的内容</h2>
+<ul>
+<li>数据库结构设计：静态的，根据应用环境设计数据库的模式结构。
+<ul>
+<li>概念结构设计</li>
+<li>逻辑结构设计</li>
+<li>物理结构设计</li>
+</ul></li>
+<li>数据库行为设计：动态的，确定数据库用户的行为和动作。</li>
+</ul>
+<h2 id="四数据库设计的方法">四、数据库设计的方法</h2>
+<p>数据库设计方法，是设计数据库的指导原则。</p>
+<ul>
+<li>直观设计法：没有理论基础，依靠经验和技巧，已被淘汰。</li>
+<li>规范设计法：
+<ul>
+<li>新奥尔良设计法：较为完整和权威的方法，4个阶段：需求分析、概念结构设计、逻辑结构设计、物理结构设计。注重结构设计，不考虑行为设计。</li>
+<li>基于ER模型的设计法：在需求分析的基础上画出ER图，建立模式，再将模式转换为特定DBMS的概念模式。</li>
+<li>基于3NF的设计法：需求分析的基础上，确定数据库的模式、属性、依赖关系，然后用模式分解，规范化成多个3NF的关系模式。</li>
+</ul></li>
+<li>计算机辅助设计法：CASE工具。</li>
+</ul>
+<h2 id="五数据库设计的过程">五、数据库设计的过程</h2>
+<p>数据库从设计到运行的阶段分为：</p>
+<ul>
+<li>需求分析阶段</li>
+<li>结构设计阶段
+<ul>
+<li>概念结构设计</li>
+<li>逻辑结构设计</li>
+<li>物理结构设计</li>
+</ul></li>
+<li>行为设计阶段
+<ul>
+<li>功能设计</li>
+<li>事务设计</li>
+<li>程序设计</li>
+</ul></li>
+<li>数据库实施阶段
+<ul>
+<li>加载数据库数据</li>
+<li>调试运行应用阶段</li>
+</ul></li>
+<li>数据库运行和维护阶段</li>
+</ul>
+<p>数据库设计过程，是一个反复修改、反复设计的迭代过程。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第三章 数据库设计</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 2.3 关系数据库的规范化理论</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-2-3-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%A7%84%E8%8C%83%E5%8C%96%E7%90%86%E8%AE%BA/%E6%95%B0%E5%8E%9F-2-3-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%A7%84%E8%8C%83%E5%8C%96%E7%90%86%E8%AE%BA/</url>
+    <content><![CDATA[<p>规范化理论研究的是：</p>
+<ul>
+<li>关系模式中属性间的依赖关系，</li>
+<li>属性间的依赖关系对关系模式的性能的影响。</li>
+<li>好的关系模式应该具备的哪些性质</li>
+<li>好的关系模式的设计算法</li>
+</ul>
+<p>关系数据库的规范化理论，是设计数据库的理论基础，是鉴别关系模式好坏的理论标准，能够帮助数据库设计人员预测可能出现的问题。</p>
+<p>P.S. 关系模式：关系数据库中，对关系的结构和属性的描述，即表结构。</p>
+<h2 id="一关系模式中可能存在的冗余和异常问题">一、关系模式中可能存在的冗余和异常问题</h2>
+<ul>
+<li>数据冗余：由完全依赖导致的非主属性的重复存储。</li>
+<li>更新异常：由数据冗余导致的潜在的不一致性</li>
+<li>插入异常：主码有多个属性，而插入行的主码中部分属性有空值，不允许插入</li>
+<li>删除异常：示例中用一个表来记录供应商基本信息和供货信息，所以会出现这种情况。</li>
+</ul>
+<p>这些问题都与数据依赖有关。</p>
+<p>数据依赖：是关系中的属性，在现实世界中的语义之间的约束关系。<br>
+比如：假设每个供应商只有一个地址，给定了供应商名字后，就可以确定其地址。</p>
+<p>数据依赖有很多种，最重要的是函数依赖(FD, Functional Dependancy)和多值依赖(MVD, Multi-Valued Dependancy)。</p>
+<h2 id="二函数依赖与关键字">二、函数依赖与关键字</h2>
+<p>函数依赖：在关系R中，对属性X的每个值，属性Y都只有唯一值与之对应，称“X函数决定Y”、“Y函数依赖X”，记作 <span class="math inline">\(X \rightarrow Y\)</span>。</p>
+<p>换句话说，确定了属性X的某个值，就确定了属性Y的值（1对1），就称为Y函数依赖于X。</p>
+<p>属性X称为决定因素。</p>
+<p>如果X不能函数决定Y，或叫，Y不能函数依赖X，记作 <span class="math inline">\(X \nrightarrow Y\)</span></p>
+<h3 id="完全函数依赖">（1）完全函数依赖</h3>
+<p>任意关系R，X,Y是属性集，X' 是 X 的任意真子集，<span class="math inline">\(X \rightarrow Y\)</span>，但 <span class="math inline">\(X&#39; \nrightarrow Y\)</span>），此时称：X 完全函数决定 Y，或称：Y 完全函数依赖于 X。</p>
+<p>注意：X 不一定就是候选码，函数依赖是属性间的关系，不是属性集和元组的关系。 ### （2）部分函数依赖 任意关系R，X,Y是属性集，X' 是 X 的某个真子集，<span class="math inline">\(X \rightarrow Y\)</span>，且 <span class="math inline">\(X&#39; \rightarrow Y\)</span>），此时称：X 部分函数决定 Y，或称：Y 部分函数依赖于 X。</p>
+<p>注意：X 不一定就是超码，函数依赖是属性间的关系，不是属性集和元组的关系。 ### （3）传递函数依赖 任意关系R，X,Y,Z是不同的属性集，<span class="math inline">\(X \rightarrow Y\)</span>，<span class="math inline">\(Y \nrightarrow X\)</span>，而 <span class="math inline">\(Y \rightarrow Z\)</span>，那么 <span class="math inline">\(X \rightarrow Z\)</span>，此时称：X 传递函数决定 Z，或称：Z 传递函数依赖于 X。</p>
+<p>比如：有关系模式 书基本信息（书的ISBN，出版社名称，出版社地址），书ISBN可以决定出版社名称，但出版社名称无法决定书ISBN（因为一个出版社不止出一本书），出版社名称可以决定出版社地址，因此知道了书ISBN，就知道了出版社地址，称：出版社地址传递函数依赖于书ISBN。</p>
+<h6 id="更严格的候选码的定义">更严格的候选码的定义</h6>
+<p>可以根据函数依赖的定义，推导出更严格的关键字的定义：<br>
+任意关系R，全部属性集合为U，X是U的子集，若 <span class="math inline">\(X \rightarrow U\)</span>，则 X 是关系R的一个候选码。</p>
+<h2 id="三范式与关系规范化过程">三、范式与关系规范化过程</h2>
+<p>范式：规范形式，Normal Form，规范性要求。</p>
+<p>根据要求的不同，范式包括：第一范式(1NF)、第二范式(2NF)、第三范式(3NF)、BC范式(BCNF)等等。</p>
+<p>关系数据库中存储的各种关系，它们的关系模式必须在不同程度满足范式。<br>
+比如某些关系模式满足1NF，某些满足2NF。</p>
+<p>规范化(Normalization)：满足较低层次范式的关系模式，可以通过模式分解，分解出：几个满足高一级范式的关系模式。</p>
+<p>现实生活中的很多数据，是不符合任何范式的。<br>
+而关系数据库通常要求关系模式必须符合1NF。<br>
+因此，必须通过规范化过程，才能将现实世界的数据存储到关系数据库中，同时，也消除了数据冗余、更新异常、插入异常、删除异常。</p>
+<h3 id="第一范式">（1）第一范式</h3>
+<p>关系数据库中的关系模式，至少应满足1NF。</p>
+<p>1NF：关系R的每一列具有原子性，不可再分。</p>
+<p>教材上讲：列和元组都不可再分，实际上不严谨。包括举的例子也不好。</p>
+<p>满足了1NF，可能存在非主属性部分函数依赖候选码的情况，由此可能导致数据冗余、插入异常、删除异常等问题。</p>
+<p>解决办法：消除非主属性对候选码的部分函数依赖——将部分函数依赖的属性分离出去组成新关系，原关系中仅保留完全函数依赖的非主属性。</p>
+<h3 id="第二范式">（2）第二范式</h3>
+<p>2NF：关系R为1NF，且其所有的非主属性都完全函数依赖于候选码。</p>
+<p>满足2NF的关系模式，可能存在非主属性传递函数依赖于候选码的问题，仍然可能产生插入异常、删除异常等问题。</p>
+<p>解决办法：消除非主属性对候选码的传递函数依赖。</p>
+<h3 id="第三范式">（3）第三范式</h3>
+<p>3NF：关系R为2NF，且其所有非主属性都不传递函数依赖于候选码。</p>
+<p>但满足3NF的关系，有时仍然存在插入异常、删除异常等问题。比如：当主属性间存在函数依赖时。</p>
+<p>解决办法：在 3NF 的基础上消除主属性对于码的部分与传递函数依赖。</p>
+<h3 id="bc范式">（4）BC范式</h3>
+<p>BCNF：关系R是3NF，其所有的决定因素都包含一个候选码。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第二章 关系数据库</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 2.1 关系数据库概述</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-2-1-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0/%E6%95%B0%E5%8E%9F-2-1-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p>略</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第二章 关系数据库</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 2.2 关系数据模型</title>
+    <url>/2019/11/29/%E6%95%B0%E5%8E%9F-2-2-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/%E6%95%B0%E5%8E%9F-2-2-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>数据模型必须具有数据结构、数据操作、数据约束三要素。<br>
+逻辑层模型的关系模型也同样具有三要素：</p>
+<ul>
+<li>关系数据结构</li>
+<li>关系数据操作集合</li>
+<li>关系完整性约束</li>
+</ul>
+<h2 id="一关系数据结构">一、关系数据结构</h2>
+<p>关系模型只有一种数据结构：关系（二维表），因此 关系模型用关系来表示实体、实体间联系。</p>
+<p>基于关系模型的关系数据库就是关系的集合，并以二维表的形式组织数据。</p>
+<h3 id="关系数据库的基本术语">关系数据库的基本术语</h3>
+<p>1.表(Table)<br>
+表也称为”关系“，是一个二维的数据结构。由表名 + 列 + 数据行组成。</p>
+<p>2.关系（Relation)<br>
+一个关系逻辑上对应一张二维表。</p>
+<p>可以给每个关系取一个名字进行标识（即表名）。</p>
+<p>关系有三种类型：</p>
+<ul>
+<li>基本关系：基本表，是实际存在的表，存储了数据。</li>
+<li>查询表：查询结果对应的表</li>
+<li>视图表：由基表或其他视图生成的表，是虚表，视图中不存储数据。</li>
+</ul>
+<p>3.列(Column)<br>
+列，也称为字段(Field)或属性(Attribute)。</p>
+<p>列是实体的属性，具有确定的数据类型。</p>
+<p>列必须有一个名称，称为字段名/属性名。</p>
+<p>4.属性(Attribute)<br>
+列即属性。</p>
+<p><em>属性的个数</em>称为关系的<strong>元</strong>或<strong>度</strong>。<br>
+具有X个属性的关系是 X元关系/X度关系。</p>
+<p>属性的取值范围称为”值域“。</p>
+<p>5.行(Row)<br>
+行，称为元组(Tuple)或记录(Record)。</p>
+<blockquote>
+<p>元组：因为属性称为元，一条记录就是元的组合，因此叫元组。</p>
+</blockquote>
+<p>一行数据就是一个元组/一条记录，由若干个字段值/属性值组成。</p>
+<p>6.元组(Tuple)<br>
+略</p>
+<p>7.分量(Component)<br>
+某元组的每个属性值，都是该元组的分量。</p>
+<p>如：学习基本信息登记表中，元组(201311103,王一鸣,女,1996-03-25,河北,汉,AC1301,XXX2)，它的每一个属性值 201311103、王一鸣、女、1996-03-25、河北,汉、AC1301、XXX2 都是该元组的分量。</p>
+<p>8.码或键(Key)<br>
+能唯一标识元组的属性(属性组)，称为该关系的码或键。</p>
+<p>9.超码/超键(Super Key)<br>
+如果一个码，即使移除某个属性，它仍然是这个关系的码，那么它就是这个关系的超码/超键。</p>
+<p>每个关系有一个默认的超码/超键：所有属性的集合，也是该关系的最大超码/超键。</p>
+<p>比如：（学号、姓名）（学号、性别、姓名）（学号+属性1+属性2+...）都是超码/超键。</p>
+<p>注意：<br>
+码/键和超码/超键是一样的，它们都允许多余属性的存在。</p>
+<p>10.候选码/候选键(Cadidate Key)<br>
+移除了任何属性都不能作为码/键的码/键，称为候选码/候选键。</p>
+<p>换句话说，候选码/候选键是不具有多余属性的超码/超键。</p>
+<p>候选码/候选键是关系的最小超码/超键。</p>
+<p>注意：<br>
+一个关系，可以有多个候选码/候选键，比如学生基本信息表，可以有学号、身份证两个候选码/候选键。</p>
+<p>11.主码/主键(Primary Key)<br>
+如果某关系具有一个或多个候选码/候选键，从中选定一个作为元组的唯一标识，这样的候选码/候选键就称为主码/主键。</p>
+<p>12.全码/全键(All-Key)<br>
+如果某关系的所有属性构成了该关系的主码/主键，这样的主码/主键就称为全码/全键。</p>
+<p>13.主属性(Primary Attribute)，非主属性(Nonprimary Attribute)<br>
+候选码中的属性是主属性，非候选码中的属性是非主属性。</p>
+<p>如：学生基本信息表，学号、身份证号是主属性，其他属性是非主属性。</p>
+<p>14.外码/外键(Foreign Key)<br>
+某关系中的某些属性（属性组）不是该关系的候选码，但却是另一个关系的主码，则该属性（属性组）是该关系的外码/外键。</p>
+<p>如：班号不是学生基本信息表的候选码，却是班级表的主码，因此班号是学生基本信息表的外码。</p>
+<p>15.参照关系(Referencing Relation)，被参照关系(Referenced Relation)<br>
+<em>这里的关系是关系代数的用语，就是指二维表。</em></p>
+<p>参照关系和被参照关系，是通过外码相关联的两个关系。</p>
+<p>外码作为主码的关系，是被参照关系。也叫主关系。<br>
+外码所在的关系，是参照关系，也叫从关系。</p>
+<p>被参照关系和参照关系，通常是一对多的联系。<br>
+即，一个关系将外码作为主码，而有多个关系将外码作为非主属性。</p>
+<p>如：班级表是被参照关系，学生基本信息表是参照关系，两者通过”班号“这个外码相关联。</p>
+<p>16.域(Domain)<br>
+属性的取值范围。</p>
+<p>17.数据类型(Data Type)<br>
+每个属性都有确定的数据类型。</p>
+<p>18.关系模式(Relation Schema)<br>
+特别注意：<br>
+关系模型（一种数据模型）有”型“和”值“的区别（见第一章第四节 数据模型）。<br>
+而这里讲的叫“关系模式”，不是“关系模型”，一字之差。</p>
+<p>关系数据库也有型和值之分。</p>
+<ul>
+<li>关系模式是对关系的结构和属性的描述（即表结构），是”型“。<br>
+</li>
+<li>关系则是具体的元组的集合，是关系模式在某一时刻的内容，是”值“。</li>
+</ul>
+<p>关系模式静态的、稳定的。<br>
+关系是动态的、随时间不断变化的。</p>
+<p>实际工作中，会把关系模式和关系都笼统的称为关系，需要从上下文来区分。</p>
+<p>19.关系数据库(Relation Database)<br>
+关系数据库：以关系模型作为数据的逻辑模型，并以关系来组织数据的一类数据库，其数据操作以关系代数为基础。</p>
+<p>关系数据库对关系的限定：</p>
+<ol type="1">
+<li>每个属性都不可分解：不允许表中有表。</li>
+<li>每个关系只有一种关系模式：该关系的关系模式中，属性的数据类型、属性个数是固定不变的。</li>
+<li>关系模式中的属性必须有名字，且在同一个关系模式中，属性名唯一，不允许同名属性。</li>
+<li>一个关系中，各元组的候选码的属性值必须不同：否则就不叫候选码</li>
+<li>元组的行序不关紧要</li>
+<li>关系中，属性的顺序无关紧要</li>
+</ol>
+<h2 id="二关系数据操作集合">二、关系数据操作集合</h2>
+<h3 id="基本的关系操作">1.基本的关系操作</h3>
+<p>关系模型的常用操作分为”查询“和”更新“两大类：</p>
+<ul>
+<li>查询（Query）：标注 * 的是基本操作，其他查询操作可由基本操作定义和导出。
+<ul>
+<li>选择 *</li>
+<li>投影 *</li>
+<li>并 *</li>
+<li>差 *</li>
+<li>笛卡尔 *</li>
+<li>连接</li>
+<li>交：可用差来完成</li>
+<li>除</li>
+</ul></li>
+<li>更新
+<ul>
+<li>插入(Insert)</li>
+<li>删除(Delete)</li>
+<li>修改(Update)</li>
+</ul></li>
+</ul>
+<p>关系操作的特点：操作对象和操作结果都是集合。<br>
+这种操作方式也称为”一次一集合方式(set-at-a-time)“。</p>
+<h3 id="关系数据语言的分类">2.关系数据语言的分类</h3>
+<p>关系操作依靠关系语言来实现。</p>
+<p>关系语言的优点：高度的非过程化。<br>
+即用户不需要关心存取路径，不必使用循环、递归来完成数据的重复操作等。</p>
+<p>关系操作有2种抽象的查询语言和1种应用于关系数据库的实际语言：</p>
+<ol type="1">
+<li>代数方式（关系代数）：通过”关系代数表达式“来表达查询要求的方式。</li>
+<li>逻辑方式（关系演算）：用谓词来表达查询要求的方式。又可分为
+<ul>
+<li>元组关系演算：谓词为元组</li>
+<li>域关系演算：谓词为域（属性）</li>
+</ul></li>
+<li>SQL语言：结构化查询语言，介于关系代数和关系演算之间的数据语言。SQL 是集 DDL, DML,DCL(数据控制语言）于一体的关系数据语言，也是关系数据库的标准语言。</li>
+</ol>
+<blockquote>
+<p>数据控制语言 DCL：控制数据访问权的指令，用于控制特定用户对数据表、视图、存储程序、用户自定义函数等数据库对象的控制权。由 GRANT 和 REVOKE 两个指令组成。</p>
+</blockquote>
+<blockquote>
+<p>谓词：动词和形容词的统称，主要充当谓语使用。</p>
+</blockquote>
+<p>关系代数、元组关系演算、域关系演算在表达能力上是等价的。（关系演算暂时不需要了解）</p>
+<h3 id="关系代数">3.关系代数</h3>
+<p>关系代数操作的三要素：</p>
+<ul>
+<li>操作对象：操作对象是关系（二维表）</li>
+<li>操作符：关系代数运算符包括 ”集合运算符”和“专门的关系运算符“，而比较运算符和逻辑运算符是辅助关系运算符的。</li>
+<li>操作结果：操作结果是关系（二维表）</li>
+</ul>
+<h4 id="a.-传统的集合运算">A. 传统的集合运算</h4>
+<p>传统的集合运算以元组为操作对象。</p>
+<h6 id="并union">(1)并(Union)</h6>
+<p>假设有关系 R1 和 R2，它们的属性个数相同，且属性的数据类型相同，那么R1R2的并运算将得到关系R3。 <span class="math inline">\(R3 =R1 \cup R2\)</span></p>
+<p>R3由属于R1或属于R2的所有”不同“元组组成。</p>
+<p>不同元组，即R3会消除重复元组。</p>
+<h6 id="差differenc">(2)差(Differenc)</h6>
+<p>条件同上，R3由属于R1但不属于R2的元组构成。</p>
+<p><span class="math inline">\(R3 = R1 - R2\)</span></p>
+<p>差集不是普通的减法！</p>
+<h6 id="交intersection">(3)交(Intersection)</h6>
+<p>条件同上，R3是由同时属于R1和R2的元组构成。</p>
+<p><span class="math inline">\(R3 = R1 \cap R2\)</span></p>
+<p>交运算也可以用差运算来完成。</p>
+<p><span class="math inline">\(R3 = R1- (R1-R2)\)</span> // 需要对差集有理解</p>
+<h6 id="笛卡尔积catesian-product">(4)笛卡尔积(Catesian product)</h6>
+<p>假设有关系R1,R2，R1是m元关系，R2是n元关系。</p>
+<p><span class="math inline">\(R3 = R1 \times R2\)</span></p>
+<p>笛卡尔积R3是：由R1和R2的所有元组，重新组合成的一个(m+n)元关系。</p>
+<p>前m个分量是R1所有可能的元组的一个成员，后n个分量是R2所有可能的元组的一个成员。</p>
+<p>假设R1有r1个元组，R2有r2个元组，那么R3就有r1xr2 个元组。</p>
+<h4 id="b.-专门的关系运算">B. 专门的关系运算</h4>
+<p>专门的关系运算以”行“和”列“为操作对象。</p>
+<p>分为：</p>
+<ul>
+<li>一元专门关系操作：对单个关系：垂直分解的投影运算，和，水平分解的选择运算</li>
+<li>二元专门关系操作：对两个关系：连接运算，和，除运算</li>
+</ul>
+<h6 id="选择select">(1)选择(select)</h6>
+<p>选择运算的关系代数表达式为：<span class="math inline">\(\sigma_{F}(R)\)</span></p>
+<p>SQL语句为：<code>select R where F</code></p>
+<p>F是常数、属性名、比较运算符、逻辑运算符组成的条件表达式。</p>
+<h6 id="投影projection">(2)投影(projection)</h6>
+<p>关系代数表达式：<span class="math inline">\(\pi_{A}(R)\)</span></p>
+<p>SQL语句： <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">projection <span class="constructor">R(<span class="params">field1</span>,<span class="params">field2</span>,<span class="operator">...</span>,<span class="params">fieldN</span>)</span></span><br><span class="line"><span class="comment">// mysql和sqlserver没有projection,只有 select f1,f2,...,fn from R。因此这里的 projection相当于伪代码</span></span><br></pre></td></tr></table></figure></p>
+<p>R是关系名，A是属性序列。</p>
+<p>注意：和真实的RDBMS不同，关系代数中的投影运算，会在结果集中消除重复元组！</p>
+<h6 id="连接">(3)连接</h6>
+<p>假设有关系R和S，</p>
+<p>关系代数表达式：这个比较难写，以后来攻克。 <span class="math inline">\(R_i\)</span> 表示 R 的第 i 列属性，<span class="math inline">\(S_j\)</span> 表示 S 的第 j 列属性，<span class="math inline">\(\theta\)</span> 是比较运算符。</p>
+<p>连接运算：<br>
+从 <span class="math inline">\(R \times S\)</span> 的笛卡尔积结果中，选取满足条件： <span class="math inline">\(R_i \theta S_j\)</span> 的那些元组，构成新的关系。</p>
+<p>连接操作，根据比较运算符和比较规则的不同，分为：</p>
+<ul>
+<li>等值连接：<span class="math inline">\(\theta\)</span>为=的连接操作。</li>
+<li>自然连接（特殊的等值连接）：要求R和J中进行等值运算的分量，必须是属性名相同的属性组（允许多个属性组比较），并要在结果中去掉重复的分量（消除重复属性）。</li>
+<li>不等连接：<span class="math inline">\(\theta\)</span> 不是=的连接操作。</li>
+</ul>
+<p>自然连接可用于构造新关系，通常用于具有公共属性的两个关系上，如果两个关系没有公共属性，那么结果会变为笛卡尔积（仅仅得到关系模型而已，并没有满足条件的元组） ###### (4)除(Division) 关系R和关系S拥有共同的属性B、C 。</p>
+<p>R÷S得到的属性值就是：在关系R中，但不在关系S中的属性，即A属性</p>
+<p><img src="_v_images/20191015004650727_9061.png"></p>
+<p>在R关系中A属性的值可以取{ a1，a2，a3，a4 }</p>
+<p>a1值对应的象集为 { (b1,c2) , (b2,c1) , (b2,c3) }</p>
+<p>a2值对应的象集为 { (b3,c7) , (b2,c3) }</p>
+<p>a3值对应的象集为 { (b4,c6) }</p>
+<p>a4值对应的象集为 { (b6,c6) }</p>
+<p>关系S在B、C上的投影为 { (b1,c2) , (b2,c1) , (b2,c3) }</p>
+<p>只有a1值对应的象集包含关系S的投影集，所以只有a1应该包含在A属性中</p>
+<p>所以R÷S =</p>
+<table>
+<thead>
+<tr class="header">
+<th>A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a1</td>
+</tr>
+</tbody>
+</table>
+<p>除运算是自然连接的逆运算。</p>
+<h2 id="三关系完整性约束">三、关系完整性约束</h2>
+<p>数据完整性是指：正确性、相容性、一致性。</p>
+<p>数据库的数据完整性是一种语义，涉及2个方面：</p>
+<ol type="1">
+<li>与现实世界中数据的正确性、相容性、一致性。</li>
+<li>数据库内，数据之间的正确性、相容性、一致性</li>
+</ol>
+<p>数据库是否具备数据完整性，关系到数据库系统能否真实的反映现实世界。</p>
+<p>用户对数据库执行插入、删除、更新操作时，必须经受完整性规则的检查，从而保证数据库数据的完整性。</p>
+<p>完整性规则：对关系的约束，也称为完整性约束。</p>
+<p>完整性约束有3类：</p>
+<ol type="1">
+<li>实体完整性约束</li>
+<li>参照完整性约束</li>
+<li>用户定义完整性约束（可选）：分为：
+<ol start="4" type="1">
+<li>域完整性约束：对属性的值域约束</li>
+<li>其他约束：具体的业务规则</li>
+</ol></li>
+</ol>
+<p>1.2 被称为”关系的不变性“，是关系模型必须遵循的完整性约束，由DBMS自动执行检查。</p>
+<h3 id="实体完整性约束">1.实体完整性约束</h3>
+<p>主码不能取空值NULL。</p>
+<h3 id="参照完整性约束">2.参照完整性约束</h3>
+<p>关系R的外码F，与关系S的主码K对应，那么字段F的取值：</p>
+<ul>
+<li>要么取S的某个元组的主码值。</li>
+<li>要么取空值NULL</li>
+</ul>
+<p>注意：R和S通常是不同的关系，但也可以是同一关系——即同一关系的非主码参照了主码。</p>
+<p>比如：职工表中存在一个“上级”字段，上级就必然要参照职工编号字段。</p>
+<h3 id="用户完整性约束">3.用户完整性约束</h3>
+<p>针对某一具体应用业务的完整性约束条件。</p>
+<p>关系数据库提供了定义机制，从而让DBMS来执行完整性约束检查，当然，也可以由应用程序来检查。</p>
+<h3 id="关系模型完整性约束的检验">关系模型完整性约束的检验</h3>
+<p>在执行插入、删除、更新操作时，需要检验完整性约束。</p>
+<h6 id="插入">(1)插入</h6>
+<p>首先检查实体完整性约束。<br>
+检查插入行的主码值是否已经在表中存在：</p>
+<ul>
+<li>如果存在：拒绝插入</li>
+<li>如果不存在：允许插入</li>
+</ul>
+<p>还应该检查插入行在主码的各属性（主码有多个属性）是否为空</p>
+<ul>
+<li>如果主码的某个属性=NULL，拒绝插入。</li>
+<li>如果主码的所有属性≠NULL，允许插入</li>
+</ul>
+<p>然后检查参照完整性约束。<br>
+如果是向参照关系中插入，需要检查插入行在外码属性上的值，是否在被参照关系的主码属性值中存在：</p>
+<ul>
+<li>如果参照关系的外码取值 in 被参照关系的主码取值：允许插入</li>
+<li>否则：不允许插入，或将外码属性置为NULL后插入。</li>
+</ul>
+<p>最后，检查用户定义完整性约束，包括值域和业务规则。 ###### (2)删除 只需要检查参照完整性约束。<br>
+如果是删除被参照关系的元组，那么需要检查：被删除的元组的主码值，是否被其他参照关系的外码引用：</p>
+<ul>
+<li>如果没有引用：可以删除</li>
+<li>如果有引用：
+<ul>
+<li>不允许删除</li>
+<li>把参照关系的外码修改为NULL（空值删除）</li>
+<li>把有引用的参照关系中的元组一起删除（级联删除）</li>
+</ul></li>
+</ul>
+<h6 id="更新">(3)更新</h6>
+<p>更新 = 删除 + 插入。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第二章 关系数据库</category>
+      </categories>
+  </entry>
+  <entry>
     <title>用 Hexo-Console-Rename 修改文件名</title>
-    <url>/2019/11/28/-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/%E7%94%A8-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/</url>
-    <content><![CDATA[<p>我们通常使用<code>hexo new [layout] &quot;title&quot;</code> 来新建博文，但常常会在创建博文后对又对原标题 <code>title</code> 不满意，如果仅仅修改内文标题，就会造成 <code>source/_post</code>(假设layout= post) 下的文件名 <code>oldFileName.md</code> 和内文标题 <code>title</code>不一致的情况。</p>
-<p>手工的方法是将<code>oldFilename</code> 修改为和 front-matter 中的 <code>title</code> 一致。 </p>
+    <url>/2019/11/28/%E7%94%A8-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/%E7%94%A8-hexo-console-rename-%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D/</url>
+    <content><![CDATA[<p>我们通常使用<code>hexo new [layout] "title"</code> 来新建博文，但常常会在创建博文后对又对原标题 <code>title</code> 不满意，如果仅仅修改内文标题，就会造成 <code>source/_post</code>(假设layout= post) 下的文件名 <code>oldFileName.md</code> 和内文标题 <code>title</code>不一致的情况。</p>
+<p>手工的方法是将<code>oldFilename</code> 修改为和 front-matter 中的 <code>title</code> 一致。</p>
 <p>如果站点配置文件 _config.yml 中<code>post_asset_folder: true</code>，则需要修改 oldFileName.md 对应的 source/oldFileName 文件夹的名称。</p>
 <p>如果 <code>new_post_name: :year_:month_:date_:title.md</code> ，那么修改时更容易出错。</p>
 <p>当然，另一个解决办法是：新建新标题博文，将老博文内容复制过来，删除老博文。</p>
@@ -12,8 +1015,9 @@
 <p>好在有插件可以解决这个问题, <a href="https://github.com/timnew/hexo-console-rename" target="_blank" rel="noopener">hexo-console-rename</a> ，它可以根据 md 文件的 front-matter 中的 <code>title</code> 修改文件名，支持单个文件改名、批量文件改名等操作，我们仅需要修改 <code>title</code> 属性为我们想要的标题，再执行 hexo rename source/_post/oldFileName.md。</p>
 <p>具体用法参见 github 即可，不多废话。</p>
 <p>这里要说下几个遇到的问题。</p>
-<p>1.npm 安装后无法使用。<br>原因是 npm 安装时没有把 lib 放入 node_module/hexo-console-rename 文件夹，解决办法是新建 lib 文件夹,从 github 下载 lib 中的所有 .js 文件，手工拷入即可。</p>
-<p>2.利用 <code>hexo rename source/**/*.md</code> 对所有源文件批量改名后，会导致 <code>source/categories/index.md</code> , <code>source/tags/index.md</code>, <code>source/404/index.md</code> 这些 page layout 的 md 文件名被修改,造成这些页面无法访问，这是个 bug 。<br>解决办法：运行批量改名后，将这些 md 文件的名称改回来。</p>
+<p>1.npm 安装后无法使用。<br>
+原因是 npm 安装时没有把 lib 放入 node_module/hexo-console-rename 文件夹，解决办法是新建 lib 文件夹,从 github 下载 lib 中的所有 .js 文件，手工拷入即可。</p>
+<p>2.利用 <code>hexo rename source/**/*.md</code> 对所有源文件批量改名后，会导致 <code>source/categories/index.md</code> , <code>source/tags/index.md</code>, <code>source/404/index.md</code> 这些 page layout 的 md 文件名被修改,造成这些页面无法访问，这是个 bug 。 解决办法：运行批量改名后，将这些 md 文件的名称改回来。</p>
 ]]></content>
       <categories>
         <category>应用软件</category>
@@ -25,42 +1029,40 @@
   <entry>
     <title>Hexo 插入图片的多种方法</title>
     <url>/2019/11/28/hexo-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95/hexo-%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>在Hexo 中插入图片，可以使用传统 Markdown 语法</p>
-<h3 id="传统的Markdown-语法"><a href="#传统的Markdown-语法" class="headerlink" title="传统的Markdown 语法"></a>传统的Markdown 语法</h3><p><code>![text](imgpath)</code></p>
+    <content><![CDATA[<p>在Hexo 中插入图片，可以使用传统 Markdown 语法 ### 传统的Markdown 语法 <code>![text](imgpath)</code></p>
 <p>但为了按文章管理资源，可以启用“文章资源管理模式”，通过将站点配置文件 config.yml 中的 post_asset_folder 选项设为 true 即可启用。</p>
-<h3 id="hexo-资源文件夹中的本地图片（不能设定显示尺寸）"><a href="#hexo-资源文件夹中的本地图片（不能设定显示尺寸）" class="headerlink" title="hexo 资源文件夹中的本地图片（不能设定显示尺寸）"></a>hexo 资源文件夹中的本地图片（不能设定显示尺寸）</h3><p><code></code></p>
+<h3 id="hexo-资源文件夹中的本地图片不能设定显示尺寸">hexo 资源文件夹中的本地图片（不能设定显示尺寸）</h3>
+<p><code></code></p>
 <p>但在实践中，仍然有一些需要注意的地方。</p>
-<ol>
+<ol type="1">
 <li>图片应放入文章对应的资源文件夹中</li>
 <li>严格按照  进行书写</li>
 <li>图片的文件名大小写敏感！</li>
 <li>不需要另起一行（markdown 代码语法 <code></code> 则需要另起一行）</li>
 </ol>
-<h3 id="网络图片（可以设定显示尺寸）"><a href="#网络图片（可以设定显示尺寸）" class="headerlink" title="网络图片（可以设定显示尺寸）"></a>网络图片（可以设定显示尺寸）</h3><p><code><img src="http://www.viemu.com/vi-vim-cheat-sheet.gif" width="200" height="400" title="vi-vim-cheat-sheet"></code></p>
-<h3 id="使用-HTML-语法"><a href="#使用-HTML-语法" class="headerlink" title="使用 HTML 语法"></a>使用 HTML 语法</h3><img src="SpellCheck.png" width="50%" height="50%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">]]></content>
+<h3 id="网络图片可以设定显示尺寸">网络图片（可以设定显示尺寸）</h3>
+<p><code><img src="http://www.viemu.com/vi-vim-cheat-sheet.gif" width="200" height="400" title="vi-vim-cheat-sheet"></code></p>
+<h3 id="使用-html-语法">使用 HTML 语法</h3>
+<p><img src="SpellCheck.png" width="50%" height="50%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+]]></content>
       <categories>
         <category>应用软件</category>
       </categories>
   </entry>
   <entry>
-    <title>利用Chrome同时登录某网站的多个账号</title>
-    <url>/2019/11/28/%E5%88%A9%E7%94%A8Chrome%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95%E6%9F%90%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/%E5%88%A9%E7%94%A8chrome%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95%E6%9F%90%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/</url>
-    <content><![CDATA[<p>有时，我们会在同一个网站注册多个账号，即所谓的小号。  </p>
+    <title>利用Chrome同时登录网站的多个账号</title>
+    <url>/2019/11/28/%E5%88%A9%E7%94%A8Chrome%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/%E5%88%A9%E7%94%A8chrome%E5%90%8C%E6%97%B6%E7%99%BB%E5%BD%95%E7%BD%91%E7%AB%99%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%B4%A6%E5%8F%B7/</url>
+    <content><![CDATA[<p>有时，我们会在同一个网站注册多个账号，即所谓的小号。</p>
 <p>对一个网站来说，同一时刻同一浏览器只能登录一个账号，要登录另一个账号必须退出当前在线的账号。</p>
 <p>但在chrome中，可以利用<strong>用户管理</strong>实现同时登录多个账号。</p>
 <p>其原理是通过在 chrome 中建立多个<strong>用户</strong>，每个用户的数据、设置都是完全独立的，包括书签、历史、设置、插件、网页应用、Cookie等。每个用户可以独占一个Chrome窗口，这样就可以在不同的窗口（用户）中，用不同的账号同时登陆同一个网站。</p>
-<p>具体操作很简单：  </p>
-<p>1.点击右上角的头像图标  </p>
-<img src="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/usrBtn.png">
-
-<p>2.在下拉菜单中选择“管理用户”，  </p>
-<img src="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/usrMenu.png">
-
+<p>具体操作很简单：</p>
+<p>1.点击右上角的头像图标<br>
+<img src="/2019/11/28/利用Chrome同时登录网站的多个账号/利用chrome同时登录网站的多个账号/usrBtn.png"></p>
+<p>2.在下拉菜单中选择“管理用户”，<br>
+<img src="/2019/11/28/利用Chrome同时登录网站的多个账号/利用chrome同时登录网站的多个账号/usrMenu.png"></p>
 <!-- ![](2019-11-28-在Chrome中管理同一网站的多个账号/20191128152858105_5362.png)-->
-
-<p>弹出“添加用户”、“以访客身份浏览”的界面。</p>
-<img src="/2019/11/28/利用Chrome同时登录某网站的多个账号/利用chrome同时登录某网站的多个账号/usrWind.bmp">
-
+<p>弹出“添加用户”、“以访客身份浏览”的界面。 <img src="/2019/11/28/利用Chrome同时登录网站的多个账号/利用chrome同时登录网站的多个账号/usrWind.bmp"></p>
 <!-- ![](2019-11-28-在Chrome中管理同一网站的多个账号/20191128161700196_30050.png)-->
 <p>在这里可以添加新用户，或切换到访客身份。</p>
 <p>新用户可以是本地账户(不关联google账户，数据和设置仅存储在本地)，也可以是google账户(通过gmail关联，允许将设置和数据同步到google服务器，当然也可以不同步)。</p>
@@ -70,133 +1072,52 @@
       </categories>
   </entry>
   <entry>
-    <title>1.4 数据模型</title>
-    <url>/2019/11/18/1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="第四节-数据模型"><a href="#第四节-数据模型" class="headerlink" title="第四节 数据模型"></a>第四节 数据模型</h1><p>模型(model)，通过对”现实世界事物的特征“进行抽象，实现模拟。</p>
-<p>数据模型(Data Model)，也是对”现实世界中数据的特征“进行了抽象，从而模拟了现实世界的数据。</p>
-<h2 id="一、数据特征与数据模型组成要素"><a href="#一、数据特征与数据模型组成要素" class="headerlink" title="一、数据特征与数据模型组成要素"></a>一、数据特征与数据模型组成要素</h2><p>现实世界中的数据具有两种特征：</p>
-<ol>
-<li>静态特征：数据的基本结构、数据间的联系、对数据的约束（比如取值范围）</li>
-<li>动态特征：对数据可以进行的、符合一定规则的操作。</li>
-</ol>
-<p>对数据进行抽象的数据模型，自然就需要描述数据的静态特征和动态行为，并为数据的表示和操作提供框架。</p>
-<p>数据模型的定义：<br>描述数据的静态结构，定义可对数据执行的操作和数据间约束的一组概念。</p>
-<h3 id="数据模型的三要素："><a href="#数据模型的三要素：" class="headerlink" title="数据模型的三要素："></a>数据模型的三要素：</h3><h6 id="1-数据结构"><a href="#1-数据结构" class="headerlink" title="1.数据结构"></a>1.数据结构</h6><p>描述数据的静态特性，如：数据类型、内容、属性、数据之间的联系。</p>
-<p>常常用”数据结构的类型“来命名数据模型，比如：<br>层次结构（树）–层次模型，网状结构（有向图）–网状模型，关系结构（二维表）–关系模型。</p>
-<h6 id="2-数据操作"><a href="#2-数据操作" class="headerlink" title="2. 数据操作"></a>2. 数据操作</h6><p>数据操作描述了数据的动态特性，包括：允许对数据执行的操作和操作规则。</p>
-<p>操作分为更新和检索两大类，更新包括：插入、删除、修改。</p>
-<p>操作规则包括：各操作的优先级等。</p>
-<h5 id="3-数据约束"><a href="#3-数据约束" class="headerlink" title="3. 数据约束"></a>3. 数据约束</h5><p>数据约束描述了：数据结构中，数据间的语法和语义关联，包括（相互制约关系）、（相互依存关系）、（数据的动态变化规则），从而保证数据的完整性（正确性、有效性、相容性）。  </p>
-<p>数据约束又分为：</p>
-<ol>
-<li>数据完整性约束：</li>
-<li>数据安全性约束：</li>
-<li>并发控制约束：</li>
-</ol>
-<h2 id="二、数据模型的分类"><a href="#二、数据模型的分类" class="headerlink" title="二、数据模型的分类"></a>二、数据模型的分类</h2><p>理想的数据模型，应该满足三方面的要求：</p>
+    <title>数原 1.3 数据系统的结构</title>
+    <url>/2019/11/18/%E6%95%B0%E5%8E%9F-1-3-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84/%E6%95%B0%E5%8E%9F-1-3-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84/</url>
+    <content><![CDATA[<p>在一个数据库系统中，不同的用户从不同的角度看待数据库，会形成不同的视图结构。</p>
 <ul>
-<li>比较真实的模拟现实世界</li>
-<li>容易被人们理解</li>
-<li>便于在计算机上实现</li>
-</ul>
-<p>但几乎没有这样的数据模型。<br>因此，只能采用逐步抽象的方法：在不同的层面使用不同的数据模型。  </p>
-<p>首先将现实世界抽象为信息世界中的某种信息结构（数据模型），它不依赖于具体的计算机系统，不依赖于具体的DBMS，只是一种概念。<br>然后，将概念级的信息模型抽象为某一具体的DBMS支持的数据模型。  </p>
-<p>因此，数据模型是数据库系统DBS的核心和基础。</p>
-<p>数据模型从分层角度，可分为：</p>
-<ol>
-<li>概念层数据模型</li>
-<li>逻辑层数据模型，</li>
-<li>物理层数据模型</li>
-</ol>
-<p>数据模型有”型“和”值“的之分。  </p>
+<li>从DBA的角度来看， 数据库系统分为：
 <ul>
-<li>型：描述了实体型的结构和属性。（实体型概念见后文）  </li>
-<li>值：某个具体实体的值。</li>
-</ul>
-<h3 id="1-概念层数据模型，也称为数据的概念模型，信息模型，Conceptual-Model"><a href="#1-概念层数据模型，也称为数据的概念模型，信息模型，Conceptual-Model" class="headerlink" title="1.概念层数据模型，也称为数据的概念模型，信息模型，Conceptual Model"></a>1.概念层数据模型，也称为数据的概念模型，信息模型，Conceptual Model</h3><p>抽象的表示了现实世界的各种事物及其联系，与计算机系统和DBMS无关。</p>
-<p>概念模型有几个优点：</p>
+<li>内部系统结构：
 <ul>
-<li>是设计数据库的有力工具</li>
-<li>数据库设计人员和用户之间的交流语言</li>
-</ul>
-<h4 id="（1）信息世界中的基本概念"><a href="#（1）信息世界中的基本概念" class="headerlink" title="（1）信息世界中的基本概念"></a>（1）信息世界中的基本概念</h4><p>①实体(Entity)：客观存在并可以相互区别的事物。实体可以是抽象的概念或联系。</p>
-<p>②属性(attribute)：实体的某种特性。一个实体可以有多个属性。</p>
-<p>③码或键(key):可<strong>唯一标识实体</strong>的”属性集合“，称为码或键。</p>
-<p>④域(domain):属性的取值范围。每个属性都有自己的域。</p>
-<p>⑤实体型(Entity Type)：属性完全相同的实体构成一个类型，称为”实体型“。用”实体名+属性集合“来表达实体型。比如：<em>学生（学号、姓名、性别、出生日期）</em> 就是一个实体型。</p>
-<p>⑥实体集(Entity Set)：实体型中实体的集合，称为实体集。</p>
-<p>⑦关系、联系(Relationship)：实体（型）内部的联系（即属性之间的联系），和实体（型）之间的联系。联系也可以有属性！</p>
-<h4 id="（2）概念模型的表示方法"><a href="#（2）概念模型的表示方法" class="headerlink" title="（2）概念模型的表示方法"></a>（2）概念模型的表示方法</h4><p>概念模型的表示方法很多，最常用的是实体-联系方法（Entity-Relationship approch)，简称ER方法。</p>
-<p>ER方法（也称为ER模型）：采用ER图来表示概念模型。</p>
-<p>ER图的表示方法：</p>
-<ul>
-<li>实体型：用矩形表示，内部写明实体的名称。</li>
-<li>属性：用椭圆形表示，并用无向边连接到实体。</li>
-<li>联系：用菱形表示，内部写明联系的名称，用无向边连接相关的实体，并在无向边旁标注联系的类型（1：1，1：N；M：N）。如果联系具有属性，则这些属性也有用无向边与联系相连接。</li>
-</ul>
-<h3 id="2-逻辑层数据模型，数据的逻辑模型（Logic-Model"><a href="#2-逻辑层数据模型，数据的逻辑模型（Logic-Model" class="headerlink" title="2.逻辑层数据模型，数据的逻辑模型（Logic Model)"></a>2.逻辑层数据模型，数据的逻辑模型（Logic Model)</h3><p>逻辑层模型描述了：某业务/某组织涉及的数据的整体逻辑结构。</p>
-<p>逻辑模型是以计算机系统看待世界的观点来完成数据建模的。</p>
-<p>所有的DBMS都必须基于某种逻辑模型。</p>
-<p>逻辑模型分为：</p>
-<ul>
-<li>层次模型（树）：DBMS最早使用的数据模型。其数据结构是一棵”有向树“。每个节点对用了一个记录集（即现实世界的实体集）。缺点：层次模型难以表达实体之间比较复杂的联系。</li>
-<li>网状模型（有向图）：优点是可以表示实体间各种联系，缺点是过于复杂，实现的算法难以规范化。</li>
-<li>关系模型（二维表）：以二维表来表示实体和联系，并以二维表来组织数据。关系模型的优点：  <ul>
-<li>具有严格的数学基础：以集合论中的关系数学理论为基础。</li>
-<li>数据结构简单清晰，用户易懂易用：统一用关系（即表）来表示实体和联系，检索和更新结果也用关系来表示。</li>
-<li>存取路径透明，具有更高的数据独立性、更好的保密性：关系模型把存取路径向用户隐蔽起来，用户只需要指出”干什么“或”找什么“，不必详细说明”怎么干“或”怎么找“（层次模型就需要说明）。</li>
-</ul>
-</li>
-<li>面向对象模型(对象）：用面向对象的观点来描述实体、联系的数据模型。比关系模型的表达能力更强，且对象可复用，维护方便。面向对象模型既是概念模型，又是逻辑模型。</li>
-</ul>
-<h3 id="3-物理层数据模型，数据的物理模型，Physical-Model"><a href="#3-物理层数据模型，数据的物理模型，Physical-Model" class="headerlink" title="3.物理层数据模型，数据的物理模型，Physical Model"></a>3.物理层数据模型，数据的物理模型，Physical Model</h3><p>描述了数据在存储介质上的组织结构，是逻辑模型的物理实现。</p>
-<p>物理模型确定了：数据的物理存储结构、数据存取路径、优化数据库的性能。</p>
-<p>物理模型的抽象由DBMS负责完成。</p>
-]]></content>
-      <categories>
-        <category>数据库系统原理</category>
-        <category>第一章 数据系统概述</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>1.3 数据系统的结构</title>
-    <url>/2019/11/18/1-3-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84/1-3-%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%93%E6%9E%84/</url>
-    <content><![CDATA[<h1 id="第三节-数据库系统的结构"><a href="#第三节-数据库系统的结构" class="headerlink" title="第三节 数据库系统的结构"></a>第三节 数据库系统的结构</h1><p>在一个数据库系统中，不同的用户从不同的角度看待数据库，会形成不同的视图结构。</p>
-<ul>
-<li>从DBA的角度来看， 数据库系统分为：<ul>
-<li>内部系统结构：<ul>
 <li>模式</li>
 <li>外模式</li>
 <li>内模式</li>
-</ul>
-</li>
-<li>外部系统结构：<ul>
+</ul></li>
+<li>外部系统结构：
+<ul>
 <li>集中式结构</li>
 <li>分布式结构</li>
 <li>并行结构</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>从数据库系统的用户（如应用程序开发人员）来看——数据系统的运行和应用结构<ul>
+</ul></li>
+</ul></li>
+<li>从数据库系统的用户（如应用程序开发人员）来看——数据系统的运行和应用结构
+<ul>
 <li>客户/服务器结构，CS</li>
 <li>浏览器/服务器结构，BS</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="一、数据库系统的三级模式结构"><a href="#一、数据库系统的三级模式结构" class="headerlink" title="一、数据库系统的三级模式结构"></a>一、数据库系统的三级模式结构</h2><p>所有的DBMS都遵循美国 ANSI/SPARC 数据库管理研究组提出的三级模式结构：外模式（用户级）、模式（概念级）、内模式（物理级）。</p>
-<h3 id="1-模式，概念模式，逻辑模式，Schema"><a href="#1-模式，概念模式，逻辑模式，Schema" class="headerlink" title="1.模式，概念模式，逻辑模式，Schema"></a>1.模式，概念模式，逻辑模式，Schema</h3><p>模式：是数据库中全体数据的逻辑结构和特征的描述，是数据库的全局概念视图。</p>
+<h2 id="一数据库系统的三级模式结构">一、数据库系统的三级模式结构</h2>
+<p>所有的DBMS都遵循美国 ANSI/SPARC 数据库管理研究组提出的三级模式结构：外模式（用户级）、模式（概念级）、内模式（物理级）。</p>
+<h3 id="模式概念模式逻辑模式schema">1.模式，概念模式，逻辑模式，Schema</h3>
+<p>模式：是数据库中全体数据的逻辑结构和特征的描述，是数据库的全局概念视图。</p>
 <p>模式定义了数据的逻辑结构、数据之间的联系，以及数据的安全性、完整性要求。</p>
 <p>模式与数据的物理存储细节、硬件环境无关，也与具体的应用程序、开发工具、开发语言无关。</p>
 <p>一个数据库只能有一个模式。</p>
 <p>P.S. 模式可以简单的理解为 表、主键、外键、视图、约束等，并且属于所有用户（不属于特定用户）。</p>
-<h3 id="2-外模式，子模式，用户模式，subSchema"><a href="#2-外模式，子模式，用户模式，subSchema" class="headerlink" title="2.外模式，子模式，用户模式，subSchema"></a>2.外模式，子模式，用户模式，subSchema</h3><p>外模式：是数据库用户（包括程序员和终端用户）能够看见和使用的，局部数据的逻辑结构和特征的描述。</p>
+<h3 id="外模式子模式用户模式subschema">2.外模式，子模式，用户模式，subSchema</h3>
+<p>外模式：是数据库用户（包括程序员和终端用户）能够看见和使用的，局部数据的逻辑结构和特征的描述。</p>
 <p>外模式是用户视图，是模式的子集，它和某个应用所需的数据紧密联系。</p>
-<p>外模式还能够对模式的局部数据重构。<br>模式中同样的数据，在外模式中其结构、类型、长度、权限都可以不同。  </p>
+<p>外模式还能够对模式的局部数据重构。<br>
+模式中同样的数据，在外模式中其结构、类型、长度、权限都可以不同。</p>
 <p>外模式可以保证数据库安全，还可以简化数据库系统的用户接口，并支持了数据的独立性和共享性。</p>
-<h3 id="3-内模式，存储模式，storage-schema"><a href="#3-内模式，存储模式，storage-schema" class="headerlink" title="3.内模式，存储模式，storage schema"></a>3.内模式，存储模式，storage schema</h3><p>内模式：是对数据库中数据的物理结构和存储方式的描述，是数据在数据库内部的表示形式。</p>
-<p>内模式是数据库的最底层，但并非物理层！它仍然属于逻辑描述，比如：<br>记录、索引、文件的组织方式，存储数据时采用顺序结构存储还是B树结构存储，数据是否压缩是否加密等。<br>而非具体的物理方法：柱面、磁道的大小等，那些属于文件系统的范畴。</p>
-<h3 id="4-三级模式结构的两层映像，与数据独立性"><a href="#4-三级模式结构的两层映像，与数据独立性" class="headerlink" title="4. 三级模式结构的两层映像，与数据独立性"></a>4. 三级模式结构的两层映像，与数据独立性</h3><p>三级模式是对数据的三级抽象，三级抽象具有如下的特点：</p>
+<h3 id="内模式存储模式storage-schema">3.内模式，存储模式，storage schema</h3>
+<p>内模式：是对数据库中数据的物理结构和存储方式的描述，是数据在数据库内部的表示形式。</p>
+<p>内模式是数据库的最底层，但并非物理层！它仍然属于逻辑描述，比如：<br>
+记录、索引、文件的组织方式，存储数据时采用顺序结构存储还是B树结构存储，数据是否压缩是否加密等。<br>
+而非具体的物理方法：柱面、磁道的大小等，那些属于文件系统的范畴。</p>
+<h3 id="三级模式结构的两层映像与数据独立性">4. 三级模式结构的两层映像，与数据独立性</h3>
+<p>三级模式是对数据的三级抽象，三级抽象具有如下的特点：</p>
 <ul>
 <li>概念模式独立于内模式和外模式（它只和业务相关），是数据库的核心，也是数据库设计的关键</li>
 <li>内模式<strong>依赖</strong>于概念模式，但独立于外模式和存储设备。</li>
@@ -208,11 +1129,15 @@
 <li>外模式/模式映像：定义了各个外模式和模式之间的映像关系，这些映像存在于外模式中。每一个外模式都有一个外模式/模式映像。如果模式发生变化，DBA会对各个外模式/模式映像进行更新，以尽量保持外模式不变，实现数据与程序的逻辑独立性。</li>
 <li>模式/内模式映像：定义了概念模式和内模式之间的对应关系，通常存在于概念模式中。模式/内模式映像只有一个。当内模式发生改变时，DBA会修改模式/内模式映像，使模式保持不变，实现了数据与程序的物理独立性。</li>
 </ul>
-<h2 id="二、数据库系统的运行与应用结构"><a href="#二、数据库系统的运行与应用结构" class="headerlink" title="二、数据库系统的运行与应用结构"></a>二、数据库系统的运行与应用结构</h2><h3 id="1-客户-服务器结构，CS"><a href="#1-客户-服务器结构，CS" class="headerlink" title="1. 客户/服务器结构，CS"></a>1. 客户/服务器结构，CS</h3><ul>
-<li>客户端/前台/表示层：命令行客户端、GUI管理工具、应用程序  </li>
+<h2 id="二数据库系统的运行与应用结构">二、数据库系统的运行与应用结构</h2>
+<h3 id="客户服务器结构cs">1. 客户/服务器结构，CS</h3>
+<ul>
+<li>客户端/前台/表示层：命令行客户端、GUI管理工具、应用程序<br>
+</li>
 <li>服务器/后台/数据层：DBMS</li>
 </ul>
-<h3 id="2-浏览器-服务器结构，BS"><a href="#2-浏览器-服务器结构，BS" class="headerlink" title="2. 浏览器/服务器结构，BS"></a>2. 浏览器/服务器结构，BS</h3><p>BS结构：基于WEB应用的客户/服务器结构，也称为”三层结构“。</p>
+<h3 id="浏览器服务器结构bs">2. 浏览器/服务器结构，BS</h3>
+<p>BS结构：基于WEB应用的客户/服务器结构，也称为”三层结构“。</p>
 <ul>
 <li>表示层：数据库使用者的操作和展示界面，通常指浏览器。</li>
 <li>处理层：也称为中间层，负责处理具体的应用逻辑。</li>
@@ -226,36 +1151,146 @@
       </categories>
   </entry>
   <entry>
-    <title>1.2 数据管理技术的发展</title>
-    <url>/2019/11/18/1-2-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF%E7%9A%84%E5%8F%91%E5%B1%95/1-2-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF%E7%9A%84%E5%8F%91%E5%B1%95/</url>
-    <content><![CDATA[<h1 id="第二节-数据管理技术的发展"><a href="#第二节-数据管理技术的发展" class="headerlink" title="第二节 数据管理技术的发展"></a>第二节 数据管理技术的发展</h1><h6 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h6><p>数据管理包括2个方面：</p>
-<ol>
+    <title>数原 1.4 数据模型</title>
+    <url>/2019/11/18/%E6%95%B0%E5%8E%9F-1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/%E6%95%B0%E5%8E%9F-1-4-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>模型(model)，通过对”现实世界事物的特征“进行抽象，实现模拟。</p>
+<p>数据模型(Data Model)，也是对”现实世界中数据的特征“进行了抽象，从而模拟了现实世界的数据。</p>
+<h2 id="一数据特征与数据模型组成要素">一、数据特征与数据模型组成要素</h2>
+<p>现实世界中的数据具有两种特征：</p>
+<ol type="1">
+<li>静态特征：数据的基本结构、数据间的联系、对数据的约束（比如取值范围）</li>
+<li>动态特征：对数据可以进行的、符合一定规则的操作。</li>
+</ol>
+<p>对数据进行抽象的数据模型，自然就需要描述数据的静态特征和动态行为，并为数据的表示和操作提供框架。</p>
+<p>数据模型的定义：<br>
+描述数据的静态结构，定义可对数据执行的操作和数据间约束的一组概念。</p>
+<h3 id="数据模型的三要素">数据模型的三要素：</h3>
+<h6 id="数据结构">1.数据结构</h6>
+<p>描述数据的静态特性，如：数据类型、内容、属性、数据之间的联系。</p>
+<p>常常用”数据结构的类型“来命名数据模型，比如： 层次结构（树）--层次模型，网状结构（有向图）--网状模型，关系结构（二维表）--关系模型。</p>
+<h6 id="数据操作">2. 数据操作</h6>
+<p>数据操作描述了数据的动态特性，包括：允许对数据执行的操作和操作规则。</p>
+<p>操作分为更新和检索两大类，更新包括：插入、删除、修改。</p>
+<p>操作规则包括：各操作的优先级等。</p>
+<h5 id="数据约束">3. 数据约束</h5>
+<p>数据约束描述了：数据结构中，数据间的语法和语义关联，包括（相互制约关系）、（相互依存关系）、（数据的动态变化规则），从而保证数据的完整性（正确性、有效性、相容性）。</p>
+<p>数据约束又分为：</p>
+<ol type="1">
+<li>数据完整性约束：</li>
+<li>数据安全性约束：</li>
+<li>并发控制约束：</li>
+</ol>
+<h2 id="二数据模型的分类">二、数据模型的分类</h2>
+<p>理想的数据模型，应该满足三方面的要求：</p>
+<ul>
+<li>比较真实的模拟现实世界</li>
+<li>容易被人们理解</li>
+<li>便于在计算机上实现</li>
+</ul>
+<p>但几乎没有这样的数据模型。<br>
+因此，只能采用逐步抽象的方法：在不同的层面使用不同的数据模型。</p>
+<p>首先将现实世界抽象为信息世界中的某种信息结构（数据模型），它不依赖于具体的计算机系统，不依赖于具体的DBMS，只是一种概念。<br>
+然后，将概念级的信息模型抽象为某一具体的DBMS支持的数据模型。</p>
+<p>因此，数据模型是数据库系统DBS的核心和基础。</p>
+<p>数据模型从分层角度，可分为：</p>
+<ol type="1">
+<li>概念层数据模型</li>
+<li>逻辑层数据模型，</li>
+<li>物理层数据模型</li>
+</ol>
+<p>数据模型有”型“和”值“的之分。</p>
+<ul>
+<li>型：描述了实体型的结构和属性。（实体型概念见后文）<br>
+</li>
+<li>值：某个具体实体的值。</li>
+</ul>
+<h3 id="概念层数据模型也称为数据的概念模型信息模型conceptual-model">1.概念层数据模型，也称为数据的概念模型，信息模型，Conceptual Model</h3>
+<p>抽象的表示了现实世界的各种事物及其联系，与计算机系统和DBMS无关。</p>
+<p>概念模型有几个优点：</p>
+<ul>
+<li>是设计数据库的有力工具</li>
+<li>数据库设计人员和用户之间的交流语言</li>
+</ul>
+<h4 id="信息世界中的基本概念">（1）信息世界中的基本概念</h4>
+<p>①实体(Entity)：客观存在并可以相互区别的事物。实体可以是抽象的概念或联系。</p>
+<p>②属性(attribute)：实体的某种特性。一个实体可以有多个属性。</p>
+<p>③码或键(key):可<strong>唯一标识实体</strong>的”属性集合“，称为码或键。</p>
+<p>④域(domain):属性的取值范围。每个属性都有自己的域。</p>
+<p>⑤实体型(Entity Type)：属性完全相同的实体构成一个类型，称为”实体型“。用”实体名+属性集合“来表达实体型。比如：<em>学生（学号、姓名、性别、出生日期）</em> 就是一个实体型。</p>
+<p>⑥实体集(Entity Set)：实体型中实体的集合，称为实体集。</p>
+<p>⑦关系、联系(Relationship)：实体（型）内部的联系（即属性之间的联系），和实体（型）之间的联系。联系也可以有属性！</p>
+<h4 id="概念模型的表示方法">（2）概念模型的表示方法</h4>
+<p>概念模型的表示方法很多，最常用的是实体-联系方法（Entity-Relationship approch)，简称ER方法。</p>
+<p>ER方法（也称为ER模型）：采用ER图来表示概念模型。</p>
+<p>ER图的表示方法：</p>
+<ul>
+<li>实体型：用矩形表示，内部写明实体的名称。</li>
+<li>属性：用椭圆形表示，并用无向边连接到实体。</li>
+<li>联系：用菱形表示，内部写明联系的名称，用无向边连接相关的实体，并在无向边旁标注联系的类型（1：1，1：N；M：N）。如果联系具有属性，则这些属性也有用无向边与联系相连接。</li>
+</ul>
+<h3 id="逻辑层数据模型数据的逻辑模型logic-model">2.逻辑层数据模型，数据的逻辑模型（Logic Model)</h3>
+<p>逻辑层模型描述了：某业务/某组织涉及的数据的整体逻辑结构。</p>
+<p>逻辑模型是以计算机系统看待世界的观点来完成数据建模的。</p>
+<p>所有的DBMS都必须基于某种逻辑模型。</p>
+<p>逻辑模型分为：</p>
+<ul>
+<li>层次模型（树）：DBMS最早使用的数据模型。其数据结构是一棵”有向树“。每个节点对用了一个记录集（即现实世界的实体集）。缺点：层次模型难以表达实体之间比较复杂的联系。</li>
+<li>网状模型（有向图）：优点是可以表示实体间各种联系，缺点是过于复杂，实现的算法难以规范化。</li>
+<li>关系模型（二维表）：以二维表来表示实体和联系，并以二维表来组织数据。关系模型的优点：
+<ul>
+<li>具有严格的数学基础：以集合论中的关系数学理论为基础。</li>
+<li>数据结构简单清晰，用户易懂易用：统一用关系（即表）来表示实体和联系，检索和更新结果也用关系来表示。</li>
+<li>存取路径透明，具有更高的数据独立性、更好的保密性：关系模型把存取路径向用户隐蔽起来，用户只需要指出”干什么“或”找什么“，不必详细说明”怎么干“或”怎么找“（层次模型就需要说明）。</li>
+</ul></li>
+<li>面向对象模型(对象）：用面向对象的观点来描述实体、联系的数据模型。比关系模型的表达能力更强，且对象可复用，维护方便。面向对象模型既是概念模型，又是逻辑模型。</li>
+</ul>
+<h3 id="物理层数据模型数据的物理模型physical-model">3.物理层数据模型，数据的物理模型，Physical Model</h3>
+<p>描述了数据在存储介质上的组织结构，是逻辑模型的物理实现。</p>
+<p>物理模型确定了：数据的物理存储结构、数据存取路径、优化数据库的性能。</p>
+<p>物理模型的抽象由DBMS负责完成。</p>
+]]></content>
+      <categories>
+        <category>数据库系统原理</category>
+        <category>第一章 数据系统概述</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数原 1.2 数据管理技术的发展</title>
+    <url>/2019/11/18/%E6%95%B0%E5%8E%9F-1-2-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF%E7%9A%84%E5%8F%91%E5%B1%95/%E6%95%B0%E5%8E%9F-1-2-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF%E7%9A%84%E5%8F%91%E5%B1%95/</url>
+    <content><![CDATA[<h6 id="数据管理">数据管理</h6>
+<p>数据管理包括2个方面：</p>
+<ol type="1">
 <li>针对组织的业务数据的管理：制定并执行“组织中关于数据的定义、组织、保护与使用的”的策略、过程和计划；（这是与数据管理技术无关的活动）</li>
 <li>依靠数据管理技术，集中控制管理数据。（本节的主要内容）</li>
 </ol>
 <p>与计算机技术结合的数据管理包括：</p>
 <ul>
 <li>收集：收集数据，将存储在其他介质的数据转换成计算机可处理的形式；</li>
-<li>组织：将收集来的数据进行适当的构造<ul>
+<li>组织：将收集来的数据进行适当的构造
+<ul>
 <li>逻辑组织：用户或应用程序所见到的数据结构形式</li>
 <li>物理组织：数据在物理存储设备上的结构形式</li>
-</ul>
-</li>
+</ul></li>
 <li>归类存储：正在使用的数据，和作为备份的数据。</li>
 <li>提供检索方法：便于用户快速获取信息</li>
 <li>存取：建立规则和执行规则的过程，控制数据的存取，从而保护数据的正确性和安全性</li>
 <li>维护：数据的规模和结构可能发生变化，需要维护。</li>
 </ul>
 <p>数据管理的任务（目的）：通过数据的收集、组织、控制、存储、选取、维护，实现在适当的时刻、以适当的形式、向适当的人提供适当的数据。</p>
-<h6 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h6><p>数据管理是数据处理的中心问题，数据处理比数据管理的概念更宽泛。</p>
+<h6 id="数据处理">数据处理</h6>
+<p>数据管理是数据处理的中心问题，数据处理比数据管理的概念更宽泛。</p>
 <p>数据处理：对各种数据进行收集、存储、加工、传播的活动。</p>
-<h2 id="数据管理技术"><a href="#数据管理技术" class="headerlink" title="数据管理技术"></a>数据管理技术</h2><h3 id="1-人工管理阶段"><a href="#1-人工管理阶段" class="headerlink" title="1.人工管理阶段"></a>1.人工管理阶段</h3><p>特点：</p>
+<h2 id="数据管理技术">数据管理技术</h2>
+<h3 id="人工管理阶段">1.人工管理阶段</h3>
+<p>特点：</p>
 <ul>
 <li>数据无法保存在计算机中：没有磁盘等存储设备，输入数据和输出只能放在纸带上，程序执行完毕后，数据空间随程序空间一起被释放。</li>
 <li>应用程序管理数据：没有操作系统也没有数据管理软件，数据由应用程序执行负责，数据的逻辑结构、物理结构（读写纸带）、存取方法都由应用程序编写人员来完成。数据和应用程序高度依赖。</li>
 <li>数据面向应用：一组数据只能用于一个程序，多个程序要无法使用同一组数据，只能分别定义，数据冗余度非常高，数据独立性差。</li>
 </ul>
-<h3 id="2-文件系统阶段"><a href="#2-文件系统阶段" class="headerlink" title="2.文件系统阶段"></a>2.文件系统阶段</h3><p>数据的物理独立性：文件系统分离了数据的逻辑结构（文件的内容，即数据）和物理结构（文件在文件系统中如何存放），应用程序读写数据的逻辑结构，文件系统管理文件的物理结构。<br>即使物理结构发生了改变，比如：把磁盘从一种文件系统转换为另一种文件系统，或者将文件从一台机器拷入另一台具有不同文件系统的机器，就不需要修改应用程序——因为文件的内容，即逻辑结构没有改变。</p>
+<h3 id="文件系统阶段">2.文件系统阶段</h3>
+<p>数据的物理独立性：文件系统分离了数据的逻辑结构（文件的内容，即数据）和物理结构（文件在文件系统中如何存放），应用程序读写数据的逻辑结构，文件系统管理文件的物理结构。<br>
+即使物理结构发生了改变，比如：把磁盘从一种文件系统转换为另一种文件系统，或者将文件从一台机器拷入另一台具有不同文件系统的机器，就不需要修改应用程序——因为文件的内容，即逻辑结构没有改变。</p>
 <p>特点：</p>
 <ul>
 <li>数据可以长期保存在计算机中：有了磁盘、磁鼓等直接存取设备。</li>
@@ -263,27 +1298,30 @@
 <li>实现了数据的物理独立性：使数据的逻辑结构和物理结构分离开来。</li>
 <li>实现了文件级的数据共享：一个文件可以为多个应用程序服务。也可以抽取多个文件的内容，组织成新的文件，形成新的数据。</li>
 </ul>
-<p>缺点：<br>只实现了文件级的共享，没有实现记录级的共享。应用程序和数据之间仍然存在依赖关系，仍然可能需要构建新的文件来满足应用程序的需要，从而导致数据冗余。</p>
-<h3 id="3-数据库系统阶段"><a href="#3-数据库系统阶段" class="headerlink" title="3.数据库系统阶段"></a>3.数据库系统阶段</h3><ul>
+<p>缺点：<br>
+只实现了文件级的共享，没有实现记录级的共享。应用程序和数据之间仍然存在依赖关系，仍然可能需要构建新的文件来满足应用程序的需要，从而导致数据冗余。</p>
+<h3 id="数据库系统阶段">3.数据库系统阶段</h3>
+<ul>
 <li>数据集成：数据被集成到DBMS中，得到最大程度的共享，冗余最小。</li>
 <li>数据共享度高：多个用户可以共同使用相同的数据，而且可以同时并发存取同一数据。</li>
 <li>数据冗余小：冗余不应该完全消除，为了合法性检验、数据存取效率等原因，受控的冗余是应该的。</li>
 <li>数据一致性：冗余的多个副本没有同时得到更新，导致失去一致性。维持一致性是数据库系统的任务。</li>
-<li>数据独立性高：数据和应用程序分离。在文件系统中，修改数据的定义、存取数据的逻辑，都需要修改应用程序(修改数据的定义后，文件的读取会受到影响，应用程序就需要修改）。<ul>
+<li>数据独立性高：数据和应用程序分离。在文件系统中，修改数据的定义、存取数据的逻辑，都需要修改应用程序(修改数据的定义后，文件的读取会受到影响，应用程序就需要修改）。
+<ul>
 <li>数据的逻辑独立：如果应用程序只修改视图，就不会影响数据；在一定范围内修改数据的定义，也可能不需要修改应用程序（修改部分可能不涉及应用程序读取的部分）。</li>
 <li>数据的物理独立：改变数据的存储结构、存取方法，无需修改应用程序。（应用程序关心的是数据的逻辑结构）</li>
-</ul>
-</li>
-<li>实施统一管理和控制：DBMS 可以实现对数据的统一管理和控制，包括：<ul>
+</ul></li>
+<li>实施统一管理和控制：DBMS 可以实现对数据的统一管理和控制，包括：
+<ul>
 <li>安全性：每个用户只能按照规定的方式访问数据，比如权限管理，防止了泄密和破坏。</li>
 <li>完整性：保证输入到数据库的数据满足约束，数据之间满足一定的关系，数据只在一定范围内有效（比如性别只能男和女）。</li>
 <li>并发控制：DBMS需要对并发访问进行控制、协调，避免得到错误结果，或破坏数据库的完整性。</li>
 <li>故障恢复：将数据库恢复到某个已知的正确状态。</li>
-</ul>
-</li>
+</ul></li>
 <li>减少应用程序开发和维护的工作量：数据的共享性和独立性促成。</li>
 </ul>
-<h6 id="补充资料"><a href="#补充资料" class="headerlink" title="补充资料"></a>补充资料</h6><p>数据的完整性：是对数据的正确性、有效性、和相容性的要求。</p>
+<h6 id="补充资料">补充资料</h6>
+<p>数据的完整性：是对数据的正确性、有效性、和相容性的要求。</p>
 <p>有效性：对数据是否正确的测试标准。</p>
 <p>相容性：描述同一事实的两个数据应相同，称为两个数据相容，否则两个数据不相容。比如一个人不能有2个性别。</p>
 ]]></content>
@@ -293,14 +1331,17 @@
       </categories>
   </entry>
   <entry>
-    <title>1.1 数据库基本概念</title>
-    <url>/2019/11/18/1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<h1 id="第一章-数据系统概述"><a href="#第一章-数据系统概述" class="headerlink" title="第一章 数据系统概述"></a>第一章 数据系统概述</h1><h2 id="第一节-数据库基本概念"><a href="#第一节-数据库基本概念" class="headerlink" title="第一节 数据库基本概念"></a>第一节 数据库基本概念</h2><h3 id="1-数据"><a href="#1-数据" class="headerlink" title="1.数据"></a>1.数据</h3><p>数据是描述事物的符号记录，是用物理符号记录下来的、可以鉴别的信息。</p>
-<p>人们通常抽取事物的某些特征或属性来描述事物。<br>此时仅有数据，没有对数据的解释就无法理解数据的意义。</p>
+    <title>数原 1.1 数据库基本概念</title>
+    <url>/2019/11/18/%E6%95%B0%E5%8E%9F-1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/%E6%95%B0%E5%8E%9F-1-1-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<h3 id="数据">1.数据</h3>
+<p>数据是描述事物的符号记录，是用物理符号记录下来的、可以鉴别的信息。</p>
+<p>人们通常抽取事物的某些特征或属性来描述事物。<br>
+此时仅有数据，没有对数据的解释就无法理解数据的意义。</p>
 <p>语义：数据所蕴含的信息，是对数据的解释。</p>
 <p>数据和语义密不可分。</p>
 <p>没有语义的数据是无意义的，不完整的。</p>
-<h3 id="2-数据库"><a href="#2-数据库" class="headerlink" title="2.数据库"></a>2.数据库</h3><p>数据库(DataBase,DB)：长期存储在计算机中的，有组织、可共享的数据集合。</p>
+<h3 id="数据库">2.数据库</h3>
+<p>数据库(DataBase,DB)：长期存储在计算机中的，有组织、可共享的数据集合。</p>
 <p>数据库中的数据具有下列特点：</p>
 <ul>
 <li>按一定的数据模型组织、描述、存储</li>
@@ -308,8 +1349,9 @@
 <li>较高的数据独立性</li>
 <li>可以被多个用户共享</li>
 </ul>
-<h3 id="3-数据库管理系统"><a href="#3-数据库管理系统" class="headerlink" title="3. 数据库管理系统"></a>3. 数据库管理系统</h3><p>数据库管理系统(DataBase Management System,DBMS)：创建和管理数据库的一套软件。</p>
-<p>DBMS 介于应用程序和操作系统之间，负责：<br>组织和存储数据，使数据库使用者（应用程序、人）能够快速获取所需数据，通过统一的控制机制提供必要的安全性和完整性，管理和维护数据。</p>
+<h3 id="数据库管理系统">3. 数据库管理系统</h3>
+<p>数据库管理系统(DataBase Management System,DBMS)：创建和管理数据库的一套软件。</p>
+<p>DBMS 介于应用程序和操作系统之间，负责： 组织和存储数据，使数据库使用者（应用程序、人）能够快速获取所需数据，通过统一的控制机制提供必要的安全性和完整性，管理和维护数据。</p>
 <p>DBMS的主要功能：</p>
 <ul>
 <li>数据定义功能：通过DDL定义DB中的数据对象——表、视图、存储过程、触发器等。</li>
@@ -319,13 +1361,14 @@
 <li>数据组织、存储、管理功能：为了提高对数据库中数据的存取效率，DBMS需要对数据库中的数据在物理层面上分类存储和管理。DBMS还提供了多种数据的存取方法，比如索引查找、顺序查找等。（这个功能，可能涉及了数据的物理存储层面的东西）</li>
 <li>其他功能：与其他软件的网络通信功能，不同DBMS之间传输数据、访问对方数据库，通过DBMS提供的API，使用编程语言与数据库交互等。</li>
 </ul>
-<h3 id="4-数据库系统"><a href="#4-数据库系统" class="headerlink" title="4. 数据库系统"></a>4. 数据库系统</h3><p>数据库系统(Database System,DBS)：在计算机中引入数据库技术之后的系统。</p>
+<h3 id="数据库系统">4. 数据库系统</h3>
+<p>数据库系统(Database System,DBS)：在计算机中引入数据库技术之后的系统。</p>
 <p>一个完整的DBS包括：</p>
 <ul>
 <li>DBMS及实用工具</li>
-<li>DB </li>
-<li>应用程序 </li>
-<li>DBA </li>
+<li>DB</li>
+<li>应用程序</li>
+<li>DBA</li>
 <li>用户（程序员+数据库终端用户）：DBS的服务对象。终端用户以交互方式向DBS提供操作请求，DBMS响应请求访问DB中的数据，返回给终端用户。终端用户不是应用程序的使用者。</li>
 </ul>
 ]]></content>
@@ -335,21 +1378,22 @@
       </categories>
   </entry>
   <entry>
-    <title>1.3 计算机网络的分类</title>
-    <url>/2019/11/17/1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<h2 id="1-3-1-按拓扑类型"><a href="#1-3-1-按拓扑类型" class="headerlink" title="1.3.1 按拓扑类型"></a>1.3.1 按拓扑类型</h2><p>网络拓扑：  指网络的形状，或者说网络在物理上的连通性。</p>
+    <title>计网 1.3 计算机网络的分类</title>
+    <url>/2019/11/17/%E8%AE%A1%E7%BD%91-1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/%E8%AE%A1%E7%BD%91-1-3-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%88%86%E7%B1%BB/</url>
+    <content><![CDATA[<h2 id="按拓扑类型">1.3.1 按拓扑类型</h2>
+<p>网络拓扑： 指网络的形状，或者说网络在物理上的连通性。</p>
 <p>网络拓扑包括：</p>
 <ul>
-<li>星型  </li>
+<li>星型<br>
+</li>
 <li>总线型</li>
 <li>环形</li>
 <li>树形</li>
 <li>混合型</li>
-<li>网型<a id="more"></a>
-
-</li>
+<li>网型 <a id="more"></a></li>
 </ul>
-<p>选择哪一种拓扑类型，与传输介质、介质访问控制方法有关。<br>选择网络拓扑类型时，应考虑以下因素：  </p>
+<p>选择哪一种拓扑类型，与传输介质、介质访问控制方法有关。<br>
+选择网络拓扑类型时，应考虑以下因素：</p>
 <ul>
 <li>可靠性：保证所有的数据能够准确送达目的节点。</li>
 <li>可维护性：便于故障检测、故障隔离</li>
@@ -360,114 +1404,132 @@
 </ul>
 <p>网络拓扑根据通信子网中的信道类型可分为：</p>
 <ul>
-<li>点对点信道：每条信道连接一对节点。包括：  <ul>
+<li>点对点信道：每条信道连接一对节点。包括：
+<ul>
 <li>星型</li>
 <li>环形</li>
 <li>树形</li>
 <li>网型</li>
-</ul>
-</li>
-<li>广播信道：多个网络节点共享一个公共信道。<ul>
+</ul></li>
+<li>广播信道：多个网络节点共享一个公共信道。
+<ul>
 <li>总线型</li>
 <li>环形</li>
 <li>树形</li>
 <li>无线通信</li>
 <li>卫星通信</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h4 id="1-星型拓扑"><a href="#1-星型拓扑" class="headerlink" title="1.星型拓扑"></a>1.星型拓扑</h4><p>星型拓扑，是由<strong>中央节点</strong>，和通过“点对点通信链路”连接到中央节点的<strong>周边节点</strong>，组成。</p>
+<h4 id="星型拓扑">1.星型拓扑</h4>
+<p>星型拓扑，是由<strong>中央节点</strong>，和通过“点对点通信链路”连接到中央节点的<strong>周边节点</strong>，组成。</p>
 <p>中央节点往往是一个集线器(hub)。</p>
-<p>集中式通信控制策略：<br>中央节点执行集中式通信控制策略，因此中央节点的负担较重，而周边节点处理通信的负担很轻。</p>
+<p>集中式通信控制策略：<br>
+中央节点执行集中式通信控制策略，因此中央节点的负担较重，而周边节点处理通信的负担很轻。</p>
 <p>优点：</p>
 <ul>
 <li>控制简单：任一周边节点只与中央节点相连，因此介质访问控制方法简单，访问协议简单，网络监控简单。</li>
 <li>故障检测、隔离简单：单个周边连接点的隔离很容易，便于检测故障，即使发生故障，也可以直接隔离，不会影响其他节点。</li>
 <li>方便服务：中央节点可以方便的对周边节点提供服务，以及重新配置网络。</li>
 </ul>
-<p>缺点：  </p>
+<p>缺点：</p>
 <ul>
 <li>电缆长度、安装量客观：</li>
 <li>中央节点负担太重，形成瓶颈：一旦中央节点故障，则全网瘫痪。</li>
 <li>周边节点的分布处理能力低下</li>
 </ul>
-<h4 id="总线拓扑"><a href="#总线拓扑" class="headerlink" title="总线拓扑"></a>总线拓扑</h4><p>总线拓扑：所有节点都接入一条传输介质上，该传输介质作为共享的公共信道——称为总线。</p>
-<p>分布式通信控制策略：<br>任何一个节点发送的数据都会沿着总线传输，其他节点都可以接受该数据。<br>为了防止多个站点同时发送数据造成信道拥堵，总线拓扑采用分布式通信控制策略：一个时点只允许一个节点发送数据。</p>
-<p>优点：  </p>
+<h4 id="总线拓扑">总线拓扑</h4>
+<p>总线拓扑：所有节点都接入一条传输介质上，该传输介质作为共享的公共信道——称为总线。</p>
+<p>分布式通信控制策略：<br>
+任何一个节点发送的数据都会沿着总线传输，其他节点都可以接受该数据。<br>
+为了防止多个站点同时发送数据造成信道拥堵，总线拓扑采用分布式通信控制策略：一个时点只允许一个节点发送数据。</p>
+<p>优点：</p>
 <ul>
 <li>需要的电缆数量少：</li>
 <li>结构简单，又是无源工作，可靠性较高：</li>
 <li>增加、删除节点比较方便</li>
 </ul>
-<p>缺点：  </p>
+<p>缺点：</p>
 <ul>
 <li>总线的传输距离有限，网络规模受限</li>
 <li>故障诊断、隔离较困难</li>
 <li>分布式通信控制协议不能保证数据的及时传输，不具有实时功能，业务量越大网络速度就越慢。</li>
 <li>节点必须是智能的，要有介质访问控制功能，增加了站点的硬件和软件开销。</li>
 </ul>
-<h4 id="环形拓扑"><a href="#环形拓扑" class="headerlink" title="环形拓扑"></a>环形拓扑</h4><p>环形拓扑：由节点和节点间的链路构成的一个闭合环。  </p>
-<p>工作方式：<br>每个节点可以接受来自于链路的数据，并可以将数据通过链路发送到下一个节点。<br>链路可以是单向的（数据总是沿着固定方向传输），也可以是双向的（数据传输方向不固定）。<br>数据是以分组的形式发送的，每个分组除了数据，还有一些控制信息，包括源和目的地址。</p>
+<h4 id="环形拓扑">环形拓扑</h4>
+<p>环形拓扑：由节点和节点间的链路构成的一个闭合环。</p>
+<p>工作方式：<br>
+每个节点可以接受来自于链路的数据，并可以将数据通过链路发送到下一个节点。<br>
+链路可以是单向的（数据总是沿着固定方向传输），也可以是双向的（数据传输方向不固定）。<br>
+数据是以分组的形式发送的，每个分组除了数据，还有一些控制信息，包括源和目的地址。</p>
 <p>环形拓扑采用分布式通信控制策略。</p>
-<p>优点：  </p>
+<p>优点：</p>
 <ul>
 <li>电缆长度短：其长度与总线型拓扑一样</li>
-<li>可使用光纤： </li>
+<li>可使用光纤：</li>
 <li>所有节点都公平的访问网络的其他部分（通信子网、资源子网），网络性能稳定。</li>
 </ul>
-<p>缺点：  </p>
+<p>缺点：</p>
 <ul>
 <li>任一节点故障会引起全网故障：</li>
 <li>增加、删除节点较复杂</li>
 <li>介质访问控制协议采用令牌传递，在负载很低时，信道利用率就很低。</li>
 </ul>
-<h4 id="树形拓扑"><a href="#树形拓扑" class="headerlink" title="树形拓扑"></a>树形拓扑</h4><p>树形拓扑：可以看做是总线型和星型的结合，根节点的分叉，就像星型拓扑，每条分支上有多个节点共享该信道。</p>
-<p>工作方式：<br>某一个结点发出数据后，会发给根节点，根节点收到数据后在全网广播。目的节点收到广播数据后，复制一份给自己处理。</p>
-<p>优点：  </p>
+<h4 id="树形拓扑">树形拓扑</h4>
+<p>树形拓扑：可以看做是总线型和星型的结合，根节点的分叉，就像星型拓扑，每条分支上有多个节点共享该信道。</p>
+<p>工作方式：<br>
+某一个结点发出数据后，会发给根节点，根节点收到数据后在全网广播。目的节点收到广播数据后，复制一份给自己处理。</p>
+<p>优点：</p>
 <ul>
 <li>易于扩展：增加新分支、新节点都比较容易。</li>
 <li>易于隔离故障：隔离某分支、某个结点都比较容易。</li>
 </ul>
-<p>缺点：<br>可靠性比较差：各节点对树根的依赖太大，如果树根发生故障，则全网瘫痪。其可靠性类似于星型拓扑。</p>
-<h4 id="混合型拓扑"><a href="#混合型拓扑" class="headerlink" title="混合型拓扑"></a>混合型拓扑</h4><p>将前述的几种拓扑结构混合在一起组网，形成混合型拓扑结构。</p>
-<p>比如：  </p>
+<p>缺点：<br>
+可靠性比较差：各节点对树根的依赖太大，如果树根发生故障，则全网瘫痪。其可靠性类似于星型拓扑。</p>
+<h4 id="混合型拓扑">混合型拓扑</h4>
+<p>将前述的几种拓扑结构混合在一起组网，形成混合型拓扑结构。</p>
+<p>比如：</p>
 <ul>
 <li>星型拓扑+ 总线型拓扑 = 星总拓扑</li>
 <li>星型拓扑+ 环形拓扑 = 星环拓扑</li>
 </ul>
 <p>混合型拓扑的总线、环形上的节点往往是集中器，连接了若干主机。</p>
-<p>优点：  </p>
+<p>优点：</p>
 <ul>
 <li>故障诊断、隔离较方便：通过诊断、隔离某个集中器，即可隔离该集中器子网</li>
 <li>易于扩展：要增加主机时，一种办法是在总线、环形上增加集中器，另一种办法是扩展集中器的接入口</li>
 <li>安装方便：总线、环形只要连通这些集中器即可，和安装电话系统相似。</li>
 </ul>
-<p>缺点：  </p>
+<p>缺点：</p>
 <ul>
 <li>需要智能集中器：方便网络故障自动诊断、故障节点的隔离</li>
 <li>集中器到各节点的电缆长度较长、安装量较大</li>
 </ul>
-<h4 id="网形拓扑"><a href="#网形拓扑" class="headerlink" title="网形拓扑"></a>网形拓扑</h4><p>网形拓扑：广泛的应用于广域网，而非局域网。</p>
+<h4 id="网形拓扑">网形拓扑</h4>
+<p>网形拓扑：广泛的应用于广域网，而非局域网。</p>
 <p>优点：没有瓶颈，网络冗余度高，可靠性高，失效可能小。</p>
 <p>缺点：结构复杂，成本高，网络协议较复杂。</p>
-<h2 id="1-3-2-按网络交换分式"><a href="#1-3-2-按网络交换分式" class="headerlink" title="1.3.2 按网络交换分式"></a>1.3.2 按网络交换分式</h2><ul>
+<h2 id="按网络交换分式">1.3.2 按网络交换分式</h2>
+<ul>
 <li>电路交换(Circuit Switching)：通信前，必须建立一条从发送端到目的端的物理信道，且通信期间双方始终占用该信道。类似于传统电话。</li>
 <li>报文交换(Message Switching)：信道中传输的是发送方的完整报文，无长度限制，中间节点存储-转发该报文，接收方接受完整报文。类似于送信。</li>
-<li>分组交换(Packet Switching)：也称为“包交换方式”，发送端先将报文分割为一个个等长的分组，各中间节点采用存储-转发方式传输分组到目的端，目的端再整合分组为一个完整的报文。<br>因为每个分组都很小，所以中间节点可以在内存中存储-转发分组，从而大大提高了传输速度。</li>
+<li>分组交换(Packet Switching)：也称为“包交换方式”，发送端先将报文分割为一个个等长的分组，各中间节点采用存储-转发方式传输分组到目的端，目的端再整合分组为一个完整的报文。<br>
+因为每个分组都很小，所以中间节点可以在内存中存储-转发分组，从而大大提高了传输速度。</li>
 </ul>
-<h2 id="1-3-3-按覆盖范围"><a href="#1-3-3-按覆盖范围" class="headerlink" title="1.3.3 按覆盖范围"></a>1.3.3 按覆盖范围</h2><p>按地理的覆盖范围分类：</p>
+<h2 id="按覆盖范围">1.3.3 按覆盖范围</h2>
+<p>按地理的覆盖范围分类：</p>
 <ul>
 <li>广域网（WAN,Wide Area Network，也称远程网)：分布范围几百~几千KM，可覆盖国家、洲，形成国际性的远程网络。通信子网通常是：卫星通信网、无线分组交换网、公用分组交换网。</li>
 <li>城域网(MAN, Metropolitan Area Network）：将几十公里范围内的企业、机关、公司的局域网互连在一起。</li>
 <li>局域网(LAN, Local Area Network)：覆盖极小的区域，提供高速、低误码率的高质量数据传输。</li>
 </ul>
-<h2 id="1-3-4-按网络传输技术"><a href="#1-3-4-按网络传输技术" class="headerlink" title="1.3.4 按网络传输技术"></a>1.3.4 按网络传输技术</h2><ul>
-<li>广播式：所有节点共享一个信道，所有节点都能“听到”分组，各节点根据分组的目的地址来决定是接受还是丢弃。<br>在广播式网络中，分组的目的地址有3种：单播、多播、广播。</li>
+<h2 id="按网络传输技术">1.3.4 按网络传输技术</h2>
+<ul>
+<li>广播式：所有节点共享一个信道，所有节点都能“听到”分组，各节点根据分组的目的地址来决定是接受还是丢弃。 在广播式网络中，分组的目的地址有3种：单播、多播、广播。</li>
 <li>点对点式：每条物理线路连接了一对节点。如果源节点和目的节点没有直接的链路，就需要中间节点对分组存储-转发，并且可能存在多条通信线路，需要节点进行路由选择计算。</li>
 </ul>
 <p>广播式和点对点式的区别：点对点式需要“存储转发”和“路由选择”。</p>
 <p>资源子网负责信息处理，通信子网负责信息传递。</p>
-<p>PSE : packet switching exchanger，分组交换设备<br>pad: packet assembler dissassebler, 分组组装/拆卸设备<br>NCC: network control center<br>C：concentrator，集中器<br>G: gateway</p>
+<p>PSE : packet switching exchanger，分组交换设备 pad: packet assembler dissassebler, 分组组装/拆卸设备 NCC: network control center C：concentrator，集中器 G: gateway</p>
 <p>imp : interface message processor , 接口信息处理机，是对PSE , PAD NCC C G 的统称。</p>
 ]]></content>
       <categories>
@@ -479,53 +1541,52 @@
       </tags>
   </entry>
   <entry>
-    <title>计算机网络中容易搞混的知识点</title>
-    <url>/2019/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <title>计网 计算机网络中容易搞混的知识点</title>
+    <url>/2019/11/17/%E8%AE%A1%E7%BD%91-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/%E8%AE%A1%E7%BD%91-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%AE%B9%E6%98%93%E6%90%9E%E6%B7%B7%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
     <content><![CDATA[<p>可以从不同的角度对网络进行区分(不同角度得到的分类可能出现重叠)。</p>
-<h4 id="按通信服务类型"><a href="#按通信服务类型" class="headerlink" title="按通信服务类型"></a>按通信服务类型</h4><ul>
-<li>面向连接服务：<pre><code>从数据交换方式来看，包括：电路交换、虚电路分组交换</code></pre></li>
-<li>无连接服务<pre><code>从数据交换方式来看，包括：报文交换、数据报分组交换</code></pre><a id="more"></a>       
-
-</li>
+<h4 id="按通信服务类型">按通信服务类型</h4>
+<ul>
+<li>面向连接服务： 从数据交换方式来看，包括：电路交换、虚电路分组交换</li>
+<li>无连接服务 从数据交换方式来看，包括：报文交换、数据报分组交换 <a id="more"></a></li>
 </ul>
-<h4 id="按通信子网中信道类型（或者叫拓扑类型）"><a href="#按通信子网中信道类型（或者叫拓扑类型）" class="headerlink" title="按通信子网中信道类型（或者叫拓扑类型）"></a>按通信子网中信道类型（或者叫拓扑类型）</h4><ul>
+<h4 id="按通信子网中信道类型或者叫拓扑类型">按通信子网中信道类型（或者叫拓扑类型）</h4>
+<ul>
 <li>广播信道：多个网络节点共享公共信道</li>
 <li>点对点信道：每条物理线路连接一对节点</li>
 </ul>
-<h4 id="按通信子网的传输方式"><a href="#按通信子网的传输方式" class="headerlink" title="按通信子网的传输方式"></a>按通信子网的传输方式</h4><p>数据传输方式：从整个通信子网看数据流。  </p>
-<p>数据在通信子网内是广播传输，还是存储转发+路由选择传输。</p>
-<ul>
-<li>广播式传输：</li>
-<li>点对点式传输：</li>
-</ul>
-<p>注意：  </p>
-<ol>
-<li>电路交换是接受后立即发送到下一个节点，网络节点无法存储数据，因此不属于点对点传输，而且电路交换占据专用物理通道，无法实现广播、多播，也不属于广播式传输。  </li>
-<li>报文交换，可以实现多播、广播，也一定会采用存储转发+路由选择，因此报文传输既可能是广播式传输，也可能是点对点式传输。</li>
-<li>分组交换，既可能是广播式传输，也可能是点对点式传输。</li>
-</ol>
+<h4 id="按通信子网的传输方式">按通信子网的传输方式</h4>
+<p>数据传输方式：从整个通信子网看数据流。</p>
+<p>数据在通信子网内是广播传输，还是存储转发+路由选择传输。 + 广播式传输： + 点对点式传输：</p>
+<p>注意：<br>
+1. 电路交换是接受后立即发送到下一个节点，网络节点无法存储数据，因此不属于点对点传输，而且电路交换占据专用物理通道，无法实现广播、多播，也不属于广播式传输。<br>
+2. 报文交换，可以实现多播、广播，也一定会采用存储转发+路由选择，因此报文传输既可能是广播式传输，也可能是点对点式传输。 3. 分组交换，既可能是广播式传输，也可能是点对点式传输。</p>
 <p>结论：通信子网的传输方式与中间节点的交换技术并无关联。</p>
-<h4 id="按中间节点的交换技术"><a href="#按中间节点的交换技术" class="headerlink" title="按中间节点的交换技术"></a>按中间节点的交换技术</h4><p>就单个中间节点来看。</p>
+<h4 id="按中间节点的交换技术">按中间节点的交换技术</h4>
+<p>就单个中间节点来看。</p>
 <p>中间节点并不关心数据内容，只是提供一种交换能力：将数据从一个节点传到另一个节点。</p>
 <ul>
 <li>电路交换：</li>
 <li>报文交换：</li>
-<li>分组交换<ul>
+<li>分组交换
+<ul>
 <li>虚电路分组交换</li>
 <li>数据报分组交换</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h6 id="端到端"><a href="#端到端" class="headerlink" title="端到端"></a>端到端</h6><p>端到端，有2种理解：</p>
-<ol>
+<h6 id="端到端">端到端</h6>
+<p>端到端，有2种理解：</p>
+<ol type="1">
 <li>源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。</li>
 <li>源主机的某端口-目的主机的某端口：专用于传输层。</li>
 </ol>
-<h6 id="数据包，数据报"><a href="#数据包，数据报" class="headerlink" title="数据包，数据报"></a>数据包，数据报</h6><p>数据包：packet，即分组。</p>
+<h6 id="数据包数据报">数据包，数据报</h6>
+<p>数据包：packet，即分组。</p>
 <p>数据报：datagram ,即无连接服务中的分组。</p>
 <p>一个数据报，包含了一个TCP段，它可能只有一个分组，也可能被分片成多个分组。</p>
 <p>换句话说，MSS数据部分，可能被分片成多个分组。</p>
-<h6 id="ovehead-，额外开销，虚耗"><a href="#ovehead-，额外开销，虚耗" class="headerlink" title="ovehead ，额外开销，虚耗"></a>ovehead ，额外开销，虚耗</h6><h6 id="拥塞控制和流量控制的差异"><a href="#拥塞控制和流量控制的差异" class="headerlink" title="拥塞控制和流量控制的差异"></a>拥塞控制和流量控制的差异</h6><p>拥塞控制：防止过多的数据注入到网络中，这样可以使网络中的路由器或链路不致过载。拥塞控制所要做的都有一个前提：网络能够承受现有的网络负荷。拥塞控制是一个全局性的过程，涉及到所有的主机、路由器，以及与降低网络传输性能有关的所有因素。</p>
+<h6 id="ovehead-额外开销虚耗">ovehead ，额外开销，虚耗</h6>
+<h6 id="拥塞控制和流量控制的差异">拥塞控制和流量控制的差异</h6>
+<p>拥塞控制：防止过多的数据注入到网络中，这样可以使网络中的路由器或链路不致过载。拥塞控制所要做的都有一个前提：网络能够承受现有的网络负荷。拥塞控制是一个全局性的过程，涉及到所有的主机、路由器，以及与降低网络传输性能有关的所有因素。</p>
 <p>流量控制：指点对点通信量的控制，是端到端的问题。流量控制所要做的就是抑制发送端发送数据的速率，以便使接收端来得及接收。</p>
 ]]></content>
       <categories>
@@ -536,42 +1597,38 @@
     <title>Hexo + gitHub 搭建成功</title>
     <url>/2019/09/08/Hexo-gitHub-%E6%90%AD%E5%BB%BA%E6%88%90%E5%8A%9F/hexo-github-%E6%90%AD%E5%BB%BA%E6%88%90%E5%8A%9F/</url>
     <content><![CDATA[<p>用 hexo+github 写博客，是一直欠下的债。从年初拖到现在9月，才终于完成这个配置。</p>
-<p>折腾了一天，终于能 deploy 到 github 并显示出来了。具体搭建过程不再复述。</p>
-<a id="more"></a>
-
-<p>本次搭建，参考了 <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a>，以及 <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo的帮助文档</a>。  </p>
+<p>折腾了一天，终于能 deploy 到 github 并显示出来了。具体搭建过程不再复述。 <a id="more"></a></p>
+<p>本次搭建，参考了 <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a>，以及 <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo的帮助文档</a>。</p>
 <p>其中遇到很多障碍：</p>
-<ol>
-<li><p>Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试了 github 的选项: keep my email address private。<br>结果这个选项对后面的 deploy 造成障碍，于是关闭了该选项。</p>
-</li>
-<li><p>nodej.js 和 git 是年初安装的，现在想看看 npm 已经安装过哪些东西，于是查阅了 ”如何查看 npm全局安装过的包”，指令如下：<br><code>npm list -g --depth 0</code></p>
-</li>
-<li><p>安装 hexo-deployer-git 时报错：<br><code>npm install hexo-deployer-git --save</code></p>
-</li>
+<ol type="1">
+<li><p>Github 原来用的私人邮箱注册，现在不想用该邮箱发布博文，于是重新注册了新邮箱。期间尝试了 github 的选项: keep my email address private。<br>
+结果这个选项对后面的 deploy 造成障碍，于是关闭了该选项。</p></li>
+<li><p>nodej.js 和 git 是年初安装的，现在想看看 npm 已经安装过哪些东西，于是查阅了 ”如何查看 npm全局安装过的包”，指令如下：<br>
+<code>npm list -g --depth 0</code></p></li>
+<li><p>安装 hexo-deployer-git 时报错： <code>npm install hexo-deployer-git --save</code></p></li>
 </ol>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">deprecated</span> <span class="string">swig@1.4.2:</span> <span class="string">This</span> <span class="string">package</span> <span class="string">is</span> <span class="literal">no</span> <span class="string">longer</span> <span class="string">maintained</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">saveError</span> <span class="attr">ENOENT:</span> <span class="literal">no</span> <span class="string">such</span> <span class="string">file</span> <span class="string">or</span> <span class="string">directory,</span> <span class="string">open</span> <span class="string">'/Users/irene.liu/package.json'</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">enoent</span> <span class="attr">ENOENT:</span> <span class="literal">no</span> <span class="string">such</span> <span class="string">file</span> <span class="string">or</span> <span class="string">directory,</span> <span class="string">open</span> <span class="string">'/Users/irene.liu/package.json'</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">description</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">repository</span> <span class="string">field.</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">README</span> <span class="string">data</span></span><br><span class="line"><span class="string">npm</span> <span class="string">WARN</span> <span class="string">irene.liu</span> <span class="literal">No</span> <span class="string">license</span> <span class="string">field.</span></span><br></pre></td></tr></table></figure>
-
 <p>原因：必须在hexo初始化的那个目录下执行安装！</p>
-<ol start="4">
-<li>hexo g 命令后出错：<figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">FATAL can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br><span class="line">^</span><br><span class="line">YAMLException: can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br></pre></td></tr></table></figure>
-
-</li>
+<ol start="4" type="1">
+<li>hexo g 命令后出错： <figure class="highlight fortran"><table><tr><td class="code"><pre><span class="line">FATAL can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br><span class="line">^</span><br><span class="line">YAMLException: can not read a block mapping <span class="built_in">entry</span>; a multiline key may not be an <span class="keyword">implicit</span> key at line <span class="number">8</span>, column <span class="number">12</span>:</span><br><span class="line">description:</span><br></pre></td></tr></table></figure></li>
 </ol>
 <p>原因：yml 配置文件中，键值对的冒号后少了空格</p>
-<ol start="5">
+<ol start="5" type="1">
 <li>hexo g -d 后，网页显示404</li>
 </ol>
 <p>原因: github 库中缺少 index .html</p>
-<p>解决办法：  </p>
+<p>解决办法：</p>
 <ul>
-<li>按照  <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a> 的步骤，手工在 github 的库中创建 index.html  </li>
+<li>按照 <a href="https://segmentfault.com/a/1190000017986794" target="_blank" rel="noopener">超详细Hexo+Github Page搭建技术博客教程</a> 的步骤，手工在 github 的库中创建 index.html<br>
+</li>
 <li><code>npm install hexo-generator-index --save</code>，也会生成 index.html 文件。</li>
 </ul>
-<ol start="6">
+<ol start="6" type="1">
 <li>在 <code>_config.yml</code> 中用中文书写 title 和 subtitle ，显示为乱码。</li>
 </ol>
 <p>解决办法： _config.yml 使用 utf-8 编码保存即可。</p>
-<p>最后还有一些疑惑，比如：<br>今天花了很大功夫配置SSH key 来访问 github，但后续 hexo g -d 时弹出账号密码框。</p>
+<p>最后还有一些疑惑，比如：<br>
+今天花了很大功夫配置SSH key 来访问 github，但后续 hexo g -d 时弹出账号密码框。</p>
 ]]></content>
       <categories>
         <category>应用软件</category>
