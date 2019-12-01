@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="需要说明：   1. 停等协议Stop and Wait、顺序接收管道协议 GBN和 Slidding Window、选择重传协议 SR ，属于数据链路层传输数据时采用的协议，包含了差错控制和流量控制策略，这种策略可适用于局域网和因特网。  2. BSC和HDLC属于OSI参考模型中数据链路层的控制协议，不是TCPIP网络的协议。       3. 本节所讲的因特网的数据链路层协议，是指TCP/I">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 4.5 Internet 的数据链路层协议">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="需要说明：   1. 停等协议Stop and Wait、顺序接收管道协议 GBN和 Slidding Window、选择重传协议 SR ，属于数据链路层传输数据时采用的协议，包含了差错控制和流量控制策略，这种策略可适用于局域网和因特网。  2. BSC和HDLC属于OSI参考模型中数据链路层的控制协议，不是TCPIP网络的协议。       3. 本节所讲的因特网的数据链路层协议，是指TCP/I">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/20190910232601006_17067.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/20190910233017876_15003.png">
+<meta property="og:updated_time" content="2019-12-01T15:43:19.520Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 4.5 Internet 的数据链路层协议">
+<meta name="twitter:description" content="需要说明：   1. 停等协议Stop and Wait、顺序接收管道协议 GBN和 Slidding Window、选择重传协议 SR ，属于数据链路层传输数据时采用的协议，包含了差错控制和流量控制策略，这种策略可适用于局域网和因特网。  2. BSC和HDLC属于OSI参考模型中数据链路层的控制协议，不是TCPIP网络的协议。       3. 本节所讲的因特网的数据链路层协议，是指TCP/I">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/20190910232601006_17067.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 4.5 Internet 的数据链路层协议 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 4.5 Internet 的数据链路层协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:05:07 / 修改时间：23:43:19" itemprop="dateCreated datePublished" datetime="2019-12-01T16:05:07+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第四章-数据链路层/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 数据链路层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>需要说明：</p>
+<ol type="1">
+<li>停等协议Stop and Wait、顺序接收管道协议 GBN和 Slidding Window、选择重传协议 SR ，属于数据链路层传输数据时采用的协议，包含了差错控制和流量控制策略，这种策略可适用于局域网和因特网。</li>
+<li>BSC和HDLC属于OSI参考模型中数据链路层的控制协议，不是TCPIP网络的协议。<br>
+</li>
+<li>本节所讲的因特网的数据链路层协议，是指TCP/IP模型所使用的数据链路层协议，包括了控制协议和数据传输协议。（TCPIP模型没有单独的数据链路层，只有主机-网络接口层）</li>
+</ol>
+<h2 id="slip协议">4.5.1 SLIP协议</h2>
+<p>串行线路 IP 协议，SLIP，Serial Line IP</p>
+<p>SLIP协议的功能：</p>
+<ul>
+<li>在串行通信线路上，对网络层传递下来的 IP分组进行封装，组装成帧。</li>
+<li>允许用户通过电话线和MODEM接入TCP/IP网络</li>
+</ul>
+<p>SLIP协议存在一些问题：</p>
+<ul>
+<li>连接过程中不支持动态 IP，通信双方必须事先告知对方IP地址。这对于没有固定IP地址的用户不方便。</li>
+<li>SLIP帧没有“协议类型”字段，只支持IP协议</li>
+<li>SLIP帧没有校验字段，无法检测差错。只能依赖更高层或更低层提供检错纠错功能。比如依靠物理层的MODEM提供检错能力（奇偶校验位）。</li>
+</ul>
+<h2 id="ppp协议">4.5.2 PPP协议</h2>
+<p>SLIP协议存在各种缺点，于是又推出了PPP协议。</p>
+<p>PPP协议（Point to Point Protocal）即”点到点协议“，是全世界广泛使用的数据链路层协议（一个主要原因是TCPIP网络的占比很大）。</p>
+<p>用户使用拨号电话线接入Internet时，一般都使用PPP协议。</p>
+<img src="/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/20190910232601006_17067.png">
+<h6 id="ppp的功能">PPP的功能</h6>
+<p>PPP协议有3个组成部分：</p>
+<ol type="1">
+<li>成帧：将网络层传递下来的 IP数据报 封装成帧，最终交给物理层形成位流。</li>
+<li>提供链路控制协议 LCP (Link Control Protocol)：LCP支持同步/异步线路，支持面向字节/比特的编码方法，提供了 协商链路层参数、建链、测试链路、拆链 等功能。</li>
+<li>提供网络控制协议NCP：PPP协议提供了“协商网络层参数”的方法，这些方法独立于网络层协议：对于每一种支持的网络层，都有一个不同的网络控制协议 NCP (Network Control Protocol)。</li>
+</ol>
+<h6 id="ppp的工作过程">PPP的工作过程</h6>
+<p><strong>PC机接入Internet的过程</strong></p>
+<p>1.建立物理连接：<br>
+PC机通过自己的MODEM呼叫ISP的MODEM，ISP的MODEM应答了用户呼叫后，建立物理连接。</p>
+<p>2.建立数据链路层：<br>
+PC机给ISP的路由器发送多个 PPP帧，这些帧的净荷包含了很多的 LCP 分组。这些分组，以及ISP路由器的应答信息，共同确定了PPP协议的参数。由此，建立了PPP协议的数据链路。</p>
+<p>3.建立网络层：<br>
+PC机和ISP的路由器之间，传送 NCP 分组，开始配置网络层。<br>
+比如：<br>
+针对IP协议的NCP负责给PC机动态分配IP地址。针对其他协议的NCP负责给PC机配置对应的协议。<br>
+最终这些NCP分组使PC机运行了一个TCP/IP协议栈。</p>
+<p>至此，PC机就接入了 Internet，成为了一台Internet的主机，可以发送和接收 IP 分组。</p>
+<p><strong>PC机如何断开与Internet的连接</strong></p>
+<ol type="1">
+<li>断开网络层连接，释放IP地址。<br>
+</li>
+<li>断开数据链路层连接<br>
+</li>
+<li>PC机通知MODEM 挂断电话，释放物理层连接。</li>
+</ol>
+<h6 id="ppp的帧格式">PPP的帧格式</h6>
+<p>PPP帧 和 HDLC帧 在格式上非常相似，但存在本质上的不同：PPP帧面向字符，HDLC帧面向字节。</p>
+<img src="/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/20190910233017876_15003.png">
+<p>PPP在 <em>拨号调制解调器线路</em> 上使用了“字节填充技术“——有效数据中如果含有与标志字节相同的二进制模式，则通过填充字节来实现数据的透明性。<br>
+因此，PPP帧的长度都是字节的整数倍！</p>
+<p>首尾的标志字节 F，和HDLC一样，采用 01111110 的二进制模式。</p>
+<p>地址字节 A ，恒为广播地址 11111111 ，避免了给站点分配”数据链路层地址“的问题。<br>
+换句话说，PPP帧是广播帧，站点可以接收该帧，但帧内的IP数据报是否接收还取决于网络层的IP地址。</p>
+<p>P.S. 数据链路层地址，即MAC地址。</p>
+<p>控制字节 C，默认值是 00000011，此值表示该帧是一个无序号帧。换句话说，默认情况下，PPP帧无法利用序号（比如N(S)N(R))来实现重发表、选择重传等可靠传输。</p>
+<p>协议字节 P，2个字节，指明净荷域（即数据，图中的信息部分）是哪一种分组，可能的分组有：LCP,NCP,IP,IPX,AppleTalk，其他协议。<br>
+如果协议域的值以0开头，说明净荷域是网络层协议的分组，即信息字段是IP数据报（IP,IPX,OSI CLNP,XNS)。<br>
+如果协议域的值以1开头，说明净荷域是LCP或NCP。</p>
+<p>净荷域是变长的。</p>
+<p>校验和域，2个字节。通常是CRC码，使PPP帧具有差错校验能力。</p>
+<p>总之，PPP是一种多协议成帧机制，可以用于多种物理层上。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/" title="网原 4.5 Internet 的数据链路层协议">https://roro4ever.github.io/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/" rel="next" title="网原 4.4 链路控制规程">
+                  <i class="fa fa-chevron-left"></i> 网原 4.4 链路控制规程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-0-网际互连基础知识/网原-5-0-网际互连基础知识/" rel="prev" title="网原 5.0 网际互连基础知识">
+                  网原 5.0 网际互连基础知识 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#slip协议"><span class="nav-text">4.5.1 SLIP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ppp协议"><span class="nav-text">4.5.2 PPP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ppp的功能"><span class="nav-text">PPP的功能</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#ppp的工作过程"><span class="nav-text">PPP的工作过程</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#ppp的帧格式"><span class="nav-text">PPP的帧格式</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '6bedc74023f8e86279e173fe46e8e71c',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

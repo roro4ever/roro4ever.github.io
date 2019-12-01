@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="3.5 数据交换技术 信源和信宿之间需要中间节点。 中间节点只负责传输数据（提供交换功能），而不关心数据内容。  交换： 英文switch，本意指开关，节点通过拨动开关来建立不同信源信宿之间的通信路径，中文翻译为交换。  信源信宿称为网络站。  中间节点的集合称为通信网络。  3.5.1 电路交换 传输的数据单位：二进制位流  利用信源、信宿、节点建立专用物理连接（电路）来传输数据。  专用物理线">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 3.5 数据交换技术">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="3.5 数据交换技术 信源和信宿之间需要中间节点。 中间节点只负责传输数据（提供交换功能），而不关心数据内容。  交换： 英文switch，本意指开关，节点通过拨动开关来建立不同信源信宿之间的通信路径，中文翻译为交换。  信源信宿称为网络站。  中间节点的集合称为通信网络。  3.5.1 电路交换 传输的数据单位：二进制位流  利用信源、信宿、节点建立专用物理连接（电路）来传输数据。  专用物理线">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T08:27:09.554Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 3.5 数据交换技术">
+<meta name="twitter:description" content="3.5 数据交换技术 信源和信宿之间需要中间节点。 中间节点只负责传输数据（提供交换功能），而不关心数据内容。  交换： 英文switch，本意指开关，节点通过拨动开关来建立不同信源信宿之间的通信路径，中文翻译为交换。  信源信宿称为网络站。  中间节点的集合称为通信网络。  3.5.1 电路交换 传输的数据单位：二进制位流  利用信源、信宿、节点建立专用物理连接（电路）来传输数据。  专用物理线">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 3.5 数据交换技术 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 3.5 数据交换技术
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:53:09 / 修改时间：16:27:09" itemprop="dateCreated datePublished" datetime="2019-12-01T15:53:09+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第三章-物理层/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 物理层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="数据交换技术">3.5 数据交换技术</h1>
+<p>信源和信宿之间需要中间节点。<br>
+中间节点只负责传输数据（提供交换功能），而不关心数据内容。</p>
+<p>交换： 英文switch，本意指开关，节点通过拨动开关来建立不同信源信宿之间的通信路径，中文翻译为交换。</p>
+<p>信源信宿称为网络站。</p>
+<p>中间节点的集合称为通信网络。</p>
+<h2 id="电路交换">3.5.1 电路交换</h2>
+<p>传输的数据单位：二进制位流</p>
+<p>利用信源、信宿、节点建立专用物理连接（电路）来传输数据。</p>
+<p>专用物理线路允许复用：<br>
+通过TDM或FDM把物理线路划分成多个信道，占用某个作为专用信道。</p>
+<p>电路交换技术需要三个步骤：</p>
+<ol type="1">
+<li>建立电路：通过呼叫请求，信源与信宿建立物理的电路连接。</li>
+<li>数据传输：传输数据时，电路保持连接。</li>
+<li>拆除电路：信源或信宿发出拆除请求，逐节拆除到对方。</li>
+</ol>
+<p>优点：</p>
+<ul>
+<li>数据传输可靠、迅速</li>
+<li>数据不会丢失</li>
+<li>数据保持了原来的序列</li>
+<li>节点转发速度很快：节点是个电子的或机电结合的交换设备，不具有存储能力，不使用“存储-转发”方式，而是”即收即发“——收到数据后即刻发送出去。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>传输空闲时造成信道浪费</li>
+<li>如果传输的数据量小，建立和拆除电路就浪费时间</li>
+</ul>
+<p>电路交换适用于：时延要求低、数据量大的高质量数据传输场景。</p>
+<h2 id="报文交换">3.5.2 报文交换</h2>
+<p>传输的数据单位：报文</p>
+<p>报文：Message，本次通信中，需要发送的全部数据，长度不限。</p>
+<p>对于突发性、随机长度（尤其是小数据量）的数据，电路交换显得太笨重，于是出现了报文交换。</p>
+<p>报文交换：</p>
+<ul>
+<li>无需建立专用通路：报文上有目的地址，各节点根据地址转发数据</li>
+<li>节点采用存储-转发方式：节点是计算机，存储收到的完整报文，再根据路由找到下一个节点转发出去。</li>
+</ul>
+<p><strong>报文在节点的延迟时间 = 接收报文所需时间（包括检查、存储的时间） + 转发前的排队时间</strong></p>
+<p>优点：</p>
+<ul>
+<li>信道带宽要求低，信道利用率高：多个报文可以“分时共享”信道（类似于时分多路复用，但又不同，分时共享允许<span style="border-bottom:2px solid red;">完整的报文</span>在某个时间片独占信道，而非TDM中由<span style="border-bottom:2px solid red;">二进制位流的片段</span>在某个时间片独占信道）。</li>
+<li>报文的输入量理论上没有上限：假设节点具有无限的存储能力，报文增多只会增大排队时间。而电路交换就有输入数据量的上限（即使信道复用，信道数量也有上限）。</li>
+<li>支持多播：一个报文可以发送给多个目的地。而电路交换只能单播。</li>
+<li>不同传输速率的节点可以互连：电路交换中，相同传输速率的节点才能相连</li>
+<li>通信子网可以转换编码：节点可以转换报文的编码</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>不适合实时通信、交互式通信：因为报文在节点的延迟时间较长且不定<br>
+</li>
+<li>报文输入量过大，节点没有存储空间时，就会丢弃报文：数据会丢失<br>
+</li>
+<li>因为延迟的存在，报文不按发出的先后顺序达到目的地。</li>
+</ul>
+<h2 id="分组交换">3.5.3 分组交换</h2>
+<div style="border-style:none none none solid;border-color:#2196F3;border-width:10px;background-color:#DDFFFF ">
+分组：把报文分成有有限长度的小段，每个小段称为分组。
+</div>
+<p>每个分组由数据+目的地址构成。</p>
+<p>优点：<br>
++ 有限长度的分组，转发速度更快：节点将分组缓存入内存而不是硬盘，提高了读写速度，也就提高了转发速度</p>
+<p>分组交换分为：虚电路、数据报</p>
+<p>需要注意：<br>
+不要把虚电路等同于TCP，数据报等同于UDP。因为虚电路交换、数据报交换只是一种机制，而TCP/UDP属于具体实现，也可以由其他协议来实现虚电路/数据报，只是目前的实现是TCP/UDP。</p>
+<h6 id="虚电路">1. 虚电路</h6>
+<p>传输的数据单位：虚电路分组</p>
+<p>虚电路分组：<br>
+每个分组中有一个虚电路标识符。</p>
+<ul>
+<li>建立虚电路：信源发出”呼叫请求分组“，各节点将请求分组路由给信宿，信宿回复”呼叫接收分组“，各节点将接收分组路由给信源，逻辑通路建立成功。逻辑通路也称为虚电路，是一条预先建立好的路径。</li>
+<li>传输数据：节点根据<span class="math inline">\(\underline{虚电路标识符}\)</span>转发分组，不再需要路由选择，转发速度更快。</li>
+<li>拆除虚电路：信源或信宿向对方发出”清除请求分组“来拆除虚电路。</li>
+</ul>
+<p><strong>信源与信宿之间可建立多条虚电路</strong><br>
+当两个网络站之间有多个进程进行通信时，每对进程都可以建立自己的虚电路，这些虚电路的路径可能不同也可能相同。<br>
+1对1，但路径多条。</p>
+<p><strong>信源可以同时与多个信宿建立虚电路.</strong><br>
+1对多。</p>
+<p><strong>虚电路和实电路的区别</strong><br>
+虚电路并不是信源和信宿之间的专用信道，任何分组都可以通过这个信道。<br>
+信道上可能同时存在多条虚电路，甚至存在数据报传输。<br>
+虚电路的分组在每个节点上仍然需要缓存和排队，和数据报分组唯一的不同是：不需要路由判定，节点根据分组内的虚电路标识符即可确定下一个转发节点。</p>
+<p>而实电路就是占用了一条专用信道，其他二进制位不得通过该信道——即使目前空闲。</p>
+<p>虚电路优点：</p>
+<ul>
+<li>适合长时间的通信，尤其是交互式会话（每次数据量都很小）</li>
+<li>节省了每个分组附加目的地址的开销，</li>
+<li>更可靠的传输：不会丢失分组</li>
+<li>分组到达信宿的顺序不变</li>
+<li>可以对流量进行控制</li>
+</ul>
+<p>缺点：当某个节点、链路出现故障时，所有经过该点的虚电路都失效。</p>
+<h6 id="数据报">2. 数据报</h6>
+<p>传输的数据单位：数据报分组，简称数据报。</p>
+<p>数据报：<br>
+每个分组携带了一个目的地址。</p>
+<ul>
+<li>信源把报文拆分成数据报：给每个分组附加目的地址，发送出去</li>
+<li>中间节点根据路由信息存储-转发数据报</li>
+<li>各数据报可能走不同的路径，可能丢失，不按先后顺序抵达目的地</li>
+<li>信宿需要重新组装数据报才能得到完整的报文</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>省去了建立、拆除虚电路过程</li>
+<li>传输少量数据时比虚电路灵活</li>
+<li>可以绕开故障节点继续传输</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>分组不能按序到达</li>
+<li>分组丢失不能立刻察觉</li>
+</ul>
+<h2 id="高速交换">3.5.4 高速交换</h2>
+<h3 id="电光结合">电光结合</h3>
+<p>todo: 什么叫：电路交换的用户与WDM之间的流量力度不匹配问题</p>
+<p>当把光纤作为传输媒介时，带宽不再是瓶颈。<br>
+高速交换：主干线路采用电路交换，融入光传输技术，本地网络采用分组交换。</p>
+<p>理论上：</p>
+<ul>
+<li>电路交换技术的缺陷：中间节点和线路利用率低，节点或线路故障时传输可靠性为0<br>
+</li>
+<li>分组交换技术具有优势：通过路由选路可以提高中间节点和线路的利用率（尤其是某条路径带宽有限时），节点或线路故障时通过重新选路，大大提高传输可靠性。</li>
+</ul>
+<p>但现状是：通过分组交换提高中间节点和线路的利用率，故障时提高传输可靠性，是没有意义的。</p>
+<ul>
+<li>很多线路没有接入交换机也就无法被选路利用，真正可以被路由的线路不到10%。<br>
+</li>
+<li>路由器（中间节点）几乎不发生故障，重新选路的实际意义几乎没有。</li>
+</ul>
+<p>同时，分组交换还有弊端：<br>
+当采用数据报的分组交换方式时，实时性的业务往往无法满足（分组丢失、不按顺序到达等）。</p>
+<p>而电路交换技术的优势很明显：<br>
++ 面向连接，适用于实时业务。<br>
++ 实现简单：铺设光纤即可 + 不需要缓存：易于与光技术结合</p>
+<p>最终实现：</p>
+<ul>
+<li>主干线路采用电路交换：比如同步光纤SONET、同步数字系列SDH，传输光信号。</li>
+<li>本地网络采用分组交换：IP路由器，传输电信号</li>
+<li>主干和本地之间需要：电光转换设备，其体积巨大且昂贵，</li>
+</ul>
+<h3 id="全光交换">全光交换</h3>
+<p>采用全光交换就需要使用光交换设备。</p>
+<p>光交换技术：<br>
+1. 微电子机械系统的光交换机 MEMS 微型镜子组成的阵列，通过旋转角度，把入射光纤反射到出射光纤。</p>
+<ol start="2" type="1">
+<li><p>无交换式光路由器 不明白</p></li>
+<li><p>阵列波导光栅路由器 不懂</p></li>
+</ol>
+<p>光交换的优点：<br>
++ 不需要光电转换，速度提高 + 光交换的技术费用，不随着接入端口的带宽增加而增大，传统交换技术就要受到影响 + 对比特率和调制方式透明，可以提高交换单元的吞吐量：不懂</p>
+<h2 id="交换技术的比较">3.5.5 交换技术的比较</h2>
+<p>这段基本上没有新内容，属于总结。</p>
+<p>但有些描述似乎有错误：<br>
+不同的交换技术适用于不同的场合：</p>
+<ul>
+<li><p>对于交互式通信来说，报文交换肯定是不适合的</p></li>
+<li><p>对于较轻和间歇式的负载来说，电路交换是最合适的</p></li>
+</ul>
+<p>报文交换、分组交换才适合这种间歇的、突发的小数据量通信。</p>
+<ul>
+<li><p>对于较重和持续的负载来说，使用租用的线路以电路交换方式是合适的</p></li>
+<li><p>对于必须交换中等到大量数据的情况，可用分组交换方法 这主要是从带宽来说，因为分组交换会调用全网的资源来分担负载，而如果用电路交换，就只能使用单一线路的带宽。</p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/" title="网原 3.5 数据交换技术">https://roro4ever.github.io/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/" rel="next" title="网原 3.4 数据编码">
+                  <i class="fa fa-chevron-left"></i> 网原 3.4 数据编码
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-4-1-数据链路层的功能/网原-4-1-数据链路层的功能/" rel="prev" title="网原 4.1 数据链路层的功能">
+                  网原 4.1 数据链路层的功能 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据交换技术"><span class="nav-text">3.5 数据交换技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#电路交换"><span class="nav-text">3.5.1 电路交换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报文交换"><span class="nav-text">3.5.2 报文交换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组交换"><span class="nav-text">3.5.3 分组交换</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#虚电路"><span class="nav-text">1. 虚电路</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据报"><span class="nav-text">2. 数据报</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高速交换"><span class="nav-text">3.5.4 高速交换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#电光结合"><span class="nav-text">电光结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全光交换"><span class="nav-text">全光交换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交换技术的比较"><span class="nav-text">3.5.5 交换技术的比较</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '80c59fe55ce8567a33b7c5efc4022d4d',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

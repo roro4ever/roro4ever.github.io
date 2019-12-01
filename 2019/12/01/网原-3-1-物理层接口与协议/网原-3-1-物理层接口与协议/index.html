@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="3.1.1 物理层接口与协议 物理层的定义 物理层不是具体的物理设备，也不是物理传输介质。 而是一种在DTE和DCE之间，建立、保持、断开物理连接的手段，具体包括了机械、电气、功能性的、规程性的4个方面。   * 标准接口的机械连接特性  * 电气信号特性  * 信号的功能特性  * 交换电路的规程特性  DTE：   * Data Terminal Equipment，数据终端设备。  DTE属">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 3.1 物理层接口与协议">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="3.1.1 物理层接口与协议 物理层的定义 物理层不是具体的物理设备，也不是物理传输介质。 而是一种在DTE和DCE之间，建立、保持、断开物理连接的手段，具体包括了机械、电气、功能性的、规程性的4个方面。   * 标准接口的机械连接特性  * 电气信号特性  * 信号的功能特性  * 交换电路的规程特性  DTE：   * Data Terminal Equipment，数据终端设备。  DTE属">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/225445361.jpg">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/VNote_2019-12-01_23-35-30.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/rs449pic_1-27-98.jpg">
+<meta property="og:updated_time" content="2019-12-01T15:40:15.268Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 3.1 物理层接口与协议">
+<meta name="twitter:description" content="3.1.1 物理层接口与协议 物理层的定义 物理层不是具体的物理设备，也不是物理传输介质。 而是一种在DTE和DCE之间，建立、保持、断开物理连接的手段，具体包括了机械、电气、功能性的、规程性的4个方面。   * 标准接口的机械连接特性  * 电气信号特性  * 信号的功能特性  * 交换电路的规程特性  DTE：   * Data Terminal Equipment，数据终端设备。  DTE属">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/225445361.jpg">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 3.1 物理层接口与协议 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 3.1 物理层接口与协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:51:25 / 修改时间：23:40:15" itemprop="dateCreated datePublished" datetime="2019-12-01T15:51:25+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第三章-物理层/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 物理层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="物理层接口与协议">3.1.1 物理层接口与协议</h4>
+<h6 id="物理层的定义">物理层的定义</h6>
+<p>物理层不是具体的物理设备，也不是物理传输介质。<br>
+而是一种在DTE和DCE之间，建立、保持、断开物理连接的手段，具体包括了机械、电气、功能性的、规程性的4个方面。</p>
+<ul>
+<li>标准接口的机械连接特性</li>
+<li>电气信号特性</li>
+<li>信号的功能特性</li>
+<li>交换电路的规程特性</li>
+</ul>
+<p>DTE：</p>
+<ul>
+<li>Data Terminal Equipment，数据终端设备。</li>
+</ul>
+<p>DTE属于资源子网，是信源或信宿，包括：计算机、终端。是用户所有的设备。</p>
+<p>DCE：包括了数据通信设备，或者数据电路终接设备</p>
+<ul>
+<li>Data Communication Equipment，数据通信设备</li>
+<li>Data Circut-Terminating Equipment，数据电路终接设备</li>
+</ul>
+<p>DCE属于通信子网，是为用户提供网络接入点的通信设备。包括：自动呼叫应答设备、调制解调器等，是网络运营商所有的设备。</p>
+<p>ACE：</p>
+<ul>
+<li>Automatic Calling Equipment，自动呼叫设备。</li>
+</ul>
+<h6 id="物理层协议也称为接口">物理层协议也称为接口</h6>
+<p>因为物理层是连接DTE和DCE的中间系统，因此物理层协议有时也称为接口。 <img src="/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/225445361.jpg"></p>
+<h6 id="物理层的传输单位是bit">物理层的传输单位是bit</h6>
+<p>物理层的传输单位是bit，即一个0或1。</p>
+<h6 id="物理层的功能">物理层的功能</h6>
+<p>只关心能否实现比特流的传输，而不关心比特流的含义，因此也无法进行传输差错的控制。</p>
+<h4 id="物理层的功能和提供的服务">3.1.2 物理层的功能和提供的服务</h4>
+<h5 id="机械特性">1.机械特性</h5>
+<p>DTE和DCE之间，通常采用连接器（即插头、插座）实现机械上的互连。 物理层的机械特性，对插头插座的几何尺寸、插针或插孔的芯数及排列方式，锁定装置形式等做了详细的规定。</p>
+<h5 id="电气特性">2.电气特性</h5>
+<p>DTE与DCE之间有多根导线相连，物理层的电气特性就规定了这组导线的电气连接方式，及其特性。</p>
+<p>电气连接方式： + 非平衡方式 + 采用差动接收器的非平衡方式 + 平衡方式</p>
+<h5 id="信号的功能特性">3.信号的功能特性</h5>
+<p>物理层的功能特性规定了接口中每根信号线的各方面： + 信号传输方向（DTE-&gt;DCE，或DCE-&gt;DTE) + 信号的作用：发送数据、接受数据、保护地线、请求发送...... + 信号线之间的关系 ：某一信号线可以控制其他几个信号线，或，几个信号线组合起来表示某个意思。</p>
+<p>信号线按功能可分为几类： + 数据信号线 + 控制信号线 + 定时信号线 + 接地线</p>
+<p>信号线的命名方法可分为几类： 1. 数字命名法：<br>
+用于DTE-DCE接口时，信号线名称均为1XX<br>
+用于DTE-ACE接口时，信号线名称均为2XX</p>
+<ol start="2" type="1">
+<li><p>字母组合法：<br>
+比如 RS 232C 中 TxD 表示Data Out。<br>
+<img src="/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/VNote_2019-12-01_23-35-30.png"></p></li>
+<li><p>英文缩写命名法：<br>
+比如 RS-449中，SD是Send Data的缩写。</p></li>
+</ol>
+<img src="/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/rs449pic_1-27-98.jpg">
+<h5 id="规程特性">4.规程特性</h5>
+<p>规程，即“规则+流程”。</p>
+<p>规程特性规定了：使用交换电路进行数据交换的控制步骤。</p>
+<p>这些控制步骤保证了比特流的正常传输。</p>
+<p>ITU建议使用的物理层规程包括： + V系列标准：V.24 ， V.25, V.54等 + X系列标准：X.20, X.20 bis， X.21，X.21 bis 等 V系列标准和X系列标准分别适用于不同的交换电路中。</p>
+<h4 id="物理层协议举例">3.1.3 物理层协议举例</h4>
+<h5 id="eia-rs-232c-接口标准">1. EIA RS-232C 接口标准</h5>
+<p>EIA：Electronic Industry Association，美国电子工业协会。 RS：Recommand Standard，推荐标准。</p>
+<p>EIA RS-232 C：<br>
+232是标准的标识号码，C是修订版本号。</p>
+<p>EIA RS-232C 是一个串行物理接口标准。</p>
+<p>RS-232C标准提供了两种连接DTE和DCE的方式： 1. 远程连接 使用公用电话网络（模拟网络）作为传输媒介，通过调制解调器（DCE）将两个远程的DTE（计算机、终端）连接起来。</p>
+<p>DTE1通过RS232C接口与调制解调器DCE1相连，DCE1把DTE1的数字信号转换成模拟信号，通过模拟电话网络传输到远程的调制解调器DCE2，DCE2将模拟信号转换成数字信号，发送给远程的DTE2，从而实现比特流的传输。<br>
+在这个过程中， + DTE是信源或信宿，负责生成和处理信号 + DCE负责通过传输媒介，将信号从信源送到信宿 + RS232C负责DTE和DCE之间的通信</p>
+<ol start="2" type="1">
+<li>近地连接 既不使用公用电话网络，也不使用调制解调器。 直接使用RS232C接口连接两台计算机。</li>
+</ol>
+<p>RS232C要求两端必须是DTE和DCE，所以在近地连接中使用“信号线交叉跳接”电缆，使任一方都会将对方视为DCE。</p>
+<p>这根交叉跳接信号线的电缆，称为零调制解调器，null modem。</p>
+<p>近地连接，又有两种连接方式： + 完整连接 + 简单连接</p>
+<h6 id="rs232机械特性">RS232机械特性</h6>
+<p>规定：使用25芯标准连接器，对连接器的尺寸、针或孔的排列位置做了详细规定。</p>
+<p>但在实际应用中，尤其是个人计算机中，某些厂家去掉了不常用的信号线，制造了RS232C的简化版本，9芯标准连接器。 ###### RS232C的电气特性 正负15V的负逻辑电平：<br>
+逻辑1的电平为-15V<sub>-5V，逻辑0的电平为5V</sub>15V。</p>
+<p>RS232C采用非平衡式发送接受电路。传输距离短，通信速率低。</p>
+<h6 id="rs232c的功能特性">RS232C的功能特性</h6>
+<p>略</p>
+<h6 id="rs232c的规程特性">RS232C的规程特性</h6>
+<p>RS-232C的工作过程必须在各根控制信号线的有序配合下进行。</p>
+<p>比如：<br>
+只有当CD和CC都处于ON状态时，RS232C接口才能进行各种操作。<br>
+要发送数据，必须先将CA置为ON状态。<br>
+要等待CB处于ON状态后，才能在BA上发送数据。</p>
+<h5 id="eia-rs-449rs-422rs-423接口标准">2. EIA RS-449（RS-422,RS-423）接口标准</h5>
+<p>因为RS-232C采用高电平信号 + 非平衡发送接受方式，存在：传输距离短、通信速率低、串扰信号大等问题。</p>
+<p>为了解决上述问题，就推出了 RS449标准。<br>
+之后又发布了449的两个电气子标准：RS422、RS423。</p>
+<p>机械特性：规定采用37芯和9芯连接器。</p>
+<p>电气特性：有两个子标准： + RS 422：平衡式，抗串扰能力大大增强，传输距离远，速率高。 + RS 423：非平衡式，比RS232C好很多，差于RS422。</p>
+<h5 id="系列和200系列接口标准">3. 100系列和200系列接口标准</h5>
+<p>ITU：国际电信联盟。</p>
+<p>CCITT：国际电报电话咨询委员会，是ITU的前身。<br>
+从事通信标准的研究和制定。<br>
+其制定的标准通常称为建议。</p>
+<p>ITU对 DTE - DCE的接口标准有V系列和X系列两大类： + V系列：DTE与，调制解调器、网络控制器（即网络适配器，网卡）之间的接口。接口复杂，信号线+控制线。 + X系列：DTE与，“公共数据网(PDN)的电路终接设备DCE”之间的接口。接口简单，只有很少的信号线。X系列接口标准是应用于广域网的接口标准。</p>
+<p>公共数据网，PDN，Public Data Network：<br>
+是由电信部门或广泛认可的私有组织建立、运营的网络，用于向公众提供数据传输服务。<br>
+PDN可以是电路交换，或分组交换网络，以数字形式提供传输服务。</p>
+<p>ITU V.24建议中，与DTE-DCE连接有关的接口标准有： + 100系列：DTE与不带自动呼叫设备的DCE（如调制解调器）之间的接口 机械特性：根据传输速率不同，采用34芯或25芯连接器。 电气特性：根据传输速率不同，采用V.28、或V.35两种建议。</p>
+<ul>
+<li>200系列：DTE与带有自动呼叫设备的DCE（如网络控制器）之间的接口 机械特性：采用25芯连接器。 电气特性：采用V.28建议。</li>
+</ul>
+<h5 id="x.21-和-x.21-bis-建议">4. X.21 和 X.21 bis 建议</h5>
+<p>X.21建议：<br>
+用户计算机DTE和数字化DCE之间的接口标准。<br>
+所谓数字化DCE，是指传输介质上传输的不是模拟信号，而是数字信号。</p>
+<p>X.21的设计目标： + 减少信号线的数目，机械特性上：采用15芯连接器代替传统的25芯连接器，且其中仅使用了8芯。 + 允许DTE-DCE的接口距离更长、速率更高（相对于RS232C）。电气特性：采用类似于平衡式的发送接受器，</p>
+<p>X.21的优点：<br>
+形式简单，操作过程全自动，有助于消除传输差错（数字信号可以奇偶校验、循环冗余校验等方式），数据与控制信号比特流都可以通过该接口进行传输。</p>
+<p>X.21适合数字线路的公用数据网（比如欧洲），不适用于模拟线路的公用数据网。<br>
+OSIRM建议采用X.21作为物理层规范。</p>
+<p>因为从V系列标准升级到X系列标准，需要升级很多硬件，比如接入用户端的信道仍然是模拟信道（电话线），大多数计算机和终端不具备X.21接口。<br>
+最终ITU推出了X.21 bis接口标准，作为从V到X.21的过渡标准： + 公共数据网使用数字传输方式，但用户入户可以使用模拟信道 + DTE-&gt;DCE之间，仍然使用V系列标准，连接器与RS-232D非常类似。</p>
+<p>X.21和X.21 bis 为三种类型的服务定义了物理电路： 1. 租用电路：专用线，两个DTE之间的持续连接。 2. 直接呼叫服务：可使用户在任何时间直接连接指定的目标。 3. 设备地址呼叫服务：如同拨号电话，每次连接前由用户呼叫指定目标。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/" title="网原 3.1 物理层接口与协议">https://roro4ever.github.io/2019/12/01/网原-3-1-物理层接口与协议/网原-3-1-物理层接口与协议/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-2-4-OSI-RM-与-TCP-IP-参考模型的比较/网原-2-4-osi-rm-与-tcp-ip-参考模型的比较/" rel="next" title="网原 2.4 OSI/RM 与 TCP/IP 参考模型的比较">
+                  <i class="fa fa-chevron-left"></i> 网原 2.4 OSI/RM 与 TCP/IP 参考模型的比较
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-3-2-传输介质/网原-3-2-传输介质/" rel="prev" title="网原 3.2 传输介质">
+                  网原 3.2 传输介质 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#物理层接口与协议"><span class="nav-text">3.1.1 物理层接口与协议</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#物理层的定义"><span class="nav-text">物理层的定义</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#物理层协议也称为接口"><span class="nav-text">物理层协议也称为接口</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#物理层的传输单位是bit"><span class="nav-text">物理层的传输单位是bit</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#物理层的功能"><span class="nav-text">物理层的功能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理层的功能和提供的服务"><span class="nav-text">3.1.2 物理层的功能和提供的服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#机械特性"><span class="nav-text">1.机械特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#电气特性"><span class="nav-text">2.电气特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#信号的功能特性"><span class="nav-text">3.信号的功能特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#规程特性"><span class="nav-text">4.规程特性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理层协议举例"><span class="nav-text">3.1.3 物理层协议举例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#eia-rs-232c-接口标准"><span class="nav-text">1. EIA RS-232C 接口标准</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#rs232机械特性"><span class="nav-text">RS232机械特性</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#rs232c的功能特性"><span class="nav-text">RS232C的功能特性</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#rs232c的规程特性"><span class="nav-text">RS232C的规程特性</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#eia-rs-449rs-422rs-423接口标准"><span class="nav-text">2. EIA RS-449（RS-422,RS-423）接口标准</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#系列和200系列接口标准"><span class="nav-text">3. 100系列和200系列接口标准</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#x.21-和-x.21-bis-建议"><span class="nav-text">4. X.21 和 X.21 bis 建议</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '705aa8cb05a0af0c78980ef6c7a8a972',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

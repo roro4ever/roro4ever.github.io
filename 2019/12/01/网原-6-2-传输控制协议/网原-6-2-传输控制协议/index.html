@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="传输控制协议 TCP，把网际层不可靠的数据报传输服务（IP协议），转化为了可靠的面向连接的传输服务。  6.2.1 TCP服务模型 TCP 服务的特点：   * 面向连接的传输：传输前先建立连接，传输完毕后释放连接。  * 端到端通信(port - port)：TCP不支持广播和组播，只能是1对1的。  * 高可靠性：TCP段顺序到达，即使出现丢失也必然重传（逻辑上视为不会丢失）  * 全双工传输">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 6.2 传输控制协议">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="传输控制协议 TCP，把网际层不可靠的数据报传输服务（IP协议），转化为了可靠的面向连接的传输服务。  6.2.1 TCP服务模型 TCP 服务的特点：   * 面向连接的传输：传输前先建立连接，传输完毕后释放连接。  * 端到端通信(port - port)：TCP不支持广播和组播，只能是1对1的。  * 高可靠性：TCP段顺序到达，即使出现丢失也必然重传（逻辑上视为不会丢失）  * 全双工传输">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191101091627585_31909.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191102190131211_17370.jpg">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191103014501256_13104.png">
+<meta property="og:updated_time" content="2019-12-01T16:07:41.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 6.2 传输控制协议">
+<meta name="twitter:description" content="传输控制协议 TCP，把网际层不可靠的数据报传输服务（IP协议），转化为了可靠的面向连接的传输服务。  6.2.1 TCP服务模型 TCP 服务的特点：   * 面向连接的传输：传输前先建立连接，传输完毕后释放连接。  * 端到端通信(port - port)：TCP不支持广播和组播，只能是1对1的。  * 高可靠性：TCP段顺序到达，即使出现丢失也必然重传（逻辑上视为不会丢失）  * 全双工传输">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191101091627585_31909.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 6.2 传输控制协议 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 6.2 传输控制协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-01 16:16:41" itemprop="dateCreated datePublished" datetime="2019-12-01T16:16:41+08:00">2019-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-02 00:07:41" itemprop="dateModified" datetime="2019-12-02T00:07:41+08:00">2019-12-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第六章-传输层/" itemprop="url" rel="index">
+                    <span itemprop="name">第六章 传输层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>传输控制协议 TCP，把网际层不可靠的数据报传输服务（IP协议），转化为了可靠的面向连接的传输服务。</p>
+<h2 id="tcp服务模型">6.2.1 TCP服务模型</h2>
+<p>TCP 服务的特点：</p>
+<ul>
+<li>面向连接的传输：传输前先建立连接，传输完毕后释放连接。</li>
+<li>端到端通信(port - port)：TCP不支持广播和组播，只能是1对1的。</li>
+<li>高可靠性：TCP段顺序到达，即使出现丢失也必然重传（逻辑上视为不会丢失）</li>
+<li>全双工传输：发方和收方建立连接后，建立了对称的两条路径，可以实现双向传输。</li>
+<li>采用字节流方式：以字节为单位，传输字节序列。</li>
+</ul>
+<p>字节流方式：</p>
+<p>todo</p>
+<h2 id="tcp数据传输机制">6.2.2 TCP数据传输机制</h2>
+<h3 id="tcp的段结构">1.TCP的段结构</h3>
+<p>TCP用于大数据量传输，应用层把很长的报文交给传输层后，传输层将其分段，称为<strong>TCP报文段</strong>。</p>
+<p>TCP报文段的结构如下图：</p>
+<img src="/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191101091627585_31909.png">
+<h6 id="最大报文段长度-mss">最大报文段长度, MSS</h6>
+<p>MSS(maximum segment size): TCP段的众多选项之一。</p>
+<p>MSS 是：在某个TCP连接中，端系统(主机/网关)能够接收的TCP段的<strong>数据部分</strong>的最大长度。单位字节。</p>
+<p>TCP在三次握手中，每一方都会建议对方：发来的TCP段采用建议的MSS值。如果对方不同意该期望值，则对方会采用默认值。(IPv4, 576-20-20 = 536 bytes, IPv6 = 1220)</p>
+<p>同一连接中，不同方向的TCP段可以有不同的MSS值。</p>
+<p>MSS 长度并不包括TCP段的头部长度，和，IP 分组的头部长度。</p>
+<p>IP层具有一个与MSS相似的概念---MTU（Maximum Transfer Unit）。</p>
+<p>下图反映了 MSS与MTU 的关系： <img src="/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191102190131211_17370.jpg"></p>
+<p>MSS值太小或太大都不合适。<br>
+太小，例如MSS值只有1byte，那么为了传输这1byte数据，至少要消耗20字节IP头部+20字节TCP头部=40byte，这还不包括其二层头部所需要的开销，显然这种数据传输效率是很低的。<br>
+过大，导致分组封装很大，那么在IP传输中分片的可能性就会增大，接受方在处理分片包所消耗的资源和处理时间都会增大。如果分片在传输中还发生了重传，网络开销还会进一步增大。<br>
+因此合理的MSS是至关重要的。MSS的合理值应为保证分组不分片的最大值。对于以太网MSS可以达到1460byte.</p>
+<h6 id="rtt往返时延">RTT，往返时延</h6>
+<p>往返时延 RTT(Round-Trip Time) 或 RTD(Round-trip Delay Time) : 一个信号从源端到目的端的时间 + 该信号的应答信号从目的端返回源端的时间。</p>
+<p>传输轮次：发出一个TCP段，收到一个TCP确认段。</p>
+<h2 id="tcp拥塞控制">6.2.6 TCP拥塞控制</h2>
+<p>从整体上来讲，TCP拥塞控制窗口变化的原则是AIMD（the Additive-Increase/Multiplicative-Decrease)，即加法增大倍数减小。</p>
+<p>AIMD原则可以较好地保证流之间的公平性，一旦某个连接出现丢包，那么立即将其 ssthresh 减半 将 cwnd退避到1 mss，给其他新建的流留有足够的空间，从而保证整个传输的公平性。</p>
+<h3 id="拥塞窗口-cwnd">拥塞窗口 cwnd</h3>
+<p>拥塞窗口，cwnd, congestion window。</p>
+<p>每个TCP连接中的发送方都有一个拥塞窗口，用于限制“待发而未确认的段”的数量。</p>
+<p>拥塞窗口不等于TCP段中的win窗口——滑动窗口(rwnd)！<br>
+滑动窗口是由接收方维护的接收窗口，用于在ACK确认段中告知发送方：你还可以发送多少个报文段。<br>
+而拥塞窗口是发送方维护的发送窗口，它与接收方的滑动窗口和整个网络当前的拥塞状态都有关系。比如：有可能接收方的滑动窗口很大，但当前网络发生了拥塞，导致发送方的拥塞窗口（发送窗口）只能取很小的一个值。</p>
+<p>发送方确定根据拥塞窗口和接收方的接收窗口，来确定发送窗口： <span class="math inline">\(发送方的发送窗口 = min(拥塞窗口 cwnd，接收方窗口 win)\)</span>。</p>
+<p>拥塞窗口会随着接收窗口、网络的拥塞状态而变化。<br>
+假设接收窗口足够大，发送方就会根据网络拥塞状况来调整拥塞窗口的大小：</p>
+<ul>
+<li>只要网络没有出现拥塞，就把拥塞窗口增大一些，以便把更多的TCP段发送出去。<br>
+</li>
+<li>如果出现拥塞，就减小拥塞窗口，减少注入到网络中的TCP段。</li>
+</ul>
+<p>尽管拥塞窗口的单位是字节，为了减少复杂度，理解算法的核心内容，讨论中的拥塞窗口数就用 MSS（Sender Max） 作为单位。</p>
+<h3 id="慢启动slow-startcwnd-指数增大">慢启动(Slow Start)，cwnd 指数增大</h3>
+<p>慢启动：TCP连接的几种拥塞控制策略之一。</p>
+<p>发送方刚开始发送数据时，并不清楚网络当前的拥塞情况，如果立即注入大量TCP段到网络中就可能引起拥塞，较好的方法是由小到大逐渐增大发送窗口(即拥塞窗口)。</p>
+<p>在开始时，设置 cwnd = MSS * 很小的倍数，假设为 1 MSS<br>
+在每收到一个确认段后，把拥塞窗口扩大一倍。（这里有很多细节，简单理解为翻倍即可）。</p>
+<p>在发生下列事件前，拥塞窗口会迅速的增大，数据传输率也相应的增大。<br>
+但发生下列事件时，拥塞窗口就会减小：</p>
+<ul>
+<li>TCP段丢失(被中间节点丢弃，说明发生了拥塞）：此时就需要减少注入网络的负载。</li>
+<li>接收方通知：接收窗口不允许继续发送了：调整拥塞窗口，甚至停发等待接收窗口变大。</li>
+<li>cwnd = ssthresh ，拥塞窗口达到慢启动门限了：停止慢启动过程（指数增大），进入拥塞避免阶段（线性增大）。</li>
+</ul>
+<h6 id="慢启动门限-ssthresh">慢启动门限 ssthresh</h6>
+<p>慢启动的 cwnd 可以很快的增长，从而尽快最大程度的利用网络带宽，但 cwnd 不能一直无限增大，否则会发生拥塞。</p>
+<p>TCP设置了一个变量：慢启动门限，ssthresh(slow start threshhold) 。</p>
+<p>大多数TCP实现中，ssthresh = 65536 byte。</p>
+<h6 id="根据是否发生重传来判断拥塞">根据是否发生重传，来判断拥塞</h6>
+<p>TCP如何判断网络是否发生了拥塞呢？通过是否发生了重传来判断。</p>
+<p>我们直到，重传可能发生在2种情况下：</p>
+<ul>
+<li>段丢失：因为拥塞，中间节点资源不足，只能丢弃段。每一个发出的TCP段都有一个重传定时器(RTO,Retransmission Time Out)，若直到RTO超时都尚未收到ACK确认段，那么发方就应对该报文段进行重传。<br>
+</li>
+<li>段错误：因为位错误，无法通过校验，节点将其丢弃，不发ACK确认段，time out后导致重传。</li>
+</ul>
+<p>在某些情况下，比如无线网络中，传输错误确实可能发生，但相对来说，现在的网络，尤其是有线网，错误率非常低，因此一旦发生重传，则可以理解为就是发生了拥塞。</p>
+<p>事实上，除了超时，后面会讲到的3 ACK，也会导致重传，它同样属于拥塞。因此把 重传 视作拥塞。</p>
+<h3 id="cwndssthresh进入拥塞避免congestion-avoidancecwnd-加法增大">cwnd&gt;=ssthresh，进入拥塞避免(congestion avoidance)，cwnd 加法增大</h3>
+<p>一旦 cwnd &gt;= ssthresh ，就结束慢启动阶段，进入拥塞避免阶段。</p>
+<p>拥塞避免算法：<br>
+每次收到ACK确认段后，cwnd 只增加 1 个报文段的长度。<br>
+cwnd = cwnd + 1 MSS</p>
+<p>( 具体实现有差异，有的版本是 cwnd = cwnd + 1mss / cwnd, 但都是线性递增的)</p>
+<p>注意：<br>
+TCP连接中，发送方并不是从应用层每收到一个段就立即发送出去，而是可以积累到一定量后再发。<br>
+接收方也并不是每收到一个段，就立即发回ACK确认信息，同意可以对多个段只确认一次，只要ACK没有超时，这多个段就算接收成功了。</p>
+<p>cwnd的值随着传输轮次线性增加，逐步调整发送窗口，在“最大化利用带宽”和“发生拥塞”之间寻找平衡点，避免了cwnd 增长过快导致网络拥塞很快发生的情况。</p>
+<p>在拥塞避免阶段，随着 cwnd 的增大，最终也会发生拥塞，表现为确认段的超时，此时：</p>
+<ol type="1">
+<li>ssthresh = cwnd / 2</li>
+<li>cwnd =1 MSS</li>
+<li>开始慢启动阶段</li>
+</ol>
+<h6 id="快速重传-fast-retransmit">快速重传, fast retransmit</h6>
+<p>通常情况下，TCP发送方使用一个计时器来识别段丢失：如果超过RTT时间没有收到该段的确认段，则认为该段已经丢失，应重传该段。</p>
+<p>而快速重传则使得发送方无需等待RTT时间，即刻判断段丢失，从而更快的重传丢失段。</p>
+<p>快速重传机制利用了TCP段的发方序列号和收方确认号的关系：<br>
+发方TCP段带有序列号 SEQ(sequence number)，收方确认段带有确认号ACK(acknowledgement number)。</p>
+<p>确认号的意义：收方告知发方，“序列号 &lt; 确认号”的所有段都已正确接收，期待发送“序列号=确认号”的段。</p>
+<p>假设，收方收到SEQ=1的段，随即返回 ACK = SEQ + 1 = 2的确认段，通知发方：SEQ=1的段已经接收，请发送SEQ=ACK=2的段！<br>
+再假设，发方发出了SEQ=2,3,4的3个TCP段，却都因为拥塞在网络中丢失了，而随后SEQ=5,6的段却抵达了收方。</p>
+<p>收方对SEQ=5的段发送确认段时，按照ACK的含义，只能令ACK=2(即SEQ=1已正确接收，期待发送SEQ=2的段)。同理，SEQ=6的段的确认段也只能令 ACK=2。</p>
+<p>这样一来，发方就会收到2个“ACK=2的确认段”，即“重复的确认段”。<br>
+一旦出现这种情况，发方就可以判断出：SEQ=2的段丢失了！此时无需继续等待 SEQ=2的段的确认段超时，可以立即重发 SEQ=2的段，SEQ =3,4 的段同理。这就是快速重传！</p>
+<p>在某些实现中，发方收到3个相同ACK的确认段，即可立即重传SEQ=ACK的段。</p>
+<h3 id="如果在任意阶段发生了段丢失">如果在任意阶段发生了段丢失，</h3>
+<p>注意：段丢失发生在慢开始阶段，或拥塞避免阶段，都会触发 TCP Tahoe/ Reno #### TCP Tahoe</p>
+<ol type="1">
+<li>快速重传丢失的段</li>
+<li>ssthresh = cwnd / 2</li>
+<li>cwnd = 1 MSS</li>
+<li>开始慢启动</li>
+</ol>
+<h4 id="tcp-reno快速恢复">TCP Reno，快速恢复</h4>
+<ol type="1">
+<li>ssthresh = cwnd / 2</li>
+<li>cwnd = cwnd / 2 + 3 = ssthresh + 3</li>
+<li>快速重传丢失的段</li>
+<li>cwnd = ssthresh<br>
+</li>
+<li>开始拥塞避免(线性递增 cwnd)</li>
+</ol>
+<h4 id="快速恢复的数据报守恒原则">快速恢复的“数据报守恒”原则</h4>
+<p>快速恢复的思想是“数据包守恒”原则：<br>
+同一个时刻在网络中的数据包数量是恒定的，只有当“老”数据包离开了网络后，才能向网络中发送一个“新”的数据包，如果发送方收到一个重复的ACK，那么根据TCP的ACK机制就表明有一个数据包离开了网络，于是cwnd加1。</p>
+<p>如果能够严格按照此原则，那么网络中很少会发生拥塞，事实上拥塞控制的目的也就在修正违反该原则的地方。</p>
+<p>具体来说快速恢复的主要步骤是：</p>
+<ol type="1">
+<li>当收到3个重复ACK时，把ssthresh设置为cwnd的一半(ssthresh = cwnd /2)，把cwnd设置为ssthresh的值加3 ( cwnd = cwnd /2 + 3 )，然后重传丢失的报文段。<br>
+加3的原因是因为收到3个重复的ACK，表明有3个“老”的数据包离开了网络。</li>
+<li>如果再收到重复的ACK，拥塞窗口增加1(如果丢失的段后有多于3个段抵达收方，或者快速重传的段被确认了，就还会收到重复的ACK）。</li>
+<li>当收到新的ACK确认段时，把cwnd设置为第一步中的ssthresh的值(cwnd = ssthresh)。如果确认了新的段，说明快速重传的段已确认，进入拥塞避免状态。</li>
+</ol>
+<h6 id="实例讲解">实例讲解</h6>
+<p>下图中：</p>
+<ul>
+<li>建立连接时，ssthresh = 16，cwnd = 1</li>
+<li>点1之前是慢开始阶段，cwnd 增长很快，每经过一个轮次就翻倍，</li>
+<li>当到达点1 时，进入拥塞避免，cwnd 每经过一个轮次加一，线性增长</li>
+<li>到达点2时，网络发生拥塞，出现确认段 time out，此时将 ssthresh = cwnd /2 ，cwnd =1, 开始慢启动阶段，即点2-点3的阶段</li>
+<li>点2-点3的慢启动阶段，cwnd 倍增，直到 cwnd &gt;= ssthresh，</li>
+<li>点3开始进入拥塞避免</li>
+<li>点4，出现段丢失（可能是拥塞，也可能是网络错误，但都视为拥塞），此时采用快速恢复手段，ssthresh = cwnd /2, cwnd = cwnd +3, 快速重传丢失段，cwnd = ssthresh, 开始拥塞避免</li>
+<li>点5，快速恢复后的拥塞避免阶段。</li>
+</ul>
+<p>到达点2的时候，网络发生拥塞了，网络出现了超时。就将 ssthresh 设置为 cwnd 的一半，并将 cwnd 重新设置为1 ，重新开始慢开始算法。到点3 时，达到了阈值，继续采用了拥塞避免算法。</p>
+<img src="/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/20191103014501256_13104.png">
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/" title="网原 6.2 传输控制协议">https://roro4ever.github.io/2019/12/01/网原-6-2-传输控制协议/网原-6-2-传输控制协议/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-6-1-传输层基本概念/网原-6-1-传输层基本概念/" rel="next" title="网原 6.1 传输层基本概念">
+                  <i class="fa fa-chevron-left"></i> 网原 6.1 传输层基本概念
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-6-3-用户数据报传输协议/网原-6-3-用户数据报传输协议/" rel="prev" title="网原 6.3 用户数据报传输协议">
+                  网原 6.3 用户数据报传输协议 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp服务模型"><span class="nav-text">6.2.1 TCP服务模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp数据传输机制"><span class="nav-text">6.2.2 TCP数据传输机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tcp的段结构"><span class="nav-text">1.TCP的段结构</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#最大报文段长度-mss"><span class="nav-text">最大报文段长度, MSS</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#rtt往返时延"><span class="nav-text">RTT，往返时延</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tcp拥塞控制"><span class="nav-text">6.2.6 TCP拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#拥塞窗口-cwnd"><span class="nav-text">拥塞窗口 cwnd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#慢启动slow-startcwnd-指数增大"><span class="nav-text">慢启动(Slow Start)，cwnd 指数增大</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#慢启动门限-ssthresh"><span class="nav-text">慢启动门限 ssthresh</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#根据是否发生重传来判断拥塞"><span class="nav-text">根据是否发生重传，来判断拥塞</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cwndssthresh进入拥塞避免congestion-avoidancecwnd-加法增大"><span class="nav-text">cwnd&gt;=ssthresh，进入拥塞避免(congestion avoidance)，cwnd 加法增大</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#快速重传-fast-retransmit"><span class="nav-text">快速重传, fast retransmit</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果在任意阶段发生了段丢失"><span class="nav-text">如果在任意阶段发生了段丢失，</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tcp-reno快速恢复"><span class="nav-text">TCP Reno，快速恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速恢复的数据报守恒原则"><span class="nav-text">快速恢复的“数据报守恒”原则</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#实例讲解"><span class="nav-text">实例讲解</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '9d0a0f30ba41898195bec5ce7a59470a',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

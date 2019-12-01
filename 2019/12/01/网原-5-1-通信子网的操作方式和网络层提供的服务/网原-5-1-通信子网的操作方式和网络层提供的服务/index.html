@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="网络层是OSI参考模型的第3层，高于数据链路层，低于传输层。  数据链路层提供了相邻节点间利用帧传输数据的能力。 网络层在此基础上，进一步管理网络通信，将数据从信源经过若干个节点传输到信宿，向传输层提供了最基本的点到点 端到端 的数据传输服务。  端到端，有2种理解：   1. 源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。  2. 源主机的某端口-目的主机的某端口：专用于传输层。">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.1 通信子网的操作方式和网络层提供的服务">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="网络层是OSI参考模型的第3层，高于数据链路层，低于传输层。  数据链路层提供了相邻节点间利用帧传输数据的能力。 网络层在此基础上，进一步管理网络通信，将数据从信源经过若干个节点传输到信宿，向传输层提供了最基本的点到点 端到端 的数据传输服务。  端到端，有2种理解：   1. 源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。  2. 源主机的某端口-目的主机的某端口：专用于传输层。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/20190915015048716_2265.jpg">
+<meta property="og:updated_time" content="2019-12-01T15:45:20.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.1 通信子网的操作方式和网络层提供的服务">
+<meta name="twitter:description" content="网络层是OSI参考模型的第3层，高于数据链路层，低于传输层。  数据链路层提供了相邻节点间利用帧传输数据的能力。 网络层在此基础上，进一步管理网络通信，将数据从信源经过若干个节点传输到信宿，向传输层提供了最基本的点到点 端到端 的数据传输服务。  端到端，有2种理解：   1. 源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。  2. 源主机的某端口-目的主机的某端口：专用于传输层。">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/20190915015048716_2265.jpg">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.1 通信子网的操作方式和网络层提供的服务 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.1 通信子网的操作方式和网络层提供的服务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:06:12 / 修改时间：23:45:20" itemprop="dateCreated datePublished" datetime="2019-12-01T16:06:12+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>网络层是OSI参考模型的第3层，高于数据链路层，低于传输层。</p>
+<p>数据链路层提供了相邻节点间利用帧传输数据的能力。<br>
+网络层在此基础上，进一步管理网络通信，将数据从信源经过若干个节点传输到信宿，向传输层提供了最基本的点到点 <del>端到端</del> 的数据传输服务。</p>
+<p>端到端，有2种理解：</p>
+<ol type="1">
+<li>源端-目的端：比如上文中“网络层提供了端到端的数据传输服务”。</li>
+<li>源主机的某端口-目的主机的某端口：专用于传输层。</li>
+</ol>
+<p>网络层还控制了通信子网的运行，影响了资源子网访问通信子网的方式。</p>
+<p>网络层是通信子网（物理层、数据链路层、网络层）中最复杂最关键的一层。</p>
+<p>网络层的目的：<br>
+实现信源和信宿之间，数据的透明传输。<br>
+（换句话说，有了网络层，信源和信宿就不需要关心数据是如何传输的）。</p>
+<p>网络层的具体功能包括：</p>
+<ul>
+<li>路由选择</li>
+<li>拥塞控制</li>
+<li>网际互连</li>
+</ul>
+<h1 id="通信子网的操作方式和网络层提供的服务">5.1 通信子网的操作方式和网络层提供的服务</h1>
+<p>通信子网的职责：向资源子网（端系统，即信源/信宿）提供网络服务。</p>
+<p>在OSI参考模型中，网络层是网络节点（通信子网）的最高层，“提供网络服务”的职责必然就落在在网络层（根据“低层向高层提供服务”的原则）。</p>
+<p>如果通信子网采用分组交换方式，网络节点可以向端系统提供 2 种网络服务：</p>
+<ol type="1">
+<li>面向连接的服务（虚电路）</li>
+<li>无连接服务（数据报）</li>
+</ol>
+<p>通信子网内部有虚电路和数据报两种操作方式（运行方式）。</p>
+<p>服务和操作方式没有联系，任何一种操作方式都可以实现面向连接服务和无连接服务。</p>
+<h2 id="虚电路操作方式">5.1.1 虚电路操作方式</h2>
+<h6 id="虚电路">虚电路</h6>
+<p>数据传输前，在源节点和目的节点（包括端系统）间的物理信道中，先建立一条用于传输分组的逻辑通路，这条逻辑通路称为“虚电路”。</p>
+<p>物理信道复用：<br>
+一条物理信道中可能存在多条虚电路，这些虚电路可能属于同一对信源信宿（不同的进程建立了不同的虚电路），也可能属于不同的信源信宿（不同的端系统的进程，建立的不同的虚电路）。</p>
+<p>注意：<br>
+<em>虚电路并非是信源-信宿的逻辑通路，而是信源和信宿间<strong>进程级</strong>的逻辑通路。</em></p>
+<p>两个端系统之间，可以有多条虚电路为不同的进程服务。<br>
+这些虚电路的实际物理路径可能相同，也可能不同，我认为这取决于物理信道能够划分出多少个虚电路吧。</p>
+<h6 id="物理信道复用">物理信道复用</h6>
+<p>频分多路复用 FDM 适用于模拟信号。<br>
+时分多路复用 TDM，既适合模拟信号，也适用于数字信号。</p>
+<p>对于分组交换方式，显然应采用时分多路复用 TDM。</p>
+<p>物理信道是如何划分为多条逻辑信道的？<br>
+每一段物理信道的起始网络节点内部，都有一组“分组缓冲器”（packet buffer），每个缓冲器的编号称为“逻辑信道号”（也称为虚电路号，VC号）。<br>
+在该段物理信道上建立虚电路时，网络节点会为虚电路分配某个缓冲器以转发分组，这个过程也称为“虚电路获取逻辑信道号”。<br>
+最终通过异步时分复用（动态划分时间片），实现物理信道复用。</p>
+<h6 id="虚电路表">虚电路表</h6>
+<p>虚电路可能会经过多个网络节点，在每段物理信道上都可能获取到不同的逻辑信道号。</p>
+<p>分组到达某个网络节点时，携带了虚电路号（VC号），节点必须根据虚电路号，从某种表格中查出下一节点的名称和下一节点为虚电路分配的逻辑信道号，才能完成转发工作（虚电路的工作原理后文讲述）。<br>
+这个表格就是“虚电路表”。</p>
+<p>虚电路表记录了：</p>
+<ul>
+<li>每条虚电路的“来路”：前节点名称、前节点为虚电路分配的逻辑信道号</li>
+<li>每条虚电路的“出路”：后节点名称、后节点为虚电路分配的逻辑信道号</li>
+</ul>
+<h6 id="虚电路分组交换如何工作">虚电路分组交换如何工作</h6>
+<p>分组携带“出路”信息到达下一节点，节点将其作为“来路”查询虚电路表，从而确定：</p>
+<ul>
+<li>后节点名称</li>
+<li>后节点为其分配的逻辑信道号。</li>
+</ul>
+<p>然后用“后节点逻辑信道号”，替换掉“前节点逻辑信道号”，再发给后节点。</p>
+<p>后续节点重复上述操作。</p>
+<h6 id="虚电路表的建立">虚电路表的建立</h6>
+<ol type="1">
+<li>自考教材上的虚电路节点名称有错误。②1-ABC应该是“②1-ACD”。</li>
+<li>下图中的 H 指 HOST（端系统，信源/信宿）</li>
+<li>HOST同样需要给分组分配逻辑信道号，H 0 表示端系统为虚电路分配了逻辑信道号 0。</li>
+<li>建立虚电路时，节点采用和数据报传输一样的方式，通过各节点的路由能力，为呼叫请求分组寻找虚电路路径。</li>
+</ol>
+<img src="/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/20190915015048716_2265.jpg">
+<p>虚电路表是在建立虚电路时构建起来的。</p>
+<p>假设有一条虚电路：信源H--A--B--C--D--信宿 H</p>
+<p>建立虚电路时，信源发出一个“呼叫请求分组”，其中包含了：</p>
+<ul>
+<li>信宿的地址</li>
+<li>信源为其分配的逻辑信道号<span class="math inline">\(N_{src}\)</span>。</li>
+</ul>
+<p>节点收到呼叫请求分组后，会在“和后节点之间的物理信道的”分组缓冲器中，分配一个<strong>未使用的、最小的</strong> 逻辑信道号 <span class="math inline">\(N_A\)</span>。<br>
+然后将呼叫请求分组中“信宿分配的逻辑信道号 <span class="math inline">\(N_{src}\)</span>” ，替换成 <span class="math inline">\(N_A\)</span>，发给后节点。</p>
+<p>此时，节点A中就生成了有关来路、出路信息的虚电路表。</p>
+<p>需要注意的是：</p>
+<ol type="1">
+<li>分组缓冲器与物理信道有关。</li>
+</ol>
+<p>比如：<br>
+A-B 和 A-C 是两段物理信道，在A节点内部就有 A-B的分组缓冲器 和 A-C的分组缓冲器。<br>
+如果在A-B上要建立两条虚电路，那么就会有 A0-B(x), A1-B(x)。<br>
+A-C只建立一条虚电路，就有 A0-C(x)。</p>
+<ol start="2" type="1">
+<li>虚电路上分组可以双向传输，由此引出一个问题：<br>
+节点为新的虚电路分配逻辑信道号时，还需要考虑：不要与“该段物理信道正反两个方向已分配的逻辑信道号”相重复。</li>
+</ol>
+<p>记住一个原则：虚电路只能是进程对独占的，无法共享。</p>
+<p>比如：<br>
+存在虚电路 ABCD，虚电路A-B占用A0,B0，此时有两个方向都可以传输分组：A0-B0, B0-A0。<br>
+如果再建立新的虚电路 BAC，B-A必然复用 A-B的物理信道，此时如果还为其分配 B0-A0就会和虚电路ABCD混淆（虚电路是进程独占的），因此，应该使用逻辑信道号B1- A1。</p>
+<p>说明：逻辑信道号与虚电路建立的先后顺序有关。</p>
+<p>教材解析：<br>
+&gt;这里假设建立了6条虚电路。由于虚电路上的数据是双向传输的，为保证两节点之间正、反两个方向的虚电路不相混淆，在一个节点选取虚电路号来替换其前一节点使用的虚电路号时，不仅要考虑与下一节点之间的虚电路号不相同，还要考虑与下一节点作为另一条反向虚电路的上一节点时所选取的虚电路号相区别。</p>
+<p>”不仅要考虑与下一节点之间的虚电路号不相同“，意思是说：该物理信道上已经存在虚电路，所以不能重复。</p>
+<h6 id="拆除虚电路">拆除虚电路</h6>
+<p>虚电路表、逻辑信道号都是网络资源，当虚电路拆除时必须释放。<br>
+信源或信宿都可以发出一个拆除请求分组，各节点收到后就删除虚电路表中的对应项。</p>
+<h2 id="数据报操作方式">5.1.2 数据报操作方式</h2>
+<p>数据报：就是分组，在数据报操作方式中分组被称为“数据报”。</p>
+<p>信源把报文分割成多个数据报，依次发送给与信源相连的网络节点。</p>
+<p>每个数据报携带了：</p>
+<ul>
+<li>分组序号</li>
+<li>信宿的地址</li>
+</ul>
+<p>通信子网中的网络节点收到分组后，根据分组中的地址信息、自身保存的路由信息、网络的实时流量、故障信息，独立决策，寻找下一个节点，并将分组发送出去。</p>
+<p>同一报文的不同数据报，在网络中的路径可能不同。各数据报到达信宿的先后顺序也不同，还可能在中途丢失。</p>
+<h2 id="虚电路服务">5.1.3 虚电路服务</h2>
+<p>虚电路服务：网络层向传输层提供的一种数据传送方式。<br>
+一种使分组“顺序到达”目的端系统的、可靠的（面向连接的）数据传送方式。</p>
+<p>虚电路服务，也是通信子网向端系统提供的服务。</p>
+<h6 id="建立虚电路的步骤">建立虚电路的步骤</h6>
+<ul>
+<li><p>在源端：</p>
+<ol type="1">
+<li>信源的传输层，向网络层发出“连接请求”</li>
+<li>网络层，向与“端系统相连的网络节点”发出“呼叫分组”</li>
+</ol></li>
+<li><p>在通信子网中</p>
+<ol type="1">
+<li>节点之间传送“呼叫分组”，建立虚电路表</li>
+</ol></li>
+<li><p>在目的端</p>
+<ol type="1">
+<li>网络节点，向网络层传送“呼叫分组”</li>
+<li>网络层，向传输层发出“连接指示”</li>
+<li>传输层，向源端返回“连接响应”。</li>
+</ol>
+<p>如果以上步骤都成功，虚电路就建立起来了。</p></li>
+</ul>
+<h6 id="通信子网有2种方式实现虚电路服务">通信子网有2种方式实现虚电路服务</h6>
+<p>在通信子网内部，有2种方式可以实现虚电路服务：</p>
+<p><strong>1.纯虚电路操作方式</strong></p>
+<p>虚电路贯穿了：源端系统 -- 通信子网的各网络节点 -- 目的端系统。<br>
+两个端系统的网络层，和“通信子网中网络节点的网络层”，具有相同的操作方式。</p>
+<p>SNA(IBM System Network Architecture)网络就是这种纯虚电路操作方式。</p>
+<p><strong>2.虚电路+数据报混合操作方式</strong></p>
+<p>与端系统相连的网络节点：简称为“端邻节点”。<br>
+端邻节点包括：源节点、目的节点。</p>
+<ul>
+<li>端和“端邻节点”建立虚电路：“端邻节点和端”的网络层，向“端的传输层”提供面向连接的分组传输服务。</li>
+<li>通信子网中的网络节点（包括端邻节点）：在网络层采用数据报传输方式。</li>
+</ul>
+<p>注意：</p>
+<ol type="1">
+<li>在端邻节点，虚电路中传输的分组只有来站信息，没有目的地址等信息，要在通信子网中以数据报的方式传输，就必须在端邻节点转换，附加上目的地址、序号等信息。<br>
+</li>
+<li>虚电路分组和数据报的长度不同。源端邻节点需要将虚电路分组再切割得到数据报。<br>
+目的端邻节点将数据报排序组装成原来的虚电路分组，再发送给目的端系统的网络层。</li>
+</ol>
+<p>在这种混合操作方式中，尽管通信子网的数据传输是不可靠的，但端邻节点做了排序、重发（仅限于端和端邻节点之间）等工作，也算是虚电路服务的一种。</p>
+<p>ARPANET 网络能够以混合操作方式提供虚电路服务。</p>
+<h2 id="数据报服务">5.1.4 数据报服务</h2>
+<h6 id="以数据报操作方式实现数据报服务">以数据报操作方式，实现数据报服务</h6>
+<p>数据报服务：通常由通信子网以数据报操作方式来实现。</p>
+<p>端系统的网络层，和网络节点的网络层，都以数据报的方式交换分组。目的端系统收到的数据报是乱序的，数据报也会发生丢失。</p>
+<p>ARPANET、DNA 网络能够以数据报操作方式，由网路层向传输层提供数据报服务。</p>
+<h6 id="以虚电路操作方式实现数据报服务">以虚电路操作方式，实现数据报服务</h6>
+<p>一种仅陷于理论的操作形式，既不经济，效率也低。</p>
+<ul>
+<li>端系统的网络层发送、接收数据报。<br>
+</li>
+<li>端邻节点将数据报转换为虚电路分组</li>
+<li>整个通信子网以虚电路操作方式工作，当端邻节点转换出虚电路分组时，就在源节点和目的节点间建立虚电路，然后完成传输，最后拆除虚电路。</li>
+</ul>
+<h2 id="虚电路子网和数据报子网的比较">5.1.5 虚电路子网和数据报子网的比较</h2>
+<p>虚电路和数据报从不同的角度来看，各有优势和劣势。</p>
+<h6 id="节点的内存空间与信道带宽之间的平衡">节点的内存空间，与，信道带宽，之间的平衡</h6>
+<p>虚电路：</p>
+<ul>
+<li>分组只需包含来路信息（前节点名+虚电路号），无需目的地址，不浪费信道带宽。</li>
+<li>每个节点都保存虚电路表，一条虚电路对应一条表项。看起来虚电路节点比数据报节点使用的内存空间少，但实际上，虚电路节点仍然需要保存每一个可能的目标地址，因为在虚电路建立阶段，仍然和数据报一样，是通过路由选择来寻找路径的。因此，虚电路节点的内存占用更大。</li>
+</ul>
+<p>数据报：</p>
+<ul>
+<li>如果每个分组都很短，那么目的地址的比特占比过大，可能比虚电路更浪费带宽。</li>
+<li>每个可能的目标地址都对应一个表项，但也比虚电路少。</li>
+</ul>
+<h6 id="建立虚电路所耗费的时间与节点解析数据报目标地址耗费的时间之间的平衡">建立虚电路所耗费的时间，与，节点解析数据报目标地址耗费的时间，之间的平衡</h6>
+<p>虚电路的建立既花费时间，也消耗资源（逻辑信道号，虚电路表）。但虚电路一旦建立，确定分组的后节点却非常简单。</p>
+<p>数据报子网中，节点需要执行一个复杂的查找过程，才能确定数据报的下一个目标，这比较花时间。</p>
+<h6 id="服务质量和拥塞控制">服务质量，和，拥塞控制</h6>
+<p>通信子网发生拥塞，会大大降低服务质量。此时就需要进行拥塞控制。</p>
+<ul>
+<li>数据报子网：很难实现拥塞控制</li>
+<li>虚电路子网：可以在建立虚电路时，事先预留各种资源（节点CPU周期、线路带宽、节点缓冲区空间等），从而一定程度避免拥塞</li>
+</ul>
+<h6 id="节点失效的影响">节点失效的影响</h6>
+<ul>
+<li>虚电路子网：所有流经失效路由器的虚电路都会断开。</li>
+<li>数据报子网：如果一台路由器失效，则只有还有分组尚留在路由器队列中的用户会受到影响，甚至这些用户也只有一部分受到影响。（不太理解这里的意思，因为数据报子网提供的是无连接服务，应该没有确认这个功能。只有数据链路层提供了对帧的确认，还仅限于BSC和HDLC控制协议，因特网的PPP协议也没有确认功能）</li>
+</ul>
+<h6 id="数据报子网还可以提供流量平衡功能">数据报子网还可以提供流量平衡功能</h6>
+<p>对于较大的分组流量，数据报子网可以把流量分散到多个节点去，而虚电路就无法做到。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/" title="网原 5.1 通信子网的操作方式和网络层提供的服务">https://roro4ever.github.io/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-0-网际互连基础知识/网原-5-0-网际互连基础知识/" rel="next" title="网原 5.0 网际互连基础知识">
+                  <i class="fa fa-chevron-left"></i> 网原 5.0 网际互连基础知识
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/" rel="prev" title="网原 5.2 路由选择">
+                  网原 5.2 路由选择 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#通信子网的操作方式和网络层提供的服务"><span class="nav-text">5.1 通信子网的操作方式和网络层提供的服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#虚电路操作方式"><span class="nav-text">5.1.1 虚电路操作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#虚电路"><span class="nav-text">虚电路</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#物理信道复用"><span class="nav-text">物理信道复用</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#虚电路表"><span class="nav-text">虚电路表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#虚电路分组交换如何工作"><span class="nav-text">虚电路分组交换如何工作</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#虚电路表的建立"><span class="nav-text">虚电路表的建立</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#拆除虚电路"><span class="nav-text">拆除虚电路</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据报操作方式"><span class="nav-text">5.1.2 数据报操作方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚电路服务"><span class="nav-text">5.1.3 虚电路服务</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#建立虚电路的步骤"><span class="nav-text">建立虚电路的步骤</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#通信子网有2种方式实现虚电路服务"><span class="nav-text">通信子网有2种方式实现虚电路服务</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据报服务"><span class="nav-text">5.1.4 数据报服务</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#以数据报操作方式实现数据报服务"><span class="nav-text">以数据报操作方式，实现数据报服务</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#以虚电路操作方式实现数据报服务"><span class="nav-text">以虚电路操作方式，实现数据报服务</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚电路子网和数据报子网的比较"><span class="nav-text">5.1.5 虚电路子网和数据报子网的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#节点的内存空间与信道带宽之间的平衡"><span class="nav-text">节点的内存空间，与，信道带宽，之间的平衡</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#建立虚电路所耗费的时间与节点解析数据报目标地址耗费的时间之间的平衡"><span class="nav-text">建立虚电路所耗费的时间，与，节点解析数据报目标地址耗费的时间，之间的平衡</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#服务质量和拥塞控制"><span class="nav-text">服务质量，和，拥塞控制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#节点失效的影响"><span class="nav-text">节点失效的影响</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据报子网还可以提供流量平衡功能"><span class="nav-text">数据报子网还可以提供流量平衡功能</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: 'e85ad043fa79beb21580951491ccd040',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="2.2.1 OSI/RM 简介 上一节讲到，网络体系结构（分层模型+协议）是一种网络类别。 各公司都研发了自己的网络体系结构，不同体系结构的网络互连很困难。  因此，国际标准化组织 ISO 制定了标准化、开放式的计算机网络层次结构模型 OSI/RM，所有遵循了该模型的计算机网络就可以互连。  OSI/RM： Open System Interconnection Reference Model，“">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 2.2 OSI&#x2F;RM 开放系统互连参考模型">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="2.2.1 OSI/RM 简介 上一节讲到，网络体系结构（分层模型+协议）是一种网络类别。 各公司都研发了自己的网络体系结构，不同体系结构的网络互连很困难。  因此，国际标准化组织 ISO 制定了标准化、开放式的计算机网络层次结构模型 OSI/RM，所有遵循了该模型的计算机网络就可以互连。  OSI/RM： Open System Interconnection Reference Model，“">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/网络分层体系结构.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/网络各层的PDU.jpg">
+<meta property="og:updated_time" content="2019-12-01T08:56:11.982Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 2.2 OSI&#x2F;RM 开放系统互连参考模型">
+<meta name="twitter:description" content="2.2.1 OSI/RM 简介 上一节讲到，网络体系结构（分层模型+协议）是一种网络类别。 各公司都研发了自己的网络体系结构，不同体系结构的网络互连很困难。  因此，国际标准化组织 ISO 制定了标准化、开放式的计算机网络层次结构模型 OSI/RM，所有遵循了该模型的计算机网络就可以互连。  OSI/RM： Open System Interconnection Reference Model，“">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/网络分层体系结构.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 2.2 OSI/RM 开放系统互连参考模型 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 2.2 OSI/RM 开放系统互连参考模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:47:44 / 修改时间：16:56:11" itemprop="dateCreated datePublished" datetime="2019-12-01T15:47:44+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第二章-计算机网络体系结构/" itemprop="url" rel="index">
+                    <span itemprop="name">第二章 计算机网络体系结构</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="osirm-简介">2.2.1 OSI/RM 简介</h4>
+<p>上一节讲到，网络体系结构（分层模型+协议）是一种网络类别。<br>
+各公司都研发了自己的网络体系结构，不同体系结构的网络互连很困难。</p>
+<p>因此，国际标准化组织 ISO 制定了标准化、开放式的计算机网络层次结构模型 OSI/RM，所有遵循了该模型的计算机网络就可以互连。</p>
+<p>OSI/RM：<br>
+Open System Interconnection Reference Model，“开放系统互连参考模型”。</p>
+<p>OSI/RM 包括了三级抽象：</p>
+<ol type="1">
+<li>体系结构：定义了七层模型，是OSIRM的基础框架。</li>
+<li>服务定义：描述了各层向上提供的服务，以及层与层之间的抽象接口，层间交互的服务原语。</li>
+<li>协议规范：定义了发送方发送控制信息，接收方解读控制信息的各种细节。</li>
+</ol>
+<p>OSI/RM 不是一个标准，只是一个概念性框架，无法被实现，用途是在制定标准时便于参考、使用。</p>
+<p>在三级抽象中，只有协议是可以实现的，</p>
+<h4 id="osi-rm-的结构">2.2.2 OSI / RM 的结构</h4>
+<p>OSI/RM系统有7层组成：</p>
+<ul>
+<li>物理层：定义了物理传输链路的机械的、电气的、功能的和规程的特性。其作用是使数据比特流能在物理介质上以电信号方式进行实通信。</li>
+<li>数据链路层：以帧为单位进行虚通信。把“不可靠的物理链路”改造成“对网络层来说是无差错的数据链路”，同时还要进行收发双方的流量控制。</li>
+<li>网络层：以分组为单位进行虚通信。网络层主要负责分组的路由选择，并对流入网络的分组数量进行控制以防止网络阻塞，另外，当分组要跨越多个通信子网时，网络层还负责解决网际互连的问题。</li>
+<li>传输层：是第一个端-端（即主机）的层次。它提供了端-端的透明数据传输服务，使更高层无需关心通信子网的运作，另外它还负责端-端的差错控制和流量控制。</li>
+<li>会话层：进程-进程的层级。负责在不同主机的两个进程间，建立和拆除会话，管理他们的通信。</li>
+<li>表示层：用统一的数据结构、编码表示，去翻译异构互连主机的数据，使得异构主机也能互相理解。因为符合OSIRM的不同主机，即使对同一数据，也可能采用了不同的数据结构描述和编码表示，而表示层就可以在发送方将其转换为统一的数据结构、编码表示，再在通信子网中传输，接收方再其转换为目标主机能够接受的形式。</li>
+<li>应用层：具体的应用软件。</li>
+</ul>
+<p>开放系统互连参考模型的网络，由两部分通过物理介质连接构成： + 作为信源和信宿的<strong>端开放系统</strong>：即资源子网中的主机，通常包含了7层功能。 + 若干<strong>中继开放系统</strong>：通信子网中的接口信息处理机(IMP)，通常只包含了3层，甚至只有2层。</p>
+<img src="/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/网络分层体系结构.png">
+<h6 id="osirm-层次结构模型网络的数据传输过程">OSI/RM 层次结构模型网络的数据传输过程</h6>
+<p>发送进程发给接收进程的数据，会经过发送方各层从上到下抵达物理介质，通过物理介质传输到接收方后，再经过从下到上的传递，最终到达接收进程。</p>
+<img src="/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/网络各层的PDU.jpg">
+<p>发送方：<br>
+每当数据要传给下层时，本层就会对数据加上控制信息，称为报头。<br>
+逐层向下传递，数据最终在物理层成为“数据比特流”，之后在物理介质上转换为电信号，通过物理介质发送给接收方。</p>
+<p>接收方：<br>
+收到电信号后，在物理层转换为数据比特流，然后逐层向上传递。<br>
+每一层在收到下一层发来的数据后，首先会剥去本层的报头，得到数据，再向上传送，数据最终会送到接受进程。</p>
+<p>接收方的任意一层都不会收到下层的报头（下层报头早已剥离），而高层的控制信息无法识别（对本层来说仅仅是数据而已），因此它只能阅读和去除本层的报头。这样一来，就好像数据在发送方和接受方的虚通信中直接传输一样。</p>
+<h4 id="面向连接服务与无连接服务">2.2.3 面向连接服务与无连接服务</h4>
+<h5 id="通信服务类型">1.通信服务类型</h5>
+<h6 id="面向连接服务">1)面向连接服务</h6>
+<p>Connection Oriented Service</p>
+<ul>
+<li>必须事先建立一条通信线路（虚电路）才能传输数据。通信过程必须有3个阶段：建立、使用、释放。</li>
+<li>各分组不需要携带目的节点地址。</li>
+<li>通信链路相当于一个管道，发送方放入数据，接收方取出数据，收发数据的顺序不变，可靠性好。</li>
+<li>通信开销大，协议复杂，通信效率低</li>
+</ul>
+<p>面向连接服务，在节点数据交换方式上包括：</p>
+<ul>
+<li>电路交换（物理信道）</li>
+<li>虚电路分组交换（逻辑信道）</li>
+</ul>
+<h6 id="无连接服务">2)无连接服务</h6>
+<p>Connectionless Service</p>
+<ul>
+<li>通信过程不需要建立、使用、释放3个步骤</li>
+<li>每个分组携带目的节点地址</li>
+<li>各分组在通信子网中独立传送。具有相同源和目的地址的分组，可能走不同的网络路径，到达目的节点的先后顺序与发送顺序无关。</li>
+<li>目的节点收到的分组可能出现乱序、重复、丢失等情况，可靠性差。</li>
+<li>通信开销小，协议简单、效率高。</li>
+</ul>
+<p>无连接服务，在节点数据交换方式上包括：</p>
+<ul>
+<li>报文交换</li>
+<li>数据报分组交换</li>
+</ul>
+<h5 id="确认和重传机制">2.确认和重传机制</h5>
+<p>面向连接服务、无连接服务，在可靠性上已有区别（面向连接&gt;无连接服务)。</p>
+<p>但还不够，为了进一步确保可靠性，还可以使用“确认和重传机制”。</p>
+<p>确认：<br>
+数据分组接收节点（中继节点，或目的节点）收到分组后，应向发送节点（上家节点，可能是源节点，也可能是中继节点）回送确认信息。</p>
+<p>重传：<br>
+发送分组的节点，在规定时间内，没有收到接收节点回送的确认信息，则认为分组发送失败，会重发该数据分组。</p>
+<p>注意：<br>
+这里仅谈到分组，实际上确认重传机制也适用于报文交换。</p>
+<h5 id="服务类型服务质量可以自由组合">服务类型、服务质量可以自由组合</h5>
+<p>面向连接服务、无连接服务属于服务类型，确认重传机制属于服务质量。</p>
+<p>两者可以自由搭配组合。</p>
+<p>比如 + 面向连接服务，可以使用确认重传机制，也可以不使用。 + 无连接服务，也可以使用确认重传机制，或者不使用。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/" title="网原 2.2 OSI/RM 开放系统互连参考模型">https://roro4ever.github.io/2019/12/01/网原-2-2-OSI-RM-开放系统互连参考模型/网原-2-2-osi-rm-开放系统互连参考模型/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-2-1-网络的分层体系结构/网原-2-1-网络的分层体系结构/" rel="next" title="网原 2.1 网络的分层体系结构">
+                  <i class="fa fa-chevron-left"></i> 网原 2.1 网络的分层体系结构
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-2-3-TCP-IP-参考模型/网原-2-3-tcp-ip-参考模型/" rel="prev" title="网原 2.3 TCP/IP 参考模型">
+                  网原 2.3 TCP/IP 参考模型 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#osirm-简介"><span class="nav-text">2.2.1 OSI/RM 简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#osi-rm-的结构"><span class="nav-text">2.2.2 OSI / RM 的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#osirm-层次结构模型网络的数据传输过程"><span class="nav-text">OSI/RM 层次结构模型网络的数据传输过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#面向连接服务与无连接服务"><span class="nav-text">2.2.3 面向连接服务与无连接服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#通信服务类型"><span class="nav-text">1.通信服务类型</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#面向连接服务"><span class="nav-text">1)面向连接服务</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#无连接服务"><span class="nav-text">2)无连接服务</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#确认和重传机制"><span class="nav-text">2.确认和重传机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#服务类型服务质量可以自由组合"><span class="nav-text">服务类型、服务质量可以自由组合</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '7c317b169c5882ed57a49c6cf690df66',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

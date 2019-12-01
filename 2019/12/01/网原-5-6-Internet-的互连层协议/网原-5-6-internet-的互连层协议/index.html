@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="* 互联网指：Internet。  * 互连网指：通过 IP 协议连接到一起的网络。  TCP/IP 模型的互连层(Internet Layer)对应了 OSI/RM 的网络层，后文中两者可以替换。  从互连层（或OSI/RM 的网络层）的角度看，Internet 就是通过互连层协议，将多个自治系统AS或子网互连在一起构成的。  互连层有4个重要的协议：   * 互连网协议：Internet Pr">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.6 Internet 的互连层协议">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="* 互联网指：Internet。  * 互连网指：通过 IP 协议连接到一起的网络。  TCP/IP 模型的互连层(Internet Layer)对应了 OSI/RM 的网络层，后文中两者可以替换。  从互连层（或OSI/RM 的网络层）的角度看，Internet 就是通过互连层协议，将多个自治系统AS或子网互连在一起构成的。  互连层有4个重要的协议：   * 互连网协议：Internet Pr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010112251954_16583.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010161431134_13939.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120420237_6450.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120707197_22229.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120733943_13339.png">
+<meta property="og:updated_time" content="2019-12-01T16:04:32.720Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.6 Internet 的互连层协议">
+<meta name="twitter:description" content="* 互联网指：Internet。  * 互连网指：通过 IP 协议连接到一起的网络。  TCP/IP 模型的互连层(Internet Layer)对应了 OSI/RM 的网络层，后文中两者可以替换。  从互连层（或OSI/RM 的网络层）的角度看，Internet 就是通过互连层协议，将多个自治系统AS或子网互连在一起构成的。  互连层有4个重要的协议：   * 互连网协议：Internet Pr">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010112251954_16583.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.6 Internet 的互连层协议 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.6 Internet 的互连层协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-01 16:07:21" itemprop="dateCreated datePublished" datetime="2019-12-01T16:07:21+08:00">2019-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-02 00:04:32" itemprop="dateModified" datetime="2019-12-02T00:04:32+08:00">2019-12-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>互联网指：Internet。</li>
+<li>互连网指：通过 IP 协议连接到一起的网络。</li>
+</ul>
+<p>TCP/IP 模型的互连层(Internet Layer)对应了 OSI/RM 的网络层，后文中两者可以替换。</p>
+<p>从互连层（或OSI/RM 的网络层）的角度看，Internet 就是通过互连层协议，将多个自治系统AS或子网互连在一起构成的。</p>
+<p>互连层有4个重要的协议：</p>
+<ul>
+<li>互连网协议：Internet Protocol, IP，提供了一种不可靠的，无连接的IP报文服务。是TCP/IP协议簇的核心。</li>
+<li>互连网控制报文协议：Internet Control Message Protocol, ICMP</li>
+<li>地址转换协议：Address Resolution Protocol, ARP</li>
+<li>反向地址转换协议：Reverse Address Resolution Protocol, RARP</li>
+</ul>
+<h2 id="ip协议">5.6.1 IP协议</h2>
+<p>IP协议（Internet Protocol,互连网协议）是互连层最重要的协议，具有多个功能：</p>
+<ul>
+<li>将多个网络连成一个互连网</li>
+<li>将上层（传输层）发来的报文分割、封装成IP数据报</li>
+<li>把IP数据报交给下层（主机-网络层），封装成帧后，通过局域网传输：</li>
+<li>IP寻址、IP路由选择
+<ul>
+<li>如果目的主机在同一LAN中：目的主机的IP协议可以接收这些数据报（局域网互连设备没有互连层——转发器、网桥都没有互连层，只能依靠主机）；</li>
+<li>如果目的主机不在同一LAN中：由LAN之间的IP路由器传送数据报（尽管局域网设备没有互连层，但IP路由器有互连层）</li>
+</ul></li>
+<li>将IP数据报组装成报文，提交给传输层</li>
+<li>消除网络差异：Internet 连接了多个网络，每个网络的帧格式、地址格式都可能存在巨大差异（数据链路层、物理层遵循了不同的协议标准），而互连层就可以消除网络差异，向传输层提供统一的描述形式：IP数据报 和 IP地址。</li>
+</ul>
+<p>说明：<br>
+&gt;也即一个 IP 数据报是通过互连网络，从一个 IP 模块传到另一个 IP模块，直到终点为止。</p>
+<p>这里的IP 模块指“主机和网关”。</p>
+<p>IP数据报分为2个部分：</p>
+<ul>
+<li>报头区：20个字节的固定部分+可选的任意长度部分（选项）</li>
+<li>数据区</li>
+</ul>
+<h3 id="ip数据报的报头">1. IP数据报的报头</h3>
+<img src="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010112251954_16583.png">
+<p>因为位流是串行发送的，因此上图中的比特位会按照从上到下、从左到右的顺序依次发送。</p>
+<ul>
+<li>版本(4bits)：该IP数据报使用的IP协议版本。IPv4 IPv6</li>
+<li>IP报头长度(IHL,Internet Header Length,4bits): 整个头部的长度（包括选项）。以32 bits为单位，普通IP数据报（没有选项），字段值是5。接收端通过此域可以计算出报头的结束位置和数据部分的开始位置。</li>
+<li>服务类型 (TOS,Type of Service, 8bits)：主机可以在此字段中要求通信子网提供哪种类型的服务，或者说，规定了本数据报的处理方式。</li>
+<li>总长度 (16bits)：报头+数据的总长度，以字节为单位。利用头部长度 IHL 和总长度字段，可以计算出 IP 数据报中数据部分的起始位置和长度。</li>
+<li>标识(16bits)：主机给每个IP数据报赋予的唯一的身份标识。</li>
+<li>分片标志(3bits)：包括了DF和MF2个标志，分别表示了：是否允许路由器对IP数据报进行分片，以及是否是分片的最后一片。</li>
+<li>分段偏移(13bits)：分片的数据区在原数据区的偏移位置。</li>
+<li>生存时间(TTL,Time to Live,8bits): IP数据报的生命周期，每经过一个路由器就会递减，在路由器中排队时可以倍数递减。</li>
+<li>上层协议标识(8bits):IP协议可以承载各种上层协议，目标端根据协议标识就可以把收到的IP数据报送到TCP或UDP等处理此报文的上层协议了。</li>
+</ul>
+<img src="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010161431134_13939.png">
+<ul>
+<li>头校验和(16bits)：仅用于校验头部</li>
+<li>源地址(32bits)：源主机的IP地址。</li>
+<li>目的地址(32bits)：目的主机的IP地址。</li>
+<li>选项(变长)：可以由多个选项组成，每一个选项用一个字节标明其内容，有些还可以跟一个字节的长度字段+ 多个字节的数据字段。</li>
+</ul>
+<p>目前已经定义的选项有5个：</p>
+<ol type="1">
+<li>安全性：IP数据报的安全程度。</li>
+<li>严格的源路由选择：以IP地址序列的方式，给出了源到目的完整路径。IP数据报必须走这条路径。此选项的主要作用是：路由器故障、网关发送紧急分组、路径时间测量等。</li>
+<li>宽松的源路由选择：要求IP数据报经过所列的路由，但中间可以穿过其他路由器。</li>
+<li>记录路由：记录了此 IP数据报流经路由器的IP地址，Debug用。</li>
+<li>时间标记：除了记录流经路由器的IP地址外，再记录流经时间。Debug用。</li>
+</ol>
+<h3 id="ip数据报的分片和重组">2. IP数据报的分片和重组</h3>
+<h6 id="最大传输单元-mtu">最大传输单元 MTU</h6>
+<p>网络中物理帧的最大长度 MTU：<br>
+IP数据报在互联网上是封装成物理帧来传输的，可能要经过多个物理网络才能从源端传输到目的端。<br>
+不同的网络由于数据链路层和介质的物理特性不同，对物理帧的最大长度有一个限制，这个限制值即最大传输单元MTU（Maximum Transmission Unit）。</p>
+<p>路径MTU：<br>
+当通信要经过多个MTU值不同的网络时，其中最小的MTU值称为路径MTU。<br>
+路径MTU是整条路径的瓶颈。<br>
+由于路由选择不一定是对称的（从A到B的路由，与从B到A的路由，可能不同），因此，<strong>路径MTU在两个方向上可能不同</strong>。</p>
+<p>下表是几种常用网络的MTU值：<br>
+<img src="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120420237_6450.png"></p>
+<h6 id="分片">分片</h6>
+<p>当通信发生在同一个网络内时，MTU是确定的，主机在发出IP数据报时就会根据MTU对IP数据报的长度进行处理，不存在分片问题。</p>
+<p>分片：<br>
+当通信发生在互联网中时，IP数据报需要穿过多个具有不同MTU值的网络，仅靠主机无法控制IP数据报的大小，就需要路由器根据相连网络的MTU把一个数据报分成多个数据报，这个过程称为分片。</p>
+<p>分片后的各个IP数据报可能经过不同的路径到达目标主机。</p>
+<p>由于路由器工作在互连层/网络层，容易对IP数据报进行操作，因此分片工作通常由路由器负责。</p>
+<p>分片后的IP数据报，和原来的IP数据报具有相同的结构：</p>
+<img src="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120707197_22229.png">
+<p>分片后的IP数据报，数据区是原数据区的一部分。<br>
+头部则复制了原IP数据报的头部，但与原来未分片的IP数据报头部有两点主要不同：</p>
+<img src="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/20191010120733943_13339.png">
+<p>(1)标志：在IP数据报头部有一个叫“标志”的字段，用3位二进制数表示：</p>
+<ul>
+<li>不分片DF（Do not Fragment）标志：如果被置1，则数据报在传输过程中路由器不能将其分片。如网络连通性测试命令ping就可以用-F参数设置为传输时不分片，但这样可能无法不能通过MTU较小的网络时，会产生数据不可达的错误。</li>
+</ul>
+<p>片未完MF（More Fragment）标志：如果被置1，说明该数据报不是分片后的最后一个数据报，最后一个数据报的该位被置0。</p>
+<p>(2)片偏移：IP数据报被分片后，各片数据区在原来IP数据区中的位置。用13位片偏移来表示。</p>
+<p>上图中分片1的偏移为0；分片2的偏移为600；分片3的偏移为1200。<br>
+实际应用中,偏移是以8个字节为单位，因而在IP数据报中分片1的偏移是0；分片2的偏移是75；分片3的偏移是150。</p>
+<h6 id="重组">重组</h6>
+<p>重组：<br>
+目标主机需要把分片后的IP数据报组装成原IP数据报，这个过程叫做“IP数据报的重组”。</p>
+<p>IP数据报头部的标识字段，是每一个原始数据报的唯一标识。</p>
+<p>目标端主机重组数据报的原理是：</p>
+<p>(1)根据“标识”字段可以确定分片属于哪个原始 IP 数据报；</p>
+<p>(2)根据“标志”字段的“片未完MF”子字段可以确定分片是不是最后一个分片；</p>
+<p>(3)根据“偏移量”字段可以确定分片在原数据报中的位置。</p>
+<h3 id="ip协议如何处理输入数据报">3. IP协议如何处理输入数据报</h3>
+<ul>
+<li>主机的IP协议对输入数据报的处理：
+<ul>
+<li>就是目的地：接收后传给高层协议软件。</li>
+<li>不是目的地：抛弃该IP数据报。</li>
+</ul></li>
+<li>网关的IP协议对输入数据报的处理：（这里的网关可能是指 网关+路由器+网关）
+<ul>
+<li>就是目的地：接收后传给高层协议软件。</li>
+<li>不是目的地：对IP数据报进行寻径，随后转发出去。</li>
+</ul></li>
+</ul>
+<h3 id="ip对输出数据报的处理">4. IP对输出数据报的处理</h3>
+<p>IP协议对输出数据报的处理也分为主机和网关两种，实际上是类似的。</p>
+<p>网关的IP协议收到IP数据报后，经过寻址和路由，找到下一个网关的IP地址，然后将IP数据报和下个网关的IP地址交给网络接口软件。</p>
+<p>网络接口软件收到 IP数据报和下一个网关的IP地址后，调用 ARP 协议将下个网关的IP地址翻译成物理地址，然后将 IP数据报封装成帧，最后交给下层（网络-主机层）完成物理传输。</p>
+<h6 id="ip地址">IP地址</h6>
+<p>IP地址：符合IP协议的地址。</p>
+<p>常用的IPv4 地址，采用32bits，通常写作圆点分隔的4个十进制数字，192.168.0.1</p>
+<p>以下为扩展资料。 ###### 网络接口是什么 <a href="https://en.wikipedia.org/wiki/Network_interface" target="_blank" rel="noopener">Network interface</a></p>
+<p>Network Interface，网络接口，或叫网络介面。</p>
+<p>在计算机领域，网络接口是指一个软件或硬件，它位于两个设备之间，或计算机网络的两个协议层之间。</p>
+<p>网络接口通常具有某种形式的网络地址，包括节点标识符+端口号，或者一个唯一的节点ID。</p>
+<p>网络接口具有的标准功能包括：传输信息，连接/断开连接，等等。</p>
+<p><a href="https://docs.oracle.com/javase/tutorial/networking/nifs/definition.html" target="_blank" rel="noopener">What Is a Network Interface?</a></p>
+<p>网络接口是一台计算机和一个网路之间的连接点。</p>
+<p>网络接口可以与物理网卡绑定，但并非必须，比如环回地址就没有绑定，详见后文。</p>
+<p>网络接口对于 multi-homed 系统很有用。<br>
+通过 java 的 NetworkInterface 类，你可以将特定的网络活动指派给特定的NIC。</p>
+<blockquote>
+<p>NetworkInterface is useful for a multi-homed system, which is a system with multiple NICs. Using NetworkInterface, you can specify which NIC to use for a particular network activity.</p>
+</blockquote>
+<h6 id="multi-homed-system">multi-homed system</h6>
+<p>Multihomed System 就是具有多个NIC的系统，或者说具有多个网络接口的主机，通常连接多个网络，做路由器使用。</p>
+<p>Multihomed describes a computer host that has multiple IP addresses to connected networks. A multihomed host is physically connected to multiple data links that can be on the same or different networks. For example, a computer with a Windows NT 4.0 Server and multiple IP addresses can be referred to as "multihomed" and may serve as an IP router.</p>
+<p>Using the Stream Control Transmission Protocol (SCTP), multihoming allows a single SCTP endpoint to support multiple IP addresses, which means that a session is more likely to survive a network failure. In a single-homed session, a network failure can isolate the end system or make transport temporarily unavailable. Multihoming means that redundant local area networks (LANs) can be used to support local access. Various approaches, such as using addresses with different prefixes to force routing through different carriers, or even using redundant core networks, can be taken to reduce the effects of failures.</p>
+<p>Multihoming is commonly used in Web management for load balancing, redundancy, and disaster recovery.</p>
+<h6 id="网络接口软件">网络接口软件</h6>
+<p>网络接口软件的解释，详见：<br>
+<a href="https://www.ibm.com/support/knowledgecenter/en/ssw_aix_72/network/tcpip_interfaces.html" target="_blank" rel="noopener">TCP/IP network interfaces</a></p>
+<p>网络接口软件是“与特定网络相关的软件”，它在 互连层和“特定网络的设备驱动程序”之间通信，使网络设备（主机/路由器）中可能存在的一个或多个网卡在 IP层 呈现为一致的接口。<br>
+换句话说，IP层通过网络接口软件，可以就与设备内的多个网卡通信。</p>
+<p>需要说明的是，网络接口并非一定要和网卡相关联，比如环回地址就没有关联到任何网卡。</p>
+<p>一台设备连接的每一个网络都必须具有一张网卡。<br>
+但多张网卡可以只使用一个网络接口软件。比如：某主机连接到了两个令牌环网络，它必须具有2张网卡，然后，只需要一份令牌环网络接口软件，和一份令牌环设备驱动程序。</p>
+<h2 id="arp协议与-rarp协议">5.6.2 ARP协议与 RARP协议</h2>
+<h3 id="地址转换协议-arp">1. 地址转换协议 ARP</h3>
+<p>TCP/IP网络中，每个主机分配的IP地址是互连层的逻辑地址，而报文的物理传输必须依赖主机-网络层和物理地址，因此必须根据目标主机的IP地址获取到其物理地址。</p>
+<h6 id="lan中的arp">LAN中的ARP</h6>
+<p>互连层的ARP协议：使主机可以在同一物理网络中，根据目的 IP地址得到其物理地址。</p>
+<p>在进行报文传输时，如果源端不知道目的端的物理地址，就广播 ARP请求，同一物理网络的目的站收到广播后做出回答，源收到回答后就把目的站的物理地址保存到自己的高速缓存中，以后就可以使用。</p>
+<p>ARP协议使物理网络的物理编址对互连层（网络层）透明。</p>
+<h6 id="internet中的arp">Internet中的ARP</h6>
+<p>为了将报文送到另一个网络的目标主机，应先把 IP数据报送到本网络的IP路由器。<br>
+因此应通过ARP广播请求，获取IP路由器的物理地址，然后送到路由器。</p>
+<p>路由器在下一个AS中仍然调用ARP协议，根据IP地址获取下一跳（或目标主机）的物理地址，再传输物理帧。</p>
+<p>有时还可以在路由器上设置代理ARP：由路由器代替目标主机回答ARP请求，向发送方返回物理地址。</p>
+<h3 id="反向地址转换协议-rarp">2. 反向地址转换协议 RARP</h3>
+<p>RARP适用于一种特殊情况：<br>
+站点初始化后，只有自己的物理地址，没有IP地址。</p>
+<p>RARP协议可以发出 广播请求，询问自己的IP地址，RARP服务器收到后会做出回答。</p>
+<p>通过RARP协议，无IP地址的站点就可以获得IP。</p>
+<h2 id="icmp协议">5.6.3 ICMP协议</h2>
+<p>因为IP数据报是一种不可靠的无连接服务，当发生传输错误、网络拥塞时，就需要一种报文来通知发送方，这些报文称为控制信息。</p>
+<p>控制信息：网络通不通、目标主机是否可达、某条路由是否可用等信息。</p>
+<p>控制信息通常由发现故障的站点发出，比如目的主机、路由器。</p>
+<p>互联网控制报文协议(ICMP,Internet Control Message Protocol)：IP数据报的目的方或路由器，向发送方发出控制信息，报告网络传输差错、网络拥塞等情况的协议。</p>
+<h2 id="igmp协议">5.6.4 IGMP协议</h2>
+<p>Internet "组管理"协议(IGMP,Internet Group Management Protocol)。</p>
+<p>单播(unicast)：最常见的传输形式，发送方和接收方1对1的关系。</p>
+<p>广播(broadcast):发送方只有一个，局域网中所有节点都是接收方。</p>
+<p>多播/组播(Multicast)：一个发送方对应多个接收方，接收方可能不是所有主机，也可能跨多个网段。</p>
+<h6 id="多播的组地址">多播的组地址</h6>
+<p>IP协议采用D类地址来支持组播，每个D类地址有28位，代表了一组主机。</p>
+<p>Internet 支持两类组地址</p>
+<ul>
+<li>永久组地址：不需要创建，总是存在。比如224.0.0.1表示局域网中所有的主机；224.0.0.2 表示局域网中所有的路由器；224.0.0.5表示局域网中所有的OSPF路由器。</li>
+<li>临时组地址：需要先创建才能使用。一个进程可以要求其宿主加入或退出某个特定的组。当主机上所有进程都退出某个组后，整个主机也就退出了该组。每个主机都要记录进程所属的组。</li>
+</ul>
+<p>当某个D类地址作为目标 IP地址时，就表示要同时向该组中的每个主机发送该IP数据报，但网络也仅仅是尽最大努力将报文传送给每个主机，并不能保证全部送达，组内有些主机可能收不到这个报文。</p>
+<h6 id="多播路由器">多播路由器</h6>
+<p>多播功能需要多播路由器支持，它也有普通路由器的功能。</p>
+<p>多播路由器会周期性的发出一个目的地址为224.0.0.1的多播报文，要求局域网内所有主机报告其进程所属组。各主机会反馈其所有进程所属组的D类地址（临时组地址），多播路由器将情况记录下来，并向其他多播路由器通告。</p>
+<p>如果某个组内已经没有本地网络中的主机，多播路由器就认为本地网络中已经没有主机属于该组了（有可能组仍然存在，但属于其他网络），以后也不再向其他的多播路由器通告该组成员的情况。</p>
+<p>多播路由器和主机之间采用 IGMP协议 进行询问和响应。</p>
+<p>IGMP只有两种报文：询问和响应。</p>
+<p>IGMP报文的传输：把IGMP报文加上IP报头作为IP数据报进行传输。</p>
+<h6 id="虚拟的多播主干网">虚拟的多播主干网</h6>
+<p>多播主干网，MBONE, Multicast Backbone On the Internet。</p>
+<p>MBONE可以把报文传输给一个组的主机，即使这些主机分散在不同的网络中。</p>
+<p>MBONE中的多播路由器称为 MRouter, Multicast Router，它既可以是专业的多播路由器，也可以是运行多播软件的普通路由器。</p>
+<h6 id="多播路由器的路由协议">多播路由器的路由协议</h6>
+<p>距离向量多播路由协议(DVMRP, Distance Vector Multicast Route Protocol)。</p>
+<h6 id="在不支持多播的网络中采用隧道技术">在不支持多播的网络中，采用隧道技术</h6>
+<p>多播报文可能穿过多个网络，如果某些网络不支持多播(比如没有多播路由器)，可以用“隧道”来解决——通过隧道技术，将多播报文封装为普通报文进行单播传输，当多播报文进入一个支持多播的网络后解除封装还原成多播报文继续传输。</p>
+<p>网络隧道技术：利用一种网络协议来传输另一种网络协议，是构建VPN的关键技术。 目前主要利用网络隧道协议(Tunneling Protocol)来实现这种功能。</p>
+<p>隧道协议（Tunneling Protocol）是一类网络协议，它是一种数据报封装技术，它将原始IP报封装在另一个数据包（称为封装IP数据报）的数据净荷字段进行传输。</p>
+<h2 id="ipv6">5.6.5 IPv6</h2>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/" title="网原 5.6 Internet 的互连层协议">https://roro4ever.github.io/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/" rel="next" title="网原 5.5 网络互连">
+                  <i class="fa fa-chevron-left"></i> 网原 5.5 网络互连
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-6-1-传输层基本概念/网原-6-1-传输层基本概念/" rel="prev" title="网原 6.1 传输层基本概念">
+                  网原 6.1 传输层基本概念 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ip协议"><span class="nav-text">5.6.1 IP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ip数据报的报头"><span class="nav-text">1. IP数据报的报头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip数据报的分片和重组"><span class="nav-text">2. IP数据报的分片和重组</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#最大传输单元-mtu"><span class="nav-text">最大传输单元 MTU</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#分片"><span class="nav-text">分片</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#重组"><span class="nav-text">重组</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip协议如何处理输入数据报"><span class="nav-text">3. IP协议如何处理输入数据报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip对输出数据报的处理"><span class="nav-text">4. IP对输出数据报的处理</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ip地址"><span class="nav-text">IP地址</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#multi-homed-system"><span class="nav-text">multi-homed system</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网络接口软件"><span class="nav-text">网络接口软件</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arp协议与-rarp协议"><span class="nav-text">5.6.2 ARP协议与 RARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#地址转换协议-arp"><span class="nav-text">1. 地址转换协议 ARP</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#lan中的arp"><span class="nav-text">LAN中的ARP</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#internet中的arp"><span class="nav-text">Internet中的ARP</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向地址转换协议-rarp"><span class="nav-text">2. 反向地址转换协议 RARP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icmp协议"><span class="nav-text">5.6.3 ICMP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#igmp协议"><span class="nav-text">5.6.4 IGMP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#多播的组地址"><span class="nav-text">多播的组地址</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#多播路由器"><span class="nav-text">多播路由器</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#虚拟的多播主干网"><span class="nav-text">虚拟的多播主干网</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#多播路由器的路由协议"><span class="nav-text">多播路由器的路由协议</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#在不支持多播的网络中采用隧道技术"><span class="nav-text">在不支持多播的网络中，采用隧道技术</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ipv6"><span class="nav-text">5.6.5 IPv6</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '1ff698439f3618e4ef0095d4a9bd96e5',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="差错控制： 通信过程中   * 发现错误  * 纠正错误，  把控制错误率的技术和方法。  数据传输中发生的码元差错，都是由噪声引起的。 噪声分为两大类：   1. 信道固有的、持续存在的随机热噪声  热噪声引起的差错称为“随机错”。 随即错的错误码元往往是单个出现的，不连续。  通常把信道的信噪比设计得很大，来减少随机错，因此随机错占比很少。   2. 来自外界的、短暂突发的冲击噪声  冲击噪声">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 4.2 差错控制">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-4-2-差错控制/网原-4-2-差错控制/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="差错控制： 通信过程中   * 发现错误  * 纠正错误，  把控制错误率的技术和方法。  数据传输中发生的码元差错，都是由噪声引起的。 噪声分为两大类：   1. 信道固有的、持续存在的随机热噪声  热噪声引起的差错称为“随机错”。 随即错的错误码元往往是单个出现的，不连续。  通常把信道的信噪比设计得很大，来减少随机错，因此随机错占比很少。   2. 来自外界的、短暂突发的冲击噪声  冲击噪声">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T08:28:41.926Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 4.2 差错控制">
+<meta name="twitter:description" content="差错控制： 通信过程中   * 发现错误  * 纠正错误，  把控制错误率的技术和方法。  数据传输中发生的码元差错，都是由噪声引起的。 噪声分为两大类：   1. 信道固有的、持续存在的随机热噪声  热噪声引起的差错称为“随机错”。 随即错的错误码元往往是单个出现的，不连续。  通常把信道的信噪比设计得很大，来减少随机错，因此随机错占比很少。   2. 来自外界的、短暂突发的冲击噪声  冲击噪声">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-4-2-差错控制/网原-4-2-差错控制/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 4.2 差错控制 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-4-2-差错控制/网原-4-2-差错控制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 4.2 差错控制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:03:58 / 修改时间：16:28:41" itemprop="dateCreated datePublished" datetime="2019-12-01T16:03:58+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第四章-数据链路层/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 数据链路层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>差错控制： 通信过程中</p>
+<ul>
+<li>发现错误</li>
+<li>纠正错误，</li>
+</ul>
+<p>把控制错误率的技术和方法。</p>
+<p>数据传输中发生的码元差错，都是由噪声引起的。<br>
+噪声分为两大类：</p>
+<ol type="1">
+<li>信道固有的、持续存在的随机热噪声</li>
+</ol>
+<p>热噪声引起的差错称为“随机错”。<br>
+随即错的错误码元往往是单个出现的，不连续。</p>
+<p>通常把信道的信噪比设计得很大，来减少随机错，因此随机错占比很少。</p>
+<ol start="2" type="1">
+<li>来自外界的、短暂突发的冲击噪声</li>
+</ol>
+<p>冲击噪声引起的差错称为“突发错”。</p>
+<p>突发错的错误码元通常是连续出现，因为即使持续时间很短的冲击噪声也会使连续多个码元发生错误。</p>
+<p>冲击噪声的幅度可能很大，就无法通过提高信噪比来抑制突发错。</p>
+<p>突发长度：<br>
+突发错中，错误码元的数量（长度）。</p>
+<p>突发错在传输差错中占比很高。</p>
+<h2 id="差错检测">4.2.1 差错检测</h2>
+<p>差错控制的首要任务：差错检测。</p>
+<p>差错检测包含了两个方面：</p>
+<ol type="1">
+<li><p>差错控制编码（发方）：<br>
+发送前，数据位+冗余位，构成“码字”。</p></li>
+<li><p>差错校验（收方） 检查数据位和冗余位的关系，从而检测错误。</p></li>
+</ol>
+<h2 id="差错控制方法">4.2.2 差错控制方法</h2>
+<p>利用差错控制编码来进行差错控制的方法：</p>
+<p>1.自动请求重发，ARQ，Automatic Repeat reQuest</p>
+<p>收方检测到差错，就通知发方重发，直到收到正确的码字为止。</p>
+<p>优点：</p>
+<ul>
+<li>码字的冗余位更少</li>
+<li>检错设备较简单</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>信道必须是双向的。（收方才能通知发方）</li>
+<li>发方必须有重发表</li>
+</ul>
+<p>2.前向纠错，Forward Error Correction, FEC</p>
+<p>收方不仅能发现错误，还能确定是错误位的位置，进行纠正。</p>
+<p>优点：</p>
+<ul>
+<li>不要求双向信道，</li>
+<li>发方也不需要重发表。</li>
+<li>实时性高（不需要重发）</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>纠错码比检错码的冗余位更多</li>
+<li>纠错设备比检错设备复杂。</li>
+</ul>
+<p>根据ARQ和FEC，差错控制编码也分为了：</p>
+<ul>
+<li>检错码</li>
+<li>纠错码</li>
+</ul>
+<p>ARQ差错控制方式是主流，某些场合也会混合使用ARQ和FEC方式。<br>
+即，如果码字中的错误位数量在纠正能力范围内，则使用FEC进行纠正，否则使用ARQ请求重发。</p>
+<p>编码效率：码字中信息位的比例。<br>
+设，信息位<span class="math inline">\(k\)</span>位，编码时附加冗余位<span class="math inline">\(r\)</span>位，码字长度为<span class="math inline">\(n=k+r\)</span>位，编码效率<br>
+<span class="math inline">\(R = k / (k+r) = k/n\)</span></p>
+<p>编码效率R越大，码字传送信息的效率就越高。</p>
+<h2 id="奇偶校验码和循环冗余码">4.2.3 奇偶校验码和循环冗余码</h2>
+<h3 id="奇偶校验码">1. 奇偶校验码</h3>
+<p>奇偶校验码：<br>
+增加冗余位，使码字中保持奇数或偶数个1的编码方法。</p>
+<p>奇偶校验码是一种检错码。</p>
+<p>又可分为：</p>
+<ul>
+<li>垂直奇偶校验码</li>
+<li>水平奇偶校验码</li>
+<li>水平垂直奇偶校验码</li>
+</ul>
+<h4 id="垂直奇偶校验纵向奇偶校验">垂直奇偶校验（纵向奇偶校验）</h4>
+<p>信道串行发送若干个码元，表示了 n 个二进制位，每 p 位划分为一个段，共分为 q 段，pq矩阵组成了一个位的数据块。<br>
+在每一段后添加一个冗余位，称为垂直奇偶校验。</p>
+<p>段的长度通常为一个字符的长度，这种称为字符奇偶校验。</p>
+<p>偶校验的编码和检测公式：（+为模2运算）</p>
+<p><span class="math display">\[
+r_{i} = I_{1i} + I_{2i} + \cdots + I_{pi}
+\]</span></p>
+<p>奇校验的编码和检测公式：（+ 为模2运算）</p>
+<p><span class="math display">\[
+r_{i} = I_{1i} + I_{2i} + \cdots + I_{pi} + 1
+\]</span></p>
+<p>垂直奇偶校验只能检测出奇数个二进制位错误，不能检测偶数个二进制位错误。</p>
+<p>突发错误中，奇数位错和偶数位错的发生几率相等，因此垂直奇偶校验的漏检率是 1/2。</p>
+<p>垂直奇偶校验还有个优势：发方可以边发边附加冗余位，收方可以边收边校验边去除冗余位。</p>
+<p>编码效率：<br>
+<span class="math inline">\(R= p/(p+1)\)</span></p>
+<h4 id="水平奇偶校验横向奇偶校验">水平奇偶校验（横向奇偶校验）</h4>
+<p>同样是 pq 数据块，通过在水平方向（q段）给二进制位附加 1 个冗余位，称为水平奇偶校验。</p>
+<p>水平奇偶校验的漏检率比垂直奇偶校验低，它可以检测出两种错误：</p>
+<p>1.水平方向上（即各段同一位上），奇数个二进制位错误 这点和垂直奇偶校验是一样的。</p>
+<p>2.数据块中一个突发长度 <span class="math inline">\(\le p\)</span> 的突发错。<br>
+如果存在突发长度 <span class="math inline">\(\le p\)</span> 的突发错，必然分布在1个或相邻的2个段上，从水平方向来看，这些错误位分布在连续的行上，且不会重叠（包括跨2个段的情况，首尾不会重叠）。<br>
+水平奇偶校验码，可以检测出这不重叠的 p 行错误。<br>
+但仅限于一个突发错，如果有多个，则可能在水平方向出现偶数个错误位，造成漏检。</p>
+<p>水平奇偶校验编码，要求发收双方都有数据缓冲区，在整个数据块发完和收完后才能进行冗余位的附加、检测、去除操作，比垂直奇偶校验码复杂。</p>
+<p>编码效率：<br>
+<span class="math inline">\(R = q/(q+1)\)</span></p>
+<h4 id="水平垂直奇偶校验纵横奇偶校验">水平垂直奇偶校验（纵横奇偶校验）</h4>
+<p>同时进行水平奇偶校验和垂直奇偶校验，就构成了水平垂直奇偶校验。</p>
+<p>同样是 pq 数据块。水平方向上，在 q 列后增加冗余位，在 p 行上增加冗余位。</p>
+<p>编码和检测的计算公式：<br>
+假设水平方向和垂直方向都采用偶校验。<br>
+水平方向</p>
+<p><span class="math display">\[
+(i是行号，i=1,2,\cdots,p) \\ 
+\\
+r_{i,q+1} = I_{i1} + I_{i2} + \cdots + I_{iq}
+\]</span></p>
+<p>垂直方向</p>
+<p><span class="math display">\[
+(j是列号， j = 1,2,\cdots,q) \\
+\\
+r_{p+1,j} = I_{1j} + I_{2j} + \cdots + I_{pj}
+\]</span></p>
+<p>交叉点：</p>
+<p><span class="math display">\[
+r_{p+1,q+1} = r_{1,q+1} + r_{2,q+1} + \cdots + r_{p,q+1} + r_{p+1,1}+ r_{p+1,2}+ \cdots + r_{p+1,q}
+\]</span></p>
+<p>水平垂直奇偶校验能够检测出：</p>
+<ul>
+<li>3位或3位以下的错误，因为此时至少在某一行或某一列上有一位错</li>
+<li>奇数位错：这个可以理解，奇偶校验就是可以检测奇数位错</li>
+<li>突发长度 <span class="math inline">\(\leq p+1\)</span> 的突发错：垂直/水平奇偶校验，长度<span class="math inline">\(\leq p\)</span>的突发错可以被检测出来，而在纵横奇偶校验中，可检测的突发长度达到了<span class="math inline">\(p+1\)</span>，p+1的突发错必然跨段，在某一行中形成偶数个错。又因为跨段的最后一个错，可以被第2个段的列检测，所以p+1是允许的。但如果p+2，则第2列出现偶数错，就会漏检，同时第一列也可能无法被检测出来（除非第一列是奇数错）。</li>
+<li>部分偶数位错</li>
+</ul>
+<p>误码率： 经测量，这种方式的误码率可降至原误码率的百分之一到万分之一。</p>
+<p>纵横奇偶校验不仅是检错码，某型情况下也可以作为纠错码使用。<br>
+比如当整个数据块中只有一个位错误时，可以通过行检错和列检错，确定出行列坐标。</p>
+<p>编码效率： <span class="math inline">\(R = pq / ((p+1)(q+1))\)</span></p>
+<p>纵横奇偶校验，要求发收双方都有数据缓冲区，在整个数据块发完和收完后才能进行冗余位的附加、检测、去除操作。</p>
+<h3 id="循环校验码">2. 循环校验码</h3>
+<p>奇偶校验码的漏检率太高，所以通常使用另一种漏检率低、便于实现的循环冗余码CRC（cyclic Redundancy Code)。</p>
+<p>循环校验码是一种检错码。</p>
+<p>前提条件：</p>
+<ol type="1">
+<li>任何一个 N 位二进制数，都唯一对应一个 “最高位是 (N-1) 次、系数只可能是0和1的”多项式。 比如： 1010111 对应 <span class="math inline">\(x^6+x^4+x^2+x+1\)</span>，101111 对应 <span class="math inline">\(x^5+x^3+x^2+x+1\)</span></li>
+</ol>
+<p>具体到校验码中，<br>
+<span class="math inline">\(k\)</span>位信息位对应了<span class="math inline">\((k-1)\)</span>次多项式 <span class="math inline">\(K(X)\)</span>，<br>
+<span class="math inline">\(r\)</span>位冗余位对应了 <span class="math inline">\((r-1)\)</span>次多项式 <span class="math inline">\(R(X)\)</span><br>
+<span class="math inline">\(n=(k+r)\)</span>位码字则对应了 <span class="math inline">\((n-1)\)</span>(即<span class="math inline">\((k+r-1)\)</span> )次多项式 <span class="math inline">\(T(X)\)</span></p>
+<p>根据码字的定义，可得： <span class="math inline">\(T(X) = X^r \cdot K(X) + R(X)\)</span></p>
+<h6 id="发方如何生成码字">发方如何生成码字</h6>
+<p>问题可以简化为：<br>
+已知信息位 <span class="math inline">\(K(X)\)</span>，如何求冗余位 <span class="math inline">\(R(X)\)</span> 呢？</p>
+<p>需要先了解一下”生成多项式“G(X)。<br>
+生成多项式是一个特定的多项式，它的最高项系数恒为1，次数为 <span class="math inline">\(r\)</span>次，收发双方都事先约定了生成多项式。 发方计算 <span class="math inline">\(X^r \cdot K(X) / G(X)\)</span>，余数即冗余位 <span class="math inline">\(R(X)\)</span>。</p>
+<p>发方码字 <span class="math inline">\(T_{send}(X) = K(X) + R(X)\)</span></p>
+<p>需要说明的是：</p>
+<ol type="1">
+<li>除法中的减法是模2减：即异或减，不借位。因此除法也称为模2除</li>
+<li>模2除中计算余数时“不计算最高位“：被减数和减数的最高位不做减法，不计入余数。</li>
+<li>生成多项式 G(X)， 信息位 K(X)，冗余位 R(X) 三者缺一不可。</li>
+<li>生成多项式一旦变化，冗余位就立刻变化。</li>
+</ol>
+<h6 id="收方如何校验码字">收方如何校验码字</h6>
+<p>收方校验原理：<br>
+计算<span class="math inline">\(T_{rec}(X)/G(X)\)</span> ，若能整除说明传输无差错，若不能整除证明传输有差错。</p>
+<p>证明如下：</p>
+<p>因为 <span class="math inline">\(X^r \cdot K(X) = G(X) \cdot Q(X)+ R(X)\)</span> ， 其中<span class="math inline">\(Q(X)\)</span> 为商。</p>
+<p>又，据模2运算规则可知： <span class="math inline">\(R(X) + R(X) = 0\)</span> 。</p>
+<p>因此：<br>
+<span class="math inline">\(X^r \cdot K(X) + R(X) = G(X) \cdot Q(X)\)</span></p>
+<p><span class="math inline">\((X^r+ R(X))/ G(X) = Q(X)\)</span></p>
+<p>最终得到：<br>
+<span class="math inline">\(T(X)/G(X) = Q(X)\)</span></p>
+<h6 id="crc码也会发生漏检">CRC码也会发生漏检</h6>
+<p>当差错模式也能被生成多项式整除时就会漏检。</p>
+<p>分析如下：<br>
+首先需要知道：</p>
+<ol type="1">
+<li>发方码字 + 差错模式 = 收方码字</li>
+<li>差错模式 = 收方码字 / 生成多项式 说得的余数</li>
+<li>差错模式记为E(X)</li>
+</ol>
+<p>推理如下： 发方码字 <span class="math inline">\(T_{send}(X)=1011001,1010\)</span>，信息位 <span class="math inline">\(K(X)=1011001\)</span>，冗余位 <span class="math inline">\(R(X)=1010\)</span>，传输受到干扰后，收方码字<span class="math inline">\(T_{rec}(X) = 1011001 ,1100\)</span>。</p>
+<p>收方校验时无法整除，会得到差错模式<span class="math inline">\(E(X)=0110\)</span>。</p>
+<p>此时可以发现，<code>1011001，1010 +  0110 = 1011001，1100</code>，</p>
+<p>证明： <span class="math inline">\(T_{send}(X) + E(X) = T_{rec}(X)\)</span></p>
+<p>收方验证码字时，</p>
+<p><span class="math display">\[
+T_{rec}(X) / G(X) = (T(X) + E(X))/G(X) = T(X)/G(X) + E(X)/G(X)
+\]</span></p>
+<p>如果 <span class="math inline">\(E(X) / G(X) =0\)</span>， 则会发生漏检。</p>
+<p>为了降低漏检率，生成多项式<span class="math inline">\(G(X)\)</span>并不是随意选取的，而是需要数学运算得到，常用的CRC码有：</p>
+<ul>
+<li>CRC12</li>
+<li>CRC16(IBM公司)</li>
+<li>CRC16(ITU)</li>
+<li>CRC32</li>
+</ul>
+<p>理论证明，CRC码可以检测出下列错误：<br>
+1. 所有奇数位错 2. 所有双比特的错 3. 所有小于等于校验位长度的突发错</p>
+<p>可以检测哪些错误这部分比较复杂，暂时不管。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-4-2-差错控制/网原-4-2-差错控制/" title="网原 4.2 差错控制">https://roro4ever.github.io/2019/12/01/网原-4-2-差错控制/网原-4-2-差错控制/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-4-1-数据链路层的功能/网原-4-1-数据链路层的功能/" rel="next" title="网原 4.1 数据链路层的功能">
+                  <i class="fa fa-chevron-left"></i> 网原 4.1 数据链路层的功能
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-4-3-基本数据链路协议/网原-4-3-基本数据链路协议/" rel="prev" title="网原 4.3 基本数据链路协议">
+                  网原 4.3 基本数据链路协议 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#差错检测"><span class="nav-text">4.2.1 差错检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#差错控制方法"><span class="nav-text">4.2.2 差错控制方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#奇偶校验码和循环冗余码"><span class="nav-text">4.2.3 奇偶校验码和循环冗余码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#奇偶校验码"><span class="nav-text">1. 奇偶校验码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#垂直奇偶校验纵向奇偶校验"><span class="nav-text">垂直奇偶校验（纵向奇偶校验）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#水平奇偶校验横向奇偶校验"><span class="nav-text">水平奇偶校验（横向奇偶校验）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#水平垂直奇偶校验纵横奇偶校验"><span class="nav-text">水平垂直奇偶校验（纵横奇偶校验）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环校验码"><span class="nav-text">2. 循环校验码</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#发方如何生成码字"><span class="nav-text">发方如何生成码字</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#收方如何校验码字"><span class="nav-text">收方如何校验码字</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#crc码也会发生漏检"><span class="nav-text">CRC码也会发生漏检</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: 'ed78545044108e47a32bc3be9b1a4ce7',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

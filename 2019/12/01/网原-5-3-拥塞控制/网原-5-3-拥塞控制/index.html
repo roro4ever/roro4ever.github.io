@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="5.3 拥塞控制，Congestion Control 拥塞： 到达通信子网中某个局部的分组数量过多，路由器无法及时处理，导致该部分甚至整个网络性能下降的现象。严重时会导致通信子网出现局部或全部死锁，网络的吞吐量为0。  吞吐量、网络负荷 吞吐量描述了某个设备处理数据的速度，属于性能指标。  网络吞吐量（throughput）：设备（链路或节点）单位时间内成功转发的比特数或分组数。 单位是 bps">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.3 拥塞控制">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="5.3 拥塞控制，Congestion Control 拥塞： 到达通信子网中某个局部的分组数量过多，路由器无法及时处理，导致该部分甚至整个网络性能下降的现象。严重时会导致通信子网出现局部或全部死锁，网络的吞吐量为0。  吞吐量、网络负荷 吞吐量描述了某个设备处理数据的速度，属于性能指标。  网络吞吐量（throughput）：设备（链路或节点）单位时间内成功转发的比特数或分组数。 单位是 bps">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928192737672_21468.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/Ksugzp.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/VlSYTK.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928234052937_28999.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928235357902_25718.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190929120022790_13041.png">
+<meta property="og:updated_time" content="2019-12-01T15:50:16.988Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.3 拥塞控制">
+<meta name="twitter:description" content="5.3 拥塞控制，Congestion Control 拥塞： 到达通信子网中某个局部的分组数量过多，路由器无法及时处理，导致该部分甚至整个网络性能下降的现象。严重时会导致通信子网出现局部或全部死锁，网络的吞吐量为0。  吞吐量、网络负荷 吞吐量描述了某个设备处理数据的速度，属于性能指标。  网络吞吐量（throughput）：设备（链路或节点）单位时间内成功转发的比特数或分组数。 单位是 bps">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928192737672_21468.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.3 拥塞控制 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.3 拥塞控制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:06:41 / 修改时间：23:50:16" itemprop="dateCreated datePublished" datetime="2019-12-01T16:06:41+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="拥塞控制congestion-control">5.3 拥塞控制，Congestion Control</h1>
+<p>拥塞： 到达通信子网中某个局部的分组数量过多，路由器无法及时处理，导致该部分甚至整个网络性能下降的现象。严重时会导致通信子网出现局部或全部死锁，网络的吞吐量为0。</p>
+<h6 id="吞吐量网络负荷">吞吐量、网络负荷</h6>
+<p>吞吐量描述了某个设备处理数据的速度，属于性能指标。</p>
+<p>网络吞吐量（throughput）：设备（链路或节点）单位时间内成功转发的比特数或分组数。 单位是 bps(bits per second)，或 pps( packets per second)。</p>
+<p>系统吞吐量（或叫合计吞吐量）：整个通信子网单位时间内，合计成功转发的比特数或分组数。</p>
+<p>吞吐量本质上等同于带宽消耗，可以用排队论对其做数学分析。<br>
+单位时间内输入的数据量称为“到达率”，单位时间内成功输出的数据量称为“离开率”。</p>
+<p>网络负荷：通信子网中正在传输的数据量（合计分组数）。</p>
+<h6 id="吞吐量与负荷的关系">吞吐量与负荷的关系</h6>
+<p>当负荷较小时，吞吐量随负荷的增加而线性增加。</p>
+<p>当负荷到达一个临界值时，吞吐量反而会下降，此时，说明网络出现了拥塞。<br>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928192737672_21468.png"></p>
+<h6 id="拥塞现象">拥塞现象</h6>
+<p>拥塞：节点没有空闲的缓存空间，只能丢弃新到来的分组，发送方需要重传分组，通信子网的吞吐量下降的现象。</p>
+<p>当分组到达节点时，因为节点的缓冲区已经用尽，分组无法暂存在节点中只能被丢弃，发送方（前节点、源节点、源主机）只能重传该分组，而且后续的多次重传仍可能没有暂存空间，此时通信子网中多个节点的CPU、缓冲区以及逻辑信道都用于这种重传，使通信子网的吞吐量大大下降。</p>
+<h6 id="死锁">死锁</h6>
+<p>死锁是拥塞的最后阶段。</p>
+<p>死锁是网络中极容易发生的故障之一，即使在网络负荷不算重时也可能发生。</p>
+<p>一组节点由于没有空闲缓冲区而无法接收和转发分组，并且它们互相等待对方节点释放缓冲区，并一直保持这一僵局，严重时导致整个网络的瘫痪。</p>
+<p>Internet中的“拒绝攻击服务”，实际上就是制造大量没有完成三次握手的TCP连接，使网络拥塞直至瘫痪。</p>
+<p>通常只能依靠人工重启网络，解除死锁，但重启后仍然可能再次发生死锁，不能从根本上解决问题。</p>
+<h2 id="拥塞发生的原因">5.3.1 拥塞发生的原因</h2>
+<p>1.线路结构：多条输入线路共用一条输出线路，当每条输入线路都有分组到达时，汇集处的路由器如果没有足够的内存来存放这些分组，有的分组就会丢失。</p>
+<p>2.节点的处理能力底下：路由器的性能不足，以至于无法完成必要的处理工作（比如缓冲区排队、更新路由表等），即使内存空间足够，也来不及将分组排队放入内存中，导致分组丢失。</p>
+<h6 id="拥塞控制和流控制的区别">拥塞控制和流控制的区别</h6>
+<p>拥塞控制的任务：保证通信子网能够承载进入子网的流量。</p>
+<p>拥塞控制是一系列系统的、全局的控制手段，涉及多个方面的行为：</p>
+<ul>
+<li>所有的主机</li>
+<li>所有的路由器</li>
+<li>路由器内部的存储-转发处理过程</li>
+<li>所有可能降低子网承载能力的其他因素</li>
+</ul>
+<p>流控制：控制点到点的流量，确保一个发方不会持续的以超过收方消化能力的速率发送数据。</p>
+<p>流控制的做法是：收方向发方提供反馈，让发方了解自身的状态。</p>
+<h2 id="拥塞控制的通用原则">5.3.2 拥塞控制的通用原则</h2>
+<p>拥塞控制原则的理论基础来自于控制论，拥塞控制的解决方法可以分为两类：开环和闭环。</p>
+<h6 id="开环控制">开环控制</h6>
+<p>设计网络时事先考虑到发生拥塞的所有因素，系统运行后就无法再中途改正。</p>
+<p>开环手段包括：</p>
+<ul>
+<li>确定何时接收新的流量</li>
+<li>确定何时丢弃分组</li>
+<li>确定丢弃哪些分组</li>
+<li>在网络的不同点上执行调度决策</li>
+</ul>
+<p>这些手段与网络的实际运行状态无关。</p>
+<h6 id="闭环控制">闭环控制</h6>
+<p>闭环方法依靠对网络实际状态的反馈，包括3个部分：</p>
+<p>1)<strong>监视系统</strong><br>
+监控何时、何地发生了拥塞。</p>
+<p>可以用多种指标来判断是否发生拥塞：</p>
+<ul>
+<li>因没有缓冲区而被丢弃的分组，在所有分组的占比</li>
+<li>所有节点的平均队列长度</li>
+<li>超时、重传分组的数量</li>
+<li>平均分组延迟</li>
+<li>分组延迟的标准方差</li>
+</ul>
+<p>这些值越大，发生拥塞的可能性也越大。</p>
+<p>2)<strong>将状态发送到能够采取行动的地方</strong></p>
+<p>有几种方法：</p>
+<ol type="1">
+<li>检测到拥塞的路由器向源端（可能有多个源）发送一个分组，报告情况。</li>
+<li>在分组中预留一个位或一个域，当拥塞度量超过某个阈值后，路由器填充该位/域，这个分组之后传输到邻居节点时，就可以警告邻居节点。</li>
+<li>主机或某些路由器周期性的向外发送询问分组，显式的询问拥塞的情况。</li>
+<li>源端利用发出分组和确认分组的来回时间，隐式的推断是否可能发生拥塞。</li>
+</ol>
+<ol start="3" type="1">
+<li><strong>调整系统以纠正拥塞</strong></li>
+</ol>
+<p>出现拥塞后，两种解决办法：</p>
+<ol type="1">
+<li>增加资源（带宽）：有时候增加系统的资源或容量是不可能的。</li>
+<li>降低负载：拒绝为某些用户服务、给某些用户降低服务等级、让用户以一种更有预见性的方式来安排他们的需求。</li>
+</ol>
+<h2 id="拥塞预防策略">5.3.3 拥塞预防策略</h2>
+<p>以下策略只能预防拥塞。</p>
+<h6 id="数据链路层">数据链路层</h6>
+<ul>
+<li>重传策略：涉及两个问题，1.超时时间设定为多久；2.超时后如何重传。对于第2个问题，可以用GBN和SR两种重传方法，显然，GBN带来的网络负载比SR多很多。</li>
+<li>乱序分组缓存策略：如果接收方将乱序分组全部丢弃，则重传量会很大。（GBN，以及窗口很小的SR）</li>
+<li>确认策略：有一种返回确认帧的方法是，不立即发回确认帧，而是先暂存在接收方，当发生反向流量时（收方-发方）捎带回去，但这样可能导致额外的超时和重传。</li>
+<li>流控制方案：一个“紧凑”的流量控制方案，可以降低数据传输率，有助于缓解拥塞。紧凑是指减小窗口尺寸，比如：停止等待协议机制，滑动窗口机制。</li>
+</ul>
+<h6 id="网络层">网络层</h6>
+<ul>
+<li>虚电路还是数据报操作方式：许多拥塞控制算法只能与虚电路子网一起工作。</li>
+<li>分组排队和服务策略：排队是指，是否为每条输入线路设置一个分组队列，是否为每条输出线路设置一个分组队列，或者为输入输出各设置一个队列（虚电路就是为输入输出各设置一个队列）。服务是指服务质量，虚电路在建立时就可以预留资源，这些虚电路所属的进程可以得到更好的服务。</li>
+<li>分组丢弃策略：当节点的缓冲器耗尽时，应该丢弃哪些分组的规则。</li>
+<li>路由算法：好的路由算法可以把流量分散到所有线路上，不好的路由算法则会将大量流量分配到已经拥塞的路线上。</li>
+<li>分组生存管理：负责管理分组的生存时间，如果生存期太长，则会长时间的占用网络资源，但如果生存期太短，还未送达目的地就被丢弃了，会造成重传。</li>
+</ul>
+<h6 id="传输层">传输层</h6>
+<p>传输层的策略和数据链路层很相似：</p>
+<ul>
+<li>重传策略</li>
+<li>乱序缓存策略</li>
+<li>确认策略</li>
+<li>流控制策略</li>
+<li>确定超时策略：传输层对确认超时的判断，比数据链路层更加困难，因为跨越整个通信子网的传输时间，比两台路由器之间的传输时间（数据链路层），更加难以预测。如果超时设定的太短，会导致更多的重传，增加拥塞的可能，如果设置得太长，重传会减少，但如果分组发生丢失，发现丢弃的响应时间会太长。</li>
+</ul>
+<h2 id="虚电路子网中的拥塞控制">5.3.4 虚电路子网中的拥塞控制</h2>
+<p>有几种用于虚电路子网的动态拥塞控制方法：</p>
+<h6 id="治疗措施准入控制一旦出现拥塞就不允许建立新的虚电路">1. 治疗措施：准入控制，一旦出现拥塞就不允许建立新的虚电路</h6>
+<p>一旦出现拥塞，则不允许创建任何新的虚电路，直到拥塞排除为止。</p>
+<h6 id="治疗措施允许建立新虚电路但要避开拥塞节点重构子网拓扑重做路由选择">2. 治疗措施：允许建立新虚电路，但要避开拥塞节点重构子网拓扑，重做路由选择</h6>
+<p>即使出现拥塞，也允许建立新的虚电路，但要去掉发生拥塞的路由器，在信源和信宿间重建子网拓扑，基于新的子网拓扑进行路由选择，得到一条避开拥塞路由器的新路由。</p>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/Ksugzp.png">
+<h6 id="预防措施在发生拥塞之前建立虚电路时做好资源预留避免发生拥塞">3. 预防措施：在发生拥塞之前，建立虚电路时做好资源预留，避免发生拥塞</h6>
+<p>在建立虚电路前，主机和通信子网之间做好约定，约定的内容包括：流量的形状（traffic shaping)、服务质量、其他参数。<br>
+建立虚电路时，按照约定预留了资源（路由器的CPU、表空间、缓存空间、线路的带宽等），就不会发生拥塞。</p>
+<h2 id="数据报子网中的拥塞控制">5.3.5 数据报子网中的拥塞控制</h2>
+<p>数据报子网的拥塞控制方法，比虚电路子网的稍微复杂一点，但也很容易理解。</p>
+<p>每台路由器都可以监视自己的“输出线路”和“其他资源”的使用情况。</p>
+<p>对路由器的每一条输出线路，都可以用<strong>输出线路利用率</strong> <span class="math inline">\(u(0.0 \lt u \lt 1.0)\)</span> 描述“最近一个采样周期的线路利用率”。</p>
+<p>路由器每隔<strong>采样周期 <code>a</code></strong> 就会采样<strong>线路的瞬时利用率</strong> <span class="math inline">\(f (f=0 or 1)\)</span>，根据下面的计算公式来更新<strong>输出线路利用率 <code>u</code></strong> ，使其尽可能的反映真实的情况。</p>
+<p><span class="math display">\[u_{new} = a \times u_{old} + (1-a) \times f\]</span></p>
+<p>采样周期 <code>a</code> 是一个常数，代表了：路由器需要多久来忘记历史线路利用率。</p>
+<p>当 <code>u</code> 超过某个阈值时，说明该线路有发生拥塞的可能，路由器将该输出线路标记为“警告”状态。</p>
+<p>当新的分组到达路由器时，路由器对其进行检查，如果分组流经“警告”线路，则采取以下措施：</p>
+<h6 id="警告位warning-bit也称为-ecn">1.警告位,Warning Bit，也称为 ECN</h6>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/VlSYTK.png">
+<p>分组的头部中设置了一个特殊的二进制位：警告位。<br>
+当路由器发现分组应该发送到警告线路时，在分组的警告位进行标注。</p>
+<p>被标注的分组送达目标主机后，警告位被复制到确认分组中，确认分组被送回源主机。</p>
+<p>源主机收到带有警告位的确认分组后，减少发往该目的主机的流量。</p>
+<ul>
+<li>只要输出线路的利用率高于阈值，就始终处于警告状态，被送往该线路的分组也始终被路由器设置警告位，返回源主机的确认分组也一直带有警告位。源主机根据带警告位的确认分组的比例，不断降低它的数据传输速率，<br>
+</li>
+<li>如果警告位确认分组占比低于某个临界值，源主机又会增加它的数据传输率。</li>
+</ul>
+<p>疑问：数据报子网为什么有确认分组？</p>
+<h6 id="源主机响应抑制分组chock-packet楔子分组">2.源主机响应抑制分组，Chock Packet（楔子分组）</h6>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928234052937_28999.png">
+<p>路由器检测到某条输出线路处于警告状态时，路由器会做2个动作：</p>
+<ul>
+<li>向源主机发送一个抑制分组：抑制分组中带有原数据分组的目标主机地址</li>
+<li>在源分组头部某个二进制位进行标注：后续路由器收到这个分组时，就知道已经发回了抑制分组，不再产生更多的抑制分组</li>
+</ul>
+<p>源主机收到抑制分组后，会做2个动作：</p>
+<ol type="1">
+<li>按照设定，把发送给指定目标主机的流量减少某个百分比。</li>
+<li>在收到第一个抑制分组之前，源主机可能又向该目标主机发送了若干分组，这些分组必然会生成更多的抑制分组，此时，源主机应该在一段时间内忽略掉所有同一目标的抑制分组。</li>
+</ol>
+<p>过了忽略时间段后，源主机再次可以接收该目标的抑制分组：</p>
+<ul>
+<li>如果仍然收到抑制分组，说明拥塞仍然存在，源主机再次按照某百分比减少送往该目标的数据传输率，</li>
+<li>如果没有收到该目标的抑制分组，说明拥塞排除，源主机可以增加该目标的流量。</li>
+</ul>
+<p>Q.如何按百分比减少流量？<br>
+A.源主机按百分比减小发送窗口的尺寸。</p>
+<h6 id="逐跳响应抑制分组hop---by---hop">3.逐跳响应抑制分组，Hop - by - hop</h6>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190928235357902_25718.png">
+<p>源主机响应抑制分组在2种情况下效果很差：</p>
+<ul>
+<li>网络传输速度很高</li>
+<li>源主机距离目的主机太远</li>
+</ul>
+<p>这2种情况下，当抑制分组到达源主机时，源主机已经发送了大量的分组到子网中，拥塞控制的响应速度太慢。</p>
+<p>逐跳响应抑制分组，是让抑制分组影响到送回源主机的沿途每一个路由器：<br>
+当抑制分组到达第一个路由器F时，F就必须减缓F-D的分组流，具体实现是：F为流向D的分组分配更多的缓冲区。<br>
+当抑制分组到达第二个路由器E时，E就会为流向F分组分配更多的缓冲区，从而减缓E-F的流量。<br>
+抑制分组到达了源节点A，A会为A-E的分组申请更多的缓冲区，将A-E的流量减缓下来。<br>
+最后，抑制分组到达与A相连的HOST，从而彻底降低HOST的分组发送速度，从源头上排除拥塞。</p>
+<p>疑问：数据报子网中，源节点可以为每条输出线路单独划分缓冲区？</p>
+<h2 id="负载丢弃load-shedding">5.3.6 负载丢弃，Load Shedding</h2>
+<p>注意：负载丢弃适用于虚电路子网和数据报子网！</p>
+<p>当前述的任何一种方法都不起作用时，就只能采取负载丢弃。</p>
+<p>负载丢弃：当路由器来不及处理分组时，只要将这些分组丢弃即可。</p>
+<h5 id="应该丢弃哪些分组">应该丢弃哪些分组？</h5>
+<h6 id="根据应用类型">根据应用类型</h6>
+<p>根据发送分组的应用程序的分类，有2种丢弃分组的策略：</p>
+<ul>
+<li>葡萄酒策略：老的比新的好，丢弃新的分组。比如：文件传输，假设一个文件总共有12个分组，接收方要求顺序接收分组（虚电路），丢掉分组6保留7<sub>12的话，可能会导致重传分组6</sub>12，而丢弃分组10，只会导致10~12的重传。（这个例子举得不太好，将就看）</li>
+<li>牛奶策略：新的比老的好，丢弃老的分组。多媒体传输，比如实时语音/视频，丢弃老的分组可能更好。 ###### 根据分组优先级 发送方的应用程序给自己的分组标注优先级。<br>
+路由器丢弃分组时，从优先级低的开始丢弃。</li>
+</ul>
+<h6 id="随机的早期预测算法redrandom-early-detection">随机的早期预测算法，RED(Random Early Detection)</h6>
+<p>RED，有多种展开法：Random Early Detection, Random Early Discard, Random Early Drop。</p>
+<p>预先发现拥塞，比真的发生拥塞再来解决要好得多，RED就是基于这个思路的算法。</p>
+<p>随机早期预测算法：在路由器发现分组队列缓冲区即将耗尽之前，就随机的丢弃分组。</p>
+<p>平均队列长度： Average Queue Length，指数加权移动平均。</p>
+<p><span class="math inline">\(Q_{avg} = (1-w) \times Q_{avg} + w \times Q_{sample} ,(0 \le w \le 1)\)</span></p>
+<p><span class="math inline">\(Q_{sample}\)</span>是采样获得的实际长度。<span class="math inline">\(w\)</span> 是采样周期。</p>
+<p>路由器为每一条输入线路设置了独立的分组缓冲队列，并且监控了每个队列的平均队列长度。一旦某条输入线路的平均队列长度超过了阈值，则认定它发生了拥塞（实际上此时分组缓冲尚未耗尽）。 虽然定位了拥塞队列，但无法判断哪一个源主机是引起拥塞的元凶（实际上也可能是多个源共同作用的结果），因此，路由器随机的丢弃拥塞队列中的分组。</p>
+<p>即使丢弃了分组，仍然需要通知造成拥塞的源主机才能从根本上消除拥塞。通知源主机的方法有：</p>
+<ol type="1">
+<li>显式通知，回送抑制分组：源主机响应的、逐跳响应的。缺点：在已经拥塞的网络中引入更多的负载。</li>
+<li>隐式通知，不发送抑制分组：源主机发现没有确认分组返回时，不再重发分组，而是降低发送速率。需要：给源主机设定“不重发、仅降速”的策略。</li>
+</ol>
+<img src="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/20190929120022790_13041.png">
+<h2 id="抖动控制jitter-control">5.3.7 抖动控制，jitter control</h2>
+<p>抖动：“分组到达路由器或信宿的传输时间”的标准差。</p>
+<p>标准差（标准偏差，均方差）：所有数减去平均值，每个差值的平方和除以数的个数（或个数减一)，再把所得值开根号。<br>
+标准查表示了一组数值的离散程度。</p>
+<p>传输音频流/视频流时，高抖动会导致声音/电影不稳定。</p>
+<h6 id="如何降低抖动">如何降低抖动？</h6>
+<p>事先通过计算，可以确定分组在每一跳的期望到达时间。</p>
+<p>当一个分组到达路由器时，路由器会检查实际到达时间和期望到达时间，并将检查结果标注在分组中。<br>
+如果早到了就多存储一会儿，如果晚到了就优先转发出去。并在转发时更新时间差。后续路由器重复此动作。</p>
+<h6 id="如果多个分组竞争同一输出线路应该先转发哪一个">如果多个分组竞争同一输出线路，应该先转发哪一个？</h6>
+<p>路由器采取的算法是：与期望到达时间偏差最大最晚的那个分组，最先发出。</p>
+<h6 id="接收方缓存分组">接收方缓存分组</h6>
+<p>除了路由器，目的主机也可以缓存分组，通过稍微延后的播放视频消除抖动，而非实时接收分组。</p>
+<p>但对于实时交互的应用，比如网络电话、视频会议，接收方缓存就无法消除抖动了。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/" title="网原 5.3 拥塞控制">https://roro4ever.github.io/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/" rel="next" title="网原 5.2 路由选择">
+                  <i class="fa fa-chevron-left"></i> 网原 5.2 路由选择
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/" rel="prev" title="网原 5.4 服务质量">
+                  网原 5.4 服务质量 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拥塞控制congestion-control"><span class="nav-text">5.3 拥塞控制，Congestion Control</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#吞吐量网络负荷"><span class="nav-text">吞吐量、网络负荷</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#吞吐量与负荷的关系"><span class="nav-text">吞吐量与负荷的关系</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#拥塞现象"><span class="nav-text">拥塞现象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#死锁"><span class="nav-text">死锁</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞发生的原因"><span class="nav-text">5.3.1 拥塞发生的原因</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#拥塞控制和流控制的区别"><span class="nav-text">拥塞控制和流控制的区别</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞控制的通用原则"><span class="nav-text">5.3.2 拥塞控制的通用原则</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#开环控制"><span class="nav-text">开环控制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#闭环控制"><span class="nav-text">闭环控制</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞预防策略"><span class="nav-text">5.3.3 拥塞预防策略</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#数据链路层"><span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网络层"><span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#传输层"><span class="nav-text">传输层</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚电路子网中的拥塞控制"><span class="nav-text">5.3.4 虚电路子网中的拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#治疗措施准入控制一旦出现拥塞就不允许建立新的虚电路"><span class="nav-text">1. 治疗措施：准入控制，一旦出现拥塞就不允许建立新的虚电路</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#治疗措施允许建立新虚电路但要避开拥塞节点重构子网拓扑重做路由选择"><span class="nav-text">2. 治疗措施：允许建立新虚电路，但要避开拥塞节点重构子网拓扑，重做路由选择</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#预防措施在发生拥塞之前建立虚电路时做好资源预留避免发生拥塞"><span class="nav-text">3. 预防措施：在发生拥塞之前，建立虚电路时做好资源预留，避免发生拥塞</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据报子网中的拥塞控制"><span class="nav-text">5.3.5 数据报子网中的拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#警告位warning-bit也称为-ecn"><span class="nav-text">1.警告位,Warning Bit，也称为 ECN</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#源主机响应抑制分组chock-packet楔子分组"><span class="nav-text">2.源主机响应抑制分组，Chock Packet（楔子分组）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#逐跳响应抑制分组hop---by---hop"><span class="nav-text">3.逐跳响应抑制分组，Hop - by - hop</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#负载丢弃load-shedding"><span class="nav-text">5.3.6 负载丢弃，Load Shedding</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#应该丢弃哪些分组"><span class="nav-text">应该丢弃哪些分组？</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#根据应用类型"><span class="nav-text">根据应用类型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#随机的早期预测算法redrandom-early-detection"><span class="nav-text">随机的早期预测算法，RED(Random Early Detection)</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抖动控制jitter-control"><span class="nav-text">5.3.7 抖动控制，jitter control</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#如何降低抖动"><span class="nav-text">如何降低抖动？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#如果多个分组竞争同一输出线路应该先转发哪一个"><span class="nav-text">如果多个分组竞争同一输出线路，应该先转发哪一个？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#接收方缓存分组"><span class="nav-text">接收方缓存分组</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: 'dd1b9fea80af7c1e8a9525b31797ec35',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

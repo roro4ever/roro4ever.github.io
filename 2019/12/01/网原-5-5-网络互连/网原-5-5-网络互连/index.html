@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="5.5.1 网络互连原理 网络互连的目的：   * 使一个网络的用户能访问另一个网络的资源（用户与资源交互，实现资源共享）  * 使不同网络上的用户能够互相通信、交换信息（用户与用户交互）  实现网络互连的前提：   * 互连的网络间，至少有一条链路，并具有对这条链路的控制规程  * 在不同网络的进程之间，必须有路由器实现进程间的数据交换  * 有一个统一的计费服务，记录不同网络的使用情况和状态信">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.5 网络互连">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="5.5.1 网络互连原理 网络互连的目的：   * 使一个网络的用户能访问另一个网络的资源（用户与资源交互，实现资源共享）  * 使不同网络上的用户能够互相通信、交换信息（用户与用户交互）  实现网络互连的前提：   * 互连的网络间，至少有一条链路，并具有对这条链路的控制规程  * 在不同网络的进程之间，必须有路由器实现进程间的数据交换  * 有一个统一的计费服务，记录不同网络的使用情况和状态信">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/2aOP7E.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191002153628059_18352.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191002005744179_22071.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191003001841365_13074.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191003005951107_14975.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191004151645116_8607.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191004175841547_26674.gif">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191009002509900_20005.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191009005944995_14710.png">
+<meta property="og:updated_time" content="2019-12-01T15:58:49.524Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.5 网络互连">
+<meta name="twitter:description" content="5.5.1 网络互连原理 网络互连的目的：   * 使一个网络的用户能访问另一个网络的资源（用户与资源交互，实现资源共享）  * 使不同网络上的用户能够互相通信、交换信息（用户与用户交互）  实现网络互连的前提：   * 互连的网络间，至少有一条链路，并具有对这条链路的控制规程  * 在不同网络的进程之间，必须有路由器实现进程间的数据交换  * 有一个统一的计费服务，记录不同网络的使用情况和状态信">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/2aOP7E.png">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.5 网络互连 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.5 网络互连
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:07:04 / 修改时间：23:58:49" itemprop="dateCreated datePublished" datetime="2019-12-01T16:07:04+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="网络互连原理">5.5.1 网络互连原理</h2>
+<p>网络互连的目的：</p>
+<ul>
+<li>使一个网络的用户能访问另一个网络的资源（用户与资源交互，实现资源共享）</li>
+<li>使不同网络上的用户能够互相通信、交换信息（用户与用户交互）</li>
+</ul>
+<p>实现网络互连的前提：</p>
+<ul>
+<li>互连的网络间，至少有一条链路，并具有对这条链路的控制规程</li>
+<li>在不同网络的进程之间，必须有路由器实现进程间的数据交换</li>
+<li>有一个统一的计费服务，记录不同网络的使用情况和状态信息：这里的计费不是指价格，而是指“距离”、“通路费用”</li>
+<li>互连时尽量不修改网络的体系结构</li>
+</ul>
+<p>注意：<br>
+第一条前提，不是确指物理链路、数据链路，而是在各层都需要遵循这个基本原则。<br>
+在物理层，就需要有物理线路或Repeater，且要有物理链路的控制规程；在数据链路层，就需要有Bridge，有BSC/HDLC/SLIP/PPP等数据链路的控制规程。</p>
+<p>网际互连的障碍：想要互连的网络可能在多个方面存在差异，要互连就必须消除差异。</p>
+<p>互连网络的差异包括下列方面：</p>
+<ol type="1">
+<li>体系结构：例如 OSI 、TCP/IP 等</li>
+<li>层次协议：分层不同，各层内含的协议不同</li>
+<li>网络服务：低层向高层提供的服务、网络向用户提供的服务</li>
+<li>寻址方式</li>
+<li>路由选择：静态、动态，其中又有细分</li>
+<li>最大分组长度</li>
+<li>网络接入机制</li>
+<li>用户接入机制</li>
+<li>超时控制</li>
+<li>差错恢复方法：ARQ，FEC，停等协议，顺序管道协议，选择重传协议</li>
+<li>状态报告方法</li>
+<li>服务类型：面向连接、无连接</li>
+<li>管理方式：</li>
+</ol>
+<p>其中差异 4~13 主要体现在各种局域网中。</p>
+<p>需要说明：<br>
+如果把需要互连的网络等价为 OSI 7层模型，网络差异不仅表现在网络层，而是表现在每一层，因此网络互连需要消除的差异是相当大的，经常会出现 OSI 网络和 非OSI 网络互连的需求。</p>
+<h5 id="网络互连设备">网络互连设备</h5>
+<p>网间连接器：把不同网络互连起来的设备。在互连网络的对应层级间完成协议和功能的转换。</p>
+<p>协议和功能的转换：不同的网络在相似的层可能采用不同的协议，网络互连设备要能够在该层理解并翻译不同协议的控制信令和数据。</p>
+<p><a href="https://www.geeksforgeeks.org/network-devices-hub-repeater-bridge-switch-router-gateways/" target="_blank" rel="noopener">Network Devices (Hub, Repeater, Bridge, Switch, Router, Gateways and Brouter)</a></p>
+<h5 id="基础知识">基础知识</h5>
+<h6 id="网段">网段</h6>
+<p>一个网段就是一个物理网络。</p>
+<p>根据 IEEE 802.3 以太网标准，<br>
+网段：网络中，通过“工作在物理层的设备”（传输介质、转发器、集线器等）相连的那一部分。</p>
+<p>具体分为几种情况：</p>
+<ol type="1">
+<li>用某种传输介质直接连接两个网络（或两组主机），构成一个网段。如交叉双绞线直接连接的两台主机。<br>
+</li>
+<li>如果两个网络（或两组主机）不以传输介质直接相连，而是通过“工作在物理层的信号扩展设备”（如中继器、集线器）相连，也属于同一网段。</li>
+</ol>
+<p>相反，工作在数据链路层或更高层的设备（如网桥、交换机、路由器、网关等），由它们连接起来的两个物理网络分别处于各自独立的物理层，属于两个网段。</p>
+<p>要判断互连的两个网络是否属于同一个网段，就看互连设备是否工作在物理层。</p>
+<p>术语“网段”还有一个误用，常常被用于代指“子网subnet”（以太网上的一个广播域）——子网是数据链路层上一个独立的内部相互作用区域。这是一种不规范的用法，应该避免。</p>
+<h6 id="冲突域">冲突域</h6>
+<p>冲突域： 同一网段内（通过共享介质或Repeater、hub连接），当多个站点同时发出信号（位流）准备通信时会发生冲突，只能竞争传输线路。冲突发生并传播的区域，就是冲突域。</p>
+<p>冲突域是一个共享段：当一个站点向另一个站点发出信号（位流）时，冲突域内的所有站点都能收到该信号。</p>
+<p>冲突域属于OSI的物理层。<br>
+物理层设备（Repeater, Hub) 无法划分冲突域。<br>
+数据链路层设备（bridge,switch）、网络层设备（router）、传输层及以上层的设备(gateway)可以划分冲突域。</p>
+<h6 id="广播域">广播域</h6>
+<p>某站点发出一个广播帧，能收到这个广播帧的范围，就是广播域。</p>
+<p>广播域属于OSI的数据链路层。<br>
+物理层设备 Repeater、Hub，数据链路层设备 Bridge、Switch 无法划分广播域。<br>
+网络层设备（router、第三层交换机）、传输层及以上层的设备（Gateway) 可以划分广播域。</p>
+<p>总结：<br>
+运行在高层的设备可以划分低层对应的域，高层设备还具有低层设备的互连功能。</p>
+<h6 id="转发器中继器repeater">1. 转发器（中继器），Repeater</h6>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/2aOP7E.png">
+<p>转发器（Repeater)：工作在物理层。</p>
+<p>作用：</p>
+<ul>
+<li>对衰减或延迟畸变的信号进行再生，延长信号的传输距离，<br>
+</li>
+<li>将两个物理网络连接成一个物理网络。</li>
+</ul>
+<p>注意：<br>
+1. 转发器并不会放大信号，当信号减弱时，转发器逐位拷贝原始信号，“再生”出一个新的、强度足够的信号继续传播。 2. 转发器是一个2口设备。 3.因为同一个网段就是同一个物理网络，所以转发器互连的网络在逻辑上属于同一个网络。</p>
+<h6 id="集线器hub">集线器，hub</h6>
+<p>集线器：多口转发器。</p>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191002153628059_18352.png">
+<h6 id="网桥bridge">2. 网桥，bridge</h6>
+<p>网桥：工作在数据链路层，提供数据链路层的协议转换（比如后图5-13，在Wireless Lan的802.11协议和Ethernet的802.3协议之间转换）</p>
+<p>网桥有几个作用：</p>
+<ol type="1">
+<li>连接网段。注意：连接后仍属于不同的网段。</li>
+<li>分割网段，划分冲突域：将1个网段划分成2个，各网段相互独立，从而防止用户的跨网段非法访问，各网段内的故障也被隔离。</li>
+<li>过滤功能：如果帧不跨网段则不转发该帧，利用过滤功能可对帧进行隔离。</li>
+<li>利用寻址和路由能力，存储转发帧：根据路由表来决定是否转发，以及转发到哪一个输出端口（端口对应网段）</li>
+<li>扩展网络容量：扩大了网络范围，容量自然增大。</li>
+</ol>
+<p>网络容量：Network capacity is the amount of traffic that a network can handle at any given time. This includes the number of simultaneous voice calls and maximum data speeds. Capacity varies by area.</p>
+<p>需要注意的是，网桥的过滤功能针对的是非广播帧，而广播帧的目标地址就是整个广播域，网桥会把它转发到连接的每一个网段中。</p>
+<h6 id="交换机switch">交换机，switch</h6>
+<p>交换机：多口的网桥。</p>
+<p>当设备接入交换机后，交换机会建立“MAC地址：端口”的MAC映射表。<br>
+以后，发往该MAC地址的帧，会直接发往对应的端口，而不是所有端口。</p>
+<p>交换机可以划分出冲突域，但不能划分出广播域。</p>
+<h6 id="路由器router">路由器，Router</h6>
+<p>工作在网络层。</p>
+<p>提供网络层的协议转换：从一条输入线路上接收分组，再向另一条输出线路转发，这两条线路可能属于不同的网络，采用的协议也可能不同。</p>
+<p>路由器在不同的网络之间存储转发分组。</p>
+<h6 id="网关-gateway又称为协议转换器">网关, Gateway，又称为协议转换器</h6>
+<p>提供高层（传输层、会话层、表示层、应用层）的协议转换，因此又称为协议转换器。</p>
+<p>注意：<br>
+因为术语的不统一，在某些文章中，“网桥+路由器+网关”统称为网关。<br>
+此时“网关”指的是：在数据链路层及以上各层之间，进行协议转换的网间连接器。比如IGP,EGP中的Gateway。</p>
+<h2 id="网桥技术">5.5.2 网桥技术</h2>
+<p>网桥工作在数据链路层，负责<em>相似局域网</em>间<strong>帧的转发</strong>。</p>
+<p>局域网的差异，主要表现在： MAC子层和物理层 遵循不同协议标准的局域网。</p>
+<blockquote>
+<p>介质访问控制子层，MAC layer(Medium Access Control)：属于数据链路层，定义了数据帧怎样在介质上传输，为局域网各主机分配共享信道的使用权，定义了物理寻址、逻辑拓扑，实现了线路控制、出错通知、帧的传递顺序和可选的流量控制。</p>
+</blockquote>
+<p>IEEE 802.1 定义了网桥的协议结构（准确的说，应该是 802.1b)。</p>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191002005744179_22071.png">
+<p>主机A 的工作流程：</p>
+<ol type="1">
+<li>分组 Pkt 由网络层 Network 交给 数据链路层的子层：逻辑链路控制子层 LLC<br>
+</li>
+<li>LLC 给 Pkt 添加 LLC控制信息，然后交给了 数据链路层的子层：媒体访问控制子层 MAC子层</li>
+<li>MAC 子层又添加了帧头，形成 MAC 帧，经过物理层、物理介质，传输到网桥的W端口。</li>
+</ol>
+<p>网桥 Wireless LAN端口（简称W端口）的工作流程：</p>
+<ol start="5" type="1">
+<li>W端口具有802.11的物理层和MAC子层，因此可以逐层剥离头部，最终在LLC层得到 Pkt。</li>
+<li>在左侧端口的LLC层，利用 Pkt 的目标MAC地址查询路由表，发现应该送到右侧端口，</li>
+</ol>
+<p>ethernet端口（简称E端口）、主机B的的过程和左侧相逆，略。</p>
+<p>说明：<br>
+802.11是无线局域网的标准（MAC协议：DCF/PCF)，802.3是有线以太网的标准（MAC协议：CSMA/CD)，桥连接了两个MAC协议不同的网络。</p>
+<p>网桥除了可以转发跨网段的数据帧以外，还可以接收控制帧（HDLC/BSC/PPP），以及“以桥为目的的帧”等所有帧。</p>
+<p>以桥为目标的帧——网桥的每一个端口都有自己的MAC地址。</p>
+<h6 id="桥如何避免和应对拥塞">桥如何避免和应对拥塞</h6>
+<p>网桥应该有足够的缓冲区，以避免大量发送到桥的MAC帧造成拥塞。</p>
+<p>同时，桥应该有应对拥塞的控制机制，比如：对于已经被多个桥转发的帧，桥收到后应优先转发，这样才不会浪费已经花费在转发该帧上的带宽。</p>
+<h6 id="网桥有过滤功能">网桥有过滤功能</h6>
+<p>一个网桥的某个端口连接了局域网后，该端口就和该LAN具有一样的MAC子层和物理层。</p>
+<p>过滤功能体现在：<br>
+假设某网桥连接了2个LAN，当它收到一个非广播帧时（冲突域内，所有节点都可以收到非广播帧），网桥就检查帧内的源MAC地址和目标MAC地址：</p>
+<ul>
+<li>如果源和目标在同一个网段（寻址的体现），则将其过滤，不转发给另一个网段，实现冲突域隔离。</li>
+<li>如果源和目标不在一个网段，网桥就查询路由表，将其转发到正确的端口。</li>
+</ul>
+<h6 id="网桥有mac路由功能">网桥有MAC路由功能</h6>
+<p>网桥的路由功能，表现为：</p>
+<ul>
+<li>多个网段通过一个多口网桥（即交换机）互连：网桥在相邻网段间，进行MAC寻址、查询路由表、存储转发到另一个网段</li>
+<li>多个网段、多个网桥互连：此时的网桥会实现跨多网段的路由。比如透明网桥，通过类似链路状态路由算法的方法，以某个网桥为根建立生成树。</li>
+</ul>
+<p>注意：<br>
+网桥的路由功能并不会把帧送到主机，而仅仅送到端口即可，因为冲突域内每个站点都可以接收帧，最终由目的主机的MAC子层来判断是否应该接收该帧。</p>
+<h3 id="透明网桥-transparent-bridge">1. 透明网桥, Transparent Bridge</h3>
+<h6 id="混杂模式和非混杂模式">混杂模式和非混杂模式</h6>
+<p>混杂模式（promiscuous mode）：设备能够接收所有流经它的数据流，而不论目的地址是否是它。</p>
+<p>非混杂模式：只接受目的地址指向自己的数据。</p>
+<h6 id="透明的含义">透明的含义</h6>
+<p>透明网桥可以支持不同种类的LAN互连（LAN的差异主要表现在MAC子层和物理层）。 LAN和透明网桥相连后，整个网络立即可以运行，不需要配置硬软件，不需人工配置路由表，LAN不需要做任何修改。<br>
+对于LAN内主机来说，透明网桥是不存在的、其运行是不可见的，则就是透明的含义。</p>
+<h6 id="路由表过滤数据库的工作方式">路由表（过滤数据库）的工作方式</h6>
+<p>透明网桥内有一个基于MAC地址的路由表（过滤数据库），它记录了：</p>
+<ul>
+<li>当前LAN内所有主机的MAC地址：</li>
+<li>MAC地址对应的端口号：即输出线路，对应了一个LAN</li>
+<li>每条记录的计时器</li>
+</ul>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191003001841365_13074.png">
+<p>上图中，左侧的表格就是路由表，ABCDE在真实的路由表中应该替换为MAC地址，计时器字段没有列出。可以看到，Bridge2 将 ABC都与自身的端口1相对应。</p>
+<p>透明网桥的工作步骤：<br>
+收到一个帧后，根据帧的目标MAC地址，查询过滤数据库：</p>
+<ul>
+<li>如果查到该MAC地址对应的输出端口，且输出端口不等于来路端口，且输出端口没有阻塞，则转发到该输出端口，如果有阻塞则丢弃该帧（需要发方重传）</li>
+<li>如果查不到目标MAC对应的输出端口（没有记录），则将该帧广播到除来路端口外的所有端口，目标主机收到该帧后会返回一个响应帧，透明网桥根据响应帧建立路由记录。</li>
+</ul>
+<h6 id="逆向学习法建立路由表">逆向学习法，建立路由表</h6>
+<p>透明网桥初始化时，路由表为空，通过逆向学习法(Backward Learning)，逐渐的建立起路由表。</p>
+<p>逆向学习法：<br>
+当一个帧（数据帧、广播后返回的响应帧）到达透明网桥的某个端口时，网桥就根据源MAC地址、来路端口号，建立、更新一条路由记录。<br>
+LAN的拓扑结构、网内主机可能会不断变化，每条记录还设置了一个计时器，当计时器超时后，该记录就过时了，随后删除。</p>
+<h6 id="网桥循环">网桥循环</h6>
+<p>通过增加备用线路和备用网桥，可以实现更大的冗余度和更强的容错能力，但会导致一个问题：<br>
+两个网段间，同时存在多条线路和网桥时，会构成循环。</p>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191003005951107_14975.png">
+<p>从A发出的广播帧，会被B1、B2网桥无休止的转发，直到耗尽所有带宽，并阻塞两个网段中其他帧的传输。</p>
+<h6 id="生成树算法spanning-tree-algorithm-sta">生成树算法，Spanning Tree Algorithm, STA</h6>
+<p>生成树算法可以解决循环路径问题，其思路是：<br>
+把新增的冗余网桥和线路设置为“备用”模式，当主链路失效时，启用备用网桥和线路。</p>
+<p>STA是动态的：当网络拓扑结构发生变化时（新增、删除网桥或线路），所有的网桥能注意到变化，立即运行STA。</p>
+<p>STA基于图论中一种“提取连通图生成树”的算法：<br>
+在互连网络中，每一个LAN对应于连通图的一个顶点，每一个网桥对应连通图的一个边。删去连通图的一个边等价于移去一个网桥。将构成回路的网桥逐个移去，最后得到的生成树不含回路，但又不改变图的连通性。</p>
+<p>STA算法需要先建立如下概念：</p>
+<ul>
+<li>用每个端口的MAC地址作为端口标识符。<br>
+</li>
+<li>用“指定的一个2字节的优先级编号 + 网桥某一端口的MAC地址”作为网桥标识符，</li>
+<li>指定通路费用：给网桥的每个端口指定一个通路费用，该费用表示通过该端口向“与其连接的LAN”传送一个帧的代价。两个主机之间的通路可能要经过多个网桥，这些网桥的有关端口的费用相加就构成了两站之间的通路的费用。例如，假定沿路每个网桥端口的费用为1，则两个站之间通路的费用就是经过的网桥数。另外也可以把网桥端口的通路费用与有关LAN的通信速率联系起来（一般为反比关系）。</li>
+</ul>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191004151645116_8607.png">
+<p>以上图为例，网段E的某主机传送一个帧到网段B的某主机，经B4的R端口的通路费用=10，经B3的R端口的通路费用为20。</p>
+<ul>
+<li>根桥：作为生成树树根的网桥，例如可选择MAC地址值最小的网桥作为根桥。<br>
+</li>
+<li>根通路：每一个网桥通向根桥的费用最小的通路。<br>
+</li>
+<li>根端口：每一个网桥与根通路相连接的端口。<br>
+</li>
+<li>指定桥：一个LAN可以有多个网桥，每个网桥都有一个根通路，其中根通路费用最小的网桥就是指定桥。如果一个LAN的多个网桥的根通路费用相同，则选择优先级最高的网桥作为指定桥。</li>
+<li>指定端口：指定桥连接该LAN的端口为指定端口（指定端口和根端口是相对的），如果指定桥有多个端口连接LAN，则选取MAC值最小的端口作为指定端口。直接连接根桥的LAN，根桥就是指定桥，连接根桥的端口即为指定端口。 指定端口是为了应对一个指定网桥有多个端口接入一个LAND的情况（LAN和指定网桥的多个端口形成循环）。</li>
+</ul>
+<p>STA算法的步骤：</p>
+<ol type="1">
+<li>确定一个根桥</li>
+<li>确定其他网桥的根端口</li>
+<li>对每一个LAN确定一个唯一的指定桥和指定端口</li>
+</ol>
+<p>按照以上3步算法，在直接连接两个LAN的多个网桥中，只能有一个作为指定桥，非指定桥或指定桥的非指定端口会处于阻塞状态。这就排除了两个LAN之间的任何环路。</p>
+<p>但由此带来了透明网桥的缺点：带宽利用率较低，毕竟只使用了拓扑结构的子集——生成树。</p>
+<p>网桥之间通过每隔几秒交换信息，来更新拓扑结构，若需要就重新计算生成树。</p>
+<p>总结：STA算法类似于“链路状态分组”。</p>
+<h3 id="源路由选择网桥source-routing-bridge">2. 源路由选择网桥，Source Routing Bridge</h3>
+<p>支持总线网的人喜欢用透明网桥，支持令牌环网的人则喜欢用源路由选择网桥。</p>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191004175841547_26674.gif">
+<p>基本思想：<br>
+每台源主机都知道从自身到目标主机的路由信息RI（Routing Information，网桥编号和LAN编号的序列）。如果目标主机是跨网段的，则把 RI 写入跨网段帧的头部，并将源地址的高位置为1（称为RII,routing information indicator，书上写错了，写成了目的地址的高位）。网桥只处理RII = 1（跨网段帧），网桥根据 RI 信息判断自己是否在转发路径中，并确定转发给哪个 LAN：</p>
+<ul>
+<li>如果 RI 中包含了自己的网桥编号，则将该帧转发给后续的 LAN</li>
+<li>如果 RI 中不包含自己的网桥编号，则不转发（一个LAN接多个网桥时，可能会走其他网桥，换句话说，源主机设定的路径不是当前网桥）。</li>
+</ul>
+<blockquote>
+<p>RI 路径的表示方法：源主机所在 LAN 编号 + 网桥1编号 + 下一个LAN的编号 + 网桥2编号 +下一个 LAN 编号 ......<br>
+每个LAN有唯一编号，每个网桥在一个LAN中有唯一的编号。<br>
+因此：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>具有多个网桥的LAN，每个网桥在其中的编号是不同的<br>
+</li>
+<li>连接多个LAN的网桥，在每一个LAN中的编号是不同</li>
+<li>跨LAN的不同网桥，可能具有相同的编号</li>
+</ul>
+</blockquote>
+<p>从基本思想可以看出，源路由选择的重点在于：源如何事先获取到达每个目标主机的最佳路径。具体步骤如下：</p>
+<p>最开始，A 不知道 B 在同一令牌环网还是其他LAN中，于是发出一个测试帧，如果测试帧返回时没有携带B的应答，说明B位于其他网段中。<br>
+A会发出一个探索帧( explorer frame，广播帧)。广播帧被每个网桥接收，接收到该广播帧的网桥如果在RI信息中，则不必进行回应；如果没有，则向RI信息中增加网桥编号和LAN编号，并继续转发到与其连接的、不在RI信息中的LAN，直到转发到目标节点B。<br>
+目标节点B返回给源节点A一个应答帧，因为探索帧是广播，最终A会接收到多个应答帧。由A选出最佳路径，以后写入数据帧的RIF中。该算法可能会引发广播风暴。</p>
+<h2 id="网络互连协议internet使用的协议">5.5.3 网络互连协议（Internet使用的协议）</h2>
+<p>前面介绍的网桥，是在数据链路层互连LAN的设备，本节介绍的路由器用于 Internet，在网络层互连不同的网络 。</p>
+<h3 id="路由信息协议riprouting-information-protocol距离向量路由选择算法">1. 路由信息协议(RIP,Routing Information Protocol,距离向量路由选择算法)</h3>
+<p>说明： 5.2 路由选择中的“距离矢量路由算法”将的是算法。<br>
+而本机讲述的是实现了该算法的、真实应用的协议。</p>
+<p>RIP 是采用了距离向量路由算法的路由协议。</p>
+<p>RIP协议可以在主机和路由器中实现，由此产生了两种操作方式的RIP：</p>
+<ul>
+<li>主机实现的RIP：工作在被动状态，它不会向其他路由器发送自身路由表中的路由信息，只是接收其他RIP路由器广播的路由信息，并根据收到的路由信息更新自己的路由表。</li>
+<li>路由器中实现的RIP：工作在主动状态，它定期将自身的路由信息传递给其他的RIP路由器，并根据其他RIP路由器发送给它的路由信息更新自己的路由表。</li>
+</ul>
+<p>被动RIP很简单，本节讨论主动RIP。</p>
+<p>RIP路由器的路由表的每条表项，记录了：</p>
+<ul>
+<li>这条路由最终目的地地址：用IP地址表示（Internet上，用IP地址作为身份证明）</li>
+<li>这条路由到目的地的距离：RIP 的度量单位是跳数，即规定每一条链路的成本为1，而不考虑链路的实际带宽、时延等因素。如果距离为n，说明到达目的地需要经过n个路由器。</li>
+<li>这条路由中，下一个路由器的地址：如果下一跳就是目的地，则此字段为空</li>
+<li>路由改变标志：指示这条路由信息最近是否被改变过</li>
+<li>和这条路由有关的计时器：</li>
+</ul>
+<h6 id="运行rip协议的机器如何交换信息">运行RIP协议的机器，如何交换信息？</h6>
+<p>实现RIP的机器（主机/路由器）：</p>
+<ul>
+<li>每隔30秒向外广播自身的路由信息。</li>
+<li>向其他路由器发送 Request 消息，询问它们保存的所有/部分路由信息：比如某主机开机后，可能要求相邻的RIP路由器向它传递路由表中的所有信息。</li>
+</ul>
+<h6 id="rip路由器如何更新自己的路由表">RIP路由器如何更新自己的路由表</h6>
+<p>假设：<br>
+路由器 R 想更新到达目的地 D 的路由信息（如果没有这条路由就新增，如果有就更新）。</p>
+<p>路由器 R 从 相邻的路由器G 收到一个路由信息时（可能是R向G发出Request，也可能是 G 发出的广播），R会在收到的路由信息中检查每一条通往目的地D的路由，假设G到D的距离为 cost(G,D)，R到G的距离为 cost(R,G)=1，此时会出现几种情况：</p>
+<p><strong>1.R的路由表中不存在到D的路由</strong></p>
+<p>在R的路由表中增加一条路由，内容如下：</p>
+<ul>
+<li>R - D的路径的下一跳：G</li>
+<li>R - D的距离：cost(R,G) + cost(G,D)</li>
+</ul>
+<p><strong>2.R的路由表中有一条到D的路由 cost(R,D)</strong></p>
+<p>此时需要比较"老的路由和新获取的路由"哪个距离更短。假设新路由距离更短：<br>
+cost(R,D) &gt; cost(R,G) + cost(G,D)</p>
+<p>将原来通往D的老路由，更新为新路由：</p>
+<ul>
+<li>R - D路径的下一跳：G</li>
+<li>R - D的距离：cost(R,G) + cost(G,D)</li>
+</ul>
+<p>注意：如果老路由和新路由在距离上一样，则不更新，以维持路由的稳定。</p>
+<h6 id="路由器的超时机制">路由器的超时机制</h6>
+<p>周期更新定时器：用来激发RIP路由器路由表的更新，每个RIP节点只有一个更新定时器，设为30s。每隔30s路由器会向其邻居广播自己的路由表信息。每个RIP路由器的定时器都独立于网络中其他路由器，因此它们同时广播的可能性很小。</p>
+<p>超时定时器：用来判定某条路由是否可用。每条路由有一个超时定时器，设为180s。当一条路由激活或更新时，该定时器初始化，如果在180s之内没有收到关于那条路由的更新，则将该路由置为无效。</p>
+<p>清除定时器：用来判定是否清除一条路由。每条路由有一个清除定时器，设为120s。当路由器认识到某条路由无效时，就初始化一个清除定时器，如果在120s内还没收到这条路由的更新，就从路由表中将该路由删除。</p>
+<p>当一个RIP路由器（设为R）收到路由信息后，</p>
+<ul>
+<li>如果发现某条路由没有发生变化，则重置该条路由的超时计时器，重新开始计时。</li>
+<li>如果某个相邻的路由器（假设为G）失效了，则 R 无法在30秒内收到以G为起点的路由信息。如果经过180秒后都未收到 G发来的路由信息，则说明路由 R - G 已经作废。</li>
+</ul>
+<p>但此时不会马上从 R 的路由表中删除 R-G 路由，因为还需要向其他的邻居路由器报告。<br>
+在经过120秒的垃圾回收时间（Garbage Collection Timer)后，如果仍未收到 G 的路由信息，就把该条路由从 R的路由表中删去。</p>
+<p>在作废某条路由时采取的机制，称为n中取k(k-out-of-n)，是一种可靠性设计，防止仅仅由于路由信息在传输中发生了丢失而导致的误作废。<br>
+换句话说，如果在6次通知中收到一次邻路由的路由信息，就不需要作废(6 x 30 = 180)。</p>
+<p>RIP的条数最多只能15跳，因此仅适用于小规模的网络。</p>
+<h3 id="开放最短路径优先协议ospfopen-shortest-path-first链路状态路由选择算法">2. 开放最短路径优先协议(OSPF,Open Shortest Path First,链路状态路由选择算法)</h3>
+<p>由于RIP是基于距离矢量算法的路由协议，存在着收敛慢、路由环路、可扩展性差等问题，而 OSPF作为基于链路状态的协议，能够解决RIP所面临的诸多问题。</p>
+<p>OSPF 已成为最主要的内部网关协议（IGP)。</p>
+<blockquote>
+<p>Internet 由无数个自治系统（或称为域）组成。一个域（domain）由一组主机和使用相同路由选择协议的路由器组成，并由单一机构管理。</p>
+</blockquote>
+<p>OSPF还有以下优点：</p>
+<ul>
+<li>OSPF采用组播形式收发报文，这样可以减少对其它不运行OSPF路由器的影响。</li>
+<li>OSPF支持无类型域间选路（CIDR）。</li>
+<li>OSPF支持对等价路由进行负载分担：如果 OSPF 计算出某路由器到某个目的地存在多条最短路由，则可以将分组分散在这些路由上。</li>
+<li>OSPF支持报文加密。</li>
+<li>OSPF 的带宽占用小：链路状态分组很小，且很少需要传输。</li>
+</ul>
+<p>OSPF协议具有以下特点：</p>
+<ul>
+<li>OSPF把自治系统AS（Autonomous System）划分成逻辑意义上的一个或多个区域；</li>
+<li>OSPF通过LSA（Link State Advertisement）的形式发布路由；</li>
+<li>OSPF依靠在OSPF区域内各设备间交互OSPF报文来达到路由信息的统一；</li>
+<li>OSPF报文封装在IP报文内，可以采用单播或组播的形式发送。</li>
+</ul>
+<p>注意：LSA不是报文，而是 OSPF 的通信机制。</p>
+<h6 id="ospf-支持的拓扑类型">OSPF 支持的拓扑类型</h6>
+<p>OSPF 支持3种类型的网络：</p>
+<ul>
+<li>点到点网络：即连接一对路由器的网络。</li>
+<li>广播网络：有至少2个以上路由器、有广播功能的网络。</li>
+<li>非广播方式的网络：有2个以上路由器，没有广播功能的网络。比如 X.25 分组交换网。 OSPF把非广播网络进一步分为了：
+<ul>
+<li>非广播多路访问网络(Non-Broadcast Multi-Access, NBMA)：这个网络上的路由器可以直接通信，它和广播方式的 OSPF 运作类似</li>
+<li>一点到多点网络(Point-to-Multi-Point, PtMP)：看成多个点到点链路。</li>
+</ul></li>
+</ul>
+<h6 id="邻接逻辑连接">邻接：逻辑连接</h6>
+<p>通常情况下，每个路由器会定期扩散“ 链路状态更新报文”(LSU，Link State Update)。<br>
+为了保证运行链路状态路由算法的所有路由器都能收到这个报文，路由器之间应该建立一个逻辑连接，LSU 就沿着逻辑连接传递出去。</p>
+<p>路由器之间的逻辑链接被称为一个邻接（adjacency），被邻接的路由器互为“邻接路由器”。</p>
+<p>大多数情况下，邻居路由器之间的连接属于邻接。<br>
+但并不是所有的邻居路由器都是邻接路由器，因为那样会产生大量的重复报文。分析如下：</p>
+<blockquote>
+<p>假设一个ethernet有N个路由器，则总共可能有 N(N-1)/2条邻接——每个路由器可以向 N-1 个路由器发射出路径，共 N个路由，所以是 N(N-1)，去除双向发射，则 / 2，所以是 N(N-1)/2。<br>
+当其中一个路由器收到一个链路状态消息时，它将这个消息的拷贝发送给其他 N-1 个路由器。每一个路由器收到信息后，又将发送给除来路的其他 N-2个路由器，则这个消息会被发送 N(N-2) 次，因此教材称为“大概有 N^2 个消息的拷贝在该网络上传递”。这样，每个节点都会收到大量的重复消息，然而并没有必要，事实上只需要 N 个消息的拷贝就足够了。</p>
+</blockquote>
+<p>为了防止出现大量的重复消息，对于广播网络和NBMA非广播网络，网络中的所有路由器会选举出一个代表，称为“选取路由器(DR,Designated Router)”：它被认为和所有的邻居路由器邻接。</p>
+<p>而其他的邻居路由器之间没有邻接。</p>
+<p>除了DR，还要选出一个“备用选举路由器（BDR,Backup Designated Router)”。</p>
+<h5 id="ospf-的报文类型和运行步骤">OSPF 的报文类型和运行步骤</h5>
+<table>
+<colgroup>
+<col style="width: 35%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>报文类型</th>
+<th>报文作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hello报文</td>
+<td>周期性发送，用来发现和维持OSPF邻居关系。</td>
+</tr>
+<tr class="even">
+<td>DD报文（Database Description packet）</td>
+<td>描述本地LSDB（Link State Database）的摘要信息，用于两台设备进行数据库同步。</td>
+</tr>
+<tr class="odd">
+<td>LSR报文（Link State Request packet）</td>
+<td>用于向对方请求所需的LSA。设备只有在OSPF邻居双方成功交换DD报文后才会向对方发出LSR报文。</td>
+</tr>
+<tr class="even">
+<td>LSU报文（Link State Update packet）</td>
+<td>用于向对方发送其所需要的LSA。</td>
+</tr>
+<tr class="odd">
+<td>LSAck报文（Link State Acknowledgment packet）</td>
+<td>用来对收到的LSA进行确认。</td>
+</tr>
+</tbody>
+</table>
+<h6 id="hello-报文">Hello 报文</h6>
+<p>Hello 报文用于发现邻居路由器、维护邻接关系。</p>
+<ul>
+<li>点对点网络：在链路上发送 Hello 消息即可</li>
+<li>广播式网络：通过多点广播来交换消息</li>
+<li>非广播网络：需要网络管理人员进行配置，从而发现邻居路由器</li>
+</ul>
+<h6 id="dd-packetdatabase-description">DD packet，Database Description</h6>
+<p>DD报文是路由器”本地保存的链路状态信息（LSDB,Link State Database）“的一个摘要。</p>
+<p>DD报文中有一个序列号，相当于数据的时间标记。</p>
+<p>当一个路由器刚刚加入网络时（有可能是新增加的，也可能是因故障重启的），它的邻接路由器先向它发送DD报文，它收到后会先比较序列号，如果本地保存的序列号小于收到的，说明本地的链路状态已过时，它就应向邻接路由器发送 LSR 请求传递最新的路由信息。</p>
+<h6 id="lsr-packet">LSR packet</h6>
+<p>用于向对方请求所需的LSA。设备只有在OSPF邻居双方成功交换DD报文后才会向对方发出LSR报文。</p>
+<h6 id="lsu-packet">LSU packet</h6>
+<p>用于向对方发送其所需要的 LSA。 + 定期发送：每个路由器会定期，向自己的邻接路由器扩散 链路状态更新消息(LSU,Link State Update Message) ，消息中包括了链路状态、邻接关系、路径花费。<br>
++ 响应式发送：如果链路状态发生了变化，路由器也会立即向邻接路由器发送 LSU。</p>
+<h6 id="lsack-packet">LSAck packet</h6>
+<p>用于对收到的 LSA 进行确认。</p>
+<h6 id="对ospf的总结这部分不需要理解超纲了">对OSPF的总结（这部分不需要理解，超纲了）</h6>
+<p>综上所述，路由器通过扩散把自己的链路状态信息告诉它所在区域的其他路由器，每个路由器都建立一个它所在区域的有向图，并计算出最短路径。</p>
+<p>主干区域中的路由器也执行相同的过程。</p>
+<p>另外，主干区域还从区域边界路由器获取信息，计算出从主干每个非主干区域的最短路径，并将路径信息发给区域边界路由器，由该路由器在它的区域中广播该消息。通过这个消息，路由器在转发跨区域分组时，可以选择到主干区域的最佳出口（即最佳的区域边界路由器）。</p>
+<p>关于OSPF ，建议寻找更系统、完整的文章来学习，教材上这个太零碎。</p>
+<h2 id="网络互连设备-1">5.5.4 网络互连设备</h2>
+<h3 id="网桥">1.网桥</h3>
+<p>这一小节的内容和前面的网桥有些重复，故略去重复部分。</p>
+<p>从网络互连的结构看，网桥属于 DCE 级的端到端的互连。<br>
+这里的端到端，是源端-目的端。</p>
+<p>局域网的逻辑结构分为：</p>
+<ul>
+<li>逻辑链路控制子层（LLC，属于数据链路层）</li>
+<li>介质访问控制子层（MAC，属于数据链路层）</li>
+<li>物理层</li>
+</ul>
+<p>异构局域网的差异主要体现在 MAC子层 和物理层上。</p>
+<p>转发器 Repeater 工作在物理层，严格来所不算网络互连。<br>
+网桥工作在数据链路层，也应算做一种网络互连的手段：因为局域网没有网络层（只有局域网中的主机才有网络层），网桥就是局域网互连的必要设备。</p>
+<p>网桥接收到帧后，在数据链路层进行差错校验，然后送到物理层，再经传输介质送到另一个网段。</p>
+<p>转发帧之前，网桥几乎不会修改帧的内容和格式。</p>
+<h6 id="网桥的工作原理">网桥的工作原理</h6>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191009002509900_20005.png">
+<h3 id="路由器">2. 路由器</h3>
+<h4 id="路由器和网桥的区别">路由器和网桥的区别</h4>
+<ul>
+<li>网桥工作在数据链路层：利用MAC地址转发数据帧。</li>
+<li><p>路由器工作在网络层：根据IP地址转发分组。</p></li>
+<li>用网桥连接2个局域网：物理层、数据链路层的协议可以不同，更高层必须采用相同的协议。</li>
+<li><p>用路由器连接2个局域网：物理层、数据链路层、网络层的协议可以不同，但更高层必须采用相同的协议。</p></li>
+</ul>
+<p>注意：因为局域网自身没有网络层，这里的更高层应该是指局域网中的主机。</p>
+<ul>
+<li>网桥工作在数据链路层，传统局域网采用广播方式，容易产生”广播风暴“问题（网桥只能分割冲突域）。</li>
+<li>路由器可以分割广播域，解决了广播风暴问题。</li>
+</ul>
+<h4 id="路由器的主要功能">路由器的主要功能</h4>
+<ol type="1">
+<li>建立并维护路由表：以OSPF 为例，路由器内部有 LSDB 和 路由表，根据LSDB 计算得到路由表。</li>
+<li>在网络间存储转发分组：当路由器收到分组后，会检查分组的源IP和目标IP，再根据路由表，决定送往哪一个路由器或主机。</li>
+</ol>
+<h4 id="路由器的基本工作原理">路由器的基本工作原理</h4>
+<img src="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/20191009005944995_14710.png">
+<h6 id="互连网络的协议结构">互连网络的协议结构</h6>
+<p>5-15(a)表示了：用2个路由器，将2个LAN，通过1个WAN互连的情况。</p>
+<p>LAN1 是总线型以太网，LAN2 是令牌环网。WAN 是一个 X.25 分组交换网。</p>
+<p>主机A 的传输层采用 TCP协议，网络层采用 IP协议。LLC 子层采用802.2协议，MAC子层和物理层采用802.3 的ethernet 协议。</p>
+<p>主机B的传输层采用 TCP协议，网络层采用 IP协议。LLC子层采用802.2协议，MAC子层和物理层采用802.5的 Token Ring 协议。</p>
+<p>路由器1的层次结构：</p>
+<ul>
+<li>与 LAN1 相连的端口1的LLC子层采用 802.2，MAC子层与物理层采用 802.3；</li>
+<li>与 WAN 相连的端口2的网络层、数据链路层、物理层则采用与 X.25 分组交换网一致的协议。</li>
+</ul>
+<p>路由器2同理。</p>
+<h6 id="路由器互连的网络中数据的传输过程">路由器互连的网络中，数据的传输过程</h6>
+<p>以A向B发送数据为例来说明。</p>
+<p>主机A的应用层数据（DATA）传送给传输层；<br>
+传输层为其添加了TCP报头，将(TCP报头+DATA）发给网络层；<br>
+网络层添加了IP报头，将（IP报头+TCP报头+DATA）发给数据链路层；<br>
+最终形成的帧结构为：MAC 1 头部+LLC头部+IP头部+TCP头部+DATA</p>
+<p>路由器1收到A的帧后，因为路由器1 的端口1 的LLC子层、MAC子层、物理层与主机A是一致的，帧A可以在端口1层层剥离，最终将（IP头+TCP头+DATA）送给路由器1 的网络层。</p>
+<p>路由器1的网络层根据IP头部中的源IP和目的IP，通过路由表查询输出路径，发现应通过端口2发送到X.25网。</p>
+<p>路由器1通过WAN端口2的X.25网的网络层，给（IP头+TCP头+DATA）添加上 X.25-3分组头，在X.25数据链路层添加 X.25-2帧头、X.25-2帧尾，最终组成（X.25-2帧头+X.25-3分组头+IP头+TCP头+DATA+X.25-2帧尾），通过X.25分组网，传输到路由器2。</p>
+<p>路由器2的WAN端口收到该分组后，按照X.25分组网的数据链路层、网络层的顺序，逐级剥离帧头帧尾和分组头，将（IP头+TCP头+DATA）送到路由器2的网络层。</p>
+<p>路由器2根据IP头，查询路由表后，送往端口2。在端口2，按照 LLC的802.2，MAC子层+物理层的802.5添加令牌环网的各种头部，最终将（令牌环 MAC2 头+令牌环LLC头+IP头+TCP头+DATA）送到主机B。</p>
+<p>主机B收到该帧后，逐级去除MAC头、LLC头，得到（IP头+TCP头+DATA），在网络层，经过对比目的IP，发现自己应该接收该分组，遂去掉IP头，将（TCP头+DATA）递交给传输层。</p>
+<h3 id="网关">3.网关</h3>
+<p>网关：也叫协议转换器，为高层（传输层-会话层-表示层-应用层）提供协议转换功能。</p>
+<p>传输层的协议转换包括：</p>
+<ul>
+<li>数据格式的重新装配</li>
+<li>长数据的分段</li>
+<li>地址格式的转换</li>
+<li>操作规程的适配</li>
+</ul>
+<p>现实中具体协议在实现网关的协议转换功能时，可以不分层，从传输到应用层的协议转换可以一起进行。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/" title="网原 5.5 网络互连">https://roro4ever.github.io/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/" rel="next" title="网原 5.4 服务质量">
+                  <i class="fa fa-chevron-left"></i> 网原 5.4 服务质量
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-6-Internet-的互连层协议/网原-5-6-internet-的互连层协议/" rel="prev" title="网原 5.6 Internet 的互连层协议">
+                  网原 5.6 Internet 的互连层协议 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络互连原理"><span class="nav-text">5.5.1 网络互连原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#网络互连设备"><span class="nav-text">网络互连设备</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基础知识"><span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#网段"><span class="nav-text">网段</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#冲突域"><span class="nav-text">冲突域</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#广播域"><span class="nav-text">广播域</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#转发器中继器repeater"><span class="nav-text">1. 转发器（中继器），Repeater</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#集线器hub"><span class="nav-text">集线器，hub</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网桥bridge"><span class="nav-text">2. 网桥，bridge</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#交换机switch"><span class="nav-text">交换机，switch</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#路由器router"><span class="nav-text">路由器，Router</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网关-gateway又称为协议转换器"><span class="nav-text">网关, Gateway，又称为协议转换器</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网桥技术"><span class="nav-text">5.5.2 网桥技术</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#桥如何避免和应对拥塞"><span class="nav-text">桥如何避免和应对拥塞</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网桥有过滤功能"><span class="nav-text">网桥有过滤功能</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网桥有mac路由功能"><span class="nav-text">网桥有MAC路由功能</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#透明网桥-transparent-bridge"><span class="nav-text">1. 透明网桥, Transparent Bridge</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#混杂模式和非混杂模式"><span class="nav-text">混杂模式和非混杂模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#透明的含义"><span class="nav-text">透明的含义</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#路由表过滤数据库的工作方式"><span class="nav-text">路由表（过滤数据库）的工作方式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#逆向学习法建立路由表"><span class="nav-text">逆向学习法，建立路由表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#网桥循环"><span class="nav-text">网桥循环</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#生成树算法spanning-tree-algorithm-sta"><span class="nav-text">生成树算法，Spanning Tree Algorithm, STA</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源路由选择网桥source-routing-bridge"><span class="nav-text">2. 源路由选择网桥，Source Routing Bridge</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络互连协议internet使用的协议"><span class="nav-text">5.5.3 网络互连协议（Internet使用的协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#路由信息协议riprouting-information-protocol距离向量路由选择算法"><span class="nav-text">1. 路由信息协议(RIP,Routing Information Protocol,距离向量路由选择算法)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#运行rip协议的机器如何交换信息"><span class="nav-text">运行RIP协议的机器，如何交换信息？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#rip路由器如何更新自己的路由表"><span class="nav-text">RIP路由器如何更新自己的路由表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#路由器的超时机制"><span class="nav-text">路由器的超时机制</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开放最短路径优先协议ospfopen-shortest-path-first链路状态路由选择算法"><span class="nav-text">2. 开放最短路径优先协议(OSPF,Open Shortest Path First,链路状态路由选择算法)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#ospf-支持的拓扑类型"><span class="nav-text">OSPF 支持的拓扑类型</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#邻接逻辑连接"><span class="nav-text">邻接：逻辑连接</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ospf-的报文类型和运行步骤"><span class="nav-text">OSPF 的报文类型和运行步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#hello-报文"><span class="nav-text">Hello 报文</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#dd-packetdatabase-description"><span class="nav-text">DD packet，Database Description</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#lsr-packet"><span class="nav-text">LSR packet</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#lsu-packet"><span class="nav-text">LSU packet</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#lsack-packet"><span class="nav-text">LSAck packet</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#对ospf的总结这部分不需要理解超纲了"><span class="nav-text">对OSPF的总结（这部分不需要理解，超纲了）</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络互连设备-1"><span class="nav-text">5.5.4 网络互连设备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网桥"><span class="nav-text">1.网桥</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#网桥的工作原理"><span class="nav-text">网桥的工作原理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由器"><span class="nav-text">2. 路由器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#路由器和网桥的区别"><span class="nav-text">路由器和网桥的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由器的主要功能"><span class="nav-text">路由器的主要功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由器的基本工作原理"><span class="nav-text">路由器的基本工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#互连网络的协议结构"><span class="nav-text">互连网络的协议结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#路由器互连的网络中数据的传输过程"><span class="nav-text">路由器互连的网络中，数据的传输过程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网关"><span class="nav-text">3.网关</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '44e188b004eef6907a1b4773be112144',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

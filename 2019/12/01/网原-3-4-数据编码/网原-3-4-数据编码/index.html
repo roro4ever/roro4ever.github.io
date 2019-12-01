@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="3.4.1 数据编码技术 1. 数字数据的数字信号编码 1.基带和频带 Q.基带是什么？ A.基带就是基本频带，指不经调制（频谱搬移和变换）的原始脉冲信号所固有的频率带。  基带传输 利用基本频带（也就是利用原始脉冲信号）传输数据，就称为基带传输。  基带信号 基带信号就是“直接表达了要传输的信息”的信号，比如我们说话的声波就是基带信号。  基带传输适用于近距离传输 由于在近距离范围内基带信号的衰">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 3.4 数据编码">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="3.4.1 数据编码技术 1. 数字数据的数字信号编码 1.基带和频带 Q.基带是什么？ A.基带就是基本频带，指不经调制（频谱搬移和变换）的原始脉冲信号所固有的频率带。  基带传输 利用基本频带（也就是利用原始脉冲信号）传输数据，就称为基带传输。  基带信号 基带信号就是“直接表达了要传输的信息”的信号，比如我们说话的声波就是基带信号。  基带传输适用于近距离传输 由于在近距离范围内基带信号的衰">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616165930095_2652.gif">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616165859380_12338.gif">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616162310645_17552.gif">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/RZcode.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190701141949127_25773.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190701141342452_27213.gif">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190710141825287_26967.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190711112458850_24221.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190710163912154_11781.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712162223352_30893.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712162612394_6279.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712173538351_2608.png">
+<meta property="og:updated_time" content="2019-12-01T14:48:10.031Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 3.4 数据编码">
+<meta name="twitter:description" content="3.4.1 数据编码技术 1. 数字数据的数字信号编码 1.基带和频带 Q.基带是什么？ A.基带就是基本频带，指不经调制（频谱搬移和变换）的原始脉冲信号所固有的频率带。  基带传输 利用基本频带（也就是利用原始脉冲信号）传输数据，就称为基带传输。  基带信号 基带信号就是“直接表达了要传输的信息”的信号，比如我们说话的声波就是基带信号。  基带传输适用于近距离传输 由于在近距离范围内基带信号的衰">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616165930095_2652.gif">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 3.4 数据编码 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 3.4 数据编码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:52:41 / 修改时间：22:48:10" itemprop="dateCreated datePublished" datetime="2019-12-01T15:52:41+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第三章-物理层/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 物理层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="数据编码技术">3.4.1 数据编码技术</h2>
+<h3 id="数字数据的数字信号编码">1. 数字数据的数字信号编码</h3>
+<h4 id="基带和频带">1.基带和频带</h4>
+<p>Q.基带是什么？<br>
+A.基带就是基本频带，指不经调制（频谱搬移和变换）的原始脉冲信号所固有的频率带。</p>
+<p>基带传输<br>
+利用基本频带（也就是利用原始脉冲信号）传输数据，就称为基带传输。</p>
+<p>基带信号<br>
+基带信号就是“直接表达了要传输的信息”的信号，比如我们说话的声波就是基带信号。</p>
+<p>基带传输适用于近距离传输<br>
+由于在近距离范围内基带信号的衰减不大，信号内容不会发生变化。因此在传输距离较近时，计算机网络都采用基带传输方式。<br>
+如<br>
+从计算机到监视器、打印机等外设号就是基带传输。<br>
+大多数的局域网使用基带传输，如以太网、令牌环网。常见的网络设计标准10BaseT使用的就是基带信号。</p>
+<p>基带信号的特点：速率高、误码率低</p>
+<p>Q. 什么是频带？<br>
+A. 基带信号调制后的信号，占用的频率带宽，称为频带。</p>
+<p>频带信号可以抗干扰、提高传输率，但速率慢、误码率高。</p>
+<p>频带传输，主要用于网络电视和有线电视的视频广播。</p>
+<p>本节只讲基带。<br>
+基带传输时，需要解决两个问题： + 数字数据的数字信号表示 + 收发两端的同步问题</p>
+<h4 id="数字数据的数字信号表示">2.数字数据的数字信号表示</h4>
+<p>最简单的办法：用不同的电平来表示两个二进制数字。</p>
+<h5 id="不归零码全宽码">不归零码（全宽码）</h5>
+<p>NRZ码，Non-Return-to-Zero Code.</p>
+<p>优点：<br>
+因为每个脉冲不归零，不需要传输归零后的零电平，节约了传输带宽。</p>
+<p>缺点：<br>
+脉冲之间没有间隔，不易识别区分，需要用某种方法使发送器和接收器之间进行定时或同步。</p>
+<p>全宽码<br>
+脉冲时间内，高电平（或正负电平）占据整个脉冲宽度，不会回到零电平。</p>
+<h6 id="单极性不归零码">单极性不归零码</h6>
+<ul>
+<li>高电平代表逻辑1</li>
+<li>零电平代表逻辑0</li>
+</ul>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616165930095_2652.gif">
+<h6 id="双极性不归零码">双极性不归零码</h6>
+<ul>
+<li>正电平代表逻辑1</li>
+<li>负电平代表逻辑0</li>
+</ul>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616165859380_12338.gif">
+<h5 id="归零码">归零码</h5>
+<p>RZ码，Return-to-Zero Code</p>
+<p>波形特征：<br>
+脉冲之间有零电平间隔，而且脉冲可以很窄，脉冲间隔可以大于窄脉冲的宽度。</p>
+<p>优点：<br>
++ 具有自同步特性，或者叫自带时钟信号。在每个窄脉冲归零之后，信号读取者即可读取数值，不需要另外的时钟信号。</p>
+<p>缺点：<br>
++ 大部分的数据带宽（产生脉冲信号的信号线，实质上就是传输数据的数据线），都用于传输“零电平”，浪费传输带宽。 + 因为 <span class="math inline">\(\frac{1}{脉宽} = 传输带宽\)</span>，所以窄脉冲占用的频带就较宽。</p>
+<h6 id="单极性归零码">单极性归零码</h6>
+<ul>
+<li>高电平代表逻辑1</li>
+<li>零电平代表逻辑0</li>
+<li>脉冲时间内会回到零电平（窄脉冲）</li>
+</ul>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190616162310645_17552.gif">
+<h6 id="双极性归零码">双极性归零码</h6>
+<ul>
+<li>正电平代表逻辑1</li>
+<li>负电平代表逻辑0</li>
+<li>脉冲时间内会回到零电平（窄脉冲）</li>
+</ul>
+<p>信号线上会出现3种电平： + 正电平 + 负电平 + 零电平</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/RZcode.png">
+<h5 id="单极性码和双极性码的比较">单极性码和双极性码的比较</h5>
+<ul>
+<li>单极性码会积累直流分量，无法在通信设备和周围环境之间用变压器做良好绝缘的交流耦合。直流分量会损坏连接点的电镀层。</li>
+<li>双极性码的直流分量可以忽略，有利于数据传输。</li>
+</ul>
+<h5 id="不归零翻转码或称反向不归零编码">不归零翻转码（或称反向不归零编码）</h5>
+<p>NRZI, Non-Return-to-Zero Inverted Code.</p>
+<ul>
+<li>电平的高低翻转（高-&gt;低，低-&gt;高，），表示一个逻辑值</li>
+<li>电平不变，表示另一个逻辑值</li>
+<li>全宽码</li>
+</ul>
+<p>USB 2.0传输就采用了NRZI码：<br>
++ 电平翻转代表0， + 电平不变代表1。</p>
+<p>NRZI码的特点：<br>
+即使整个脉冲波形完全翻转，也表示了相同的数据。</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190701141949127_25773.png">
+<h5 id="曼彻斯特编码">曼彻斯特编码</h5>
+<ul>
+<li>双极性码</li>
+<li>每个脉冲的中间有一个正负电平的跳变</li>
+<li>正-&gt;负，表示0</li>
+<li>负-&gt;正，表示1</li>
+</ul>
+<p>曼彻斯特编码常用于局域网中。</p>
+<h5 id="差分曼彻斯特编码">差分曼彻斯特编码</h5>
+<ul>
+<li>双极性码</li>
+<li>脉冲开头有跳变（不论方向），表示0</li>
+<li>脉冲开头无跳变（不论方向），表示1</li>
+<li>脉冲中间必有跳变（时钟信号）</li>
+</ul>
+<p>差分曼彻斯特编码比曼彻斯特编码的变化更少，是对前者的改进，广泛的用于宽带高速网中。</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190701141342452_27213.gif">
+<h4 id="收发两端的同步问题">2.收发两端的同步问题</h4>
+<p>Q. 同步是什么？<br>
+A. 串行通信中，收发双方统一时钟、频率等相关物理量的过程，称为同步。</p>
+<p>同步包括：</p>
+<ol type="1">
+<li>尺子(脉宽）：双方统一脉宽，脉宽= 1 / 脉冲频率，因此也称为频率同步。</li>
+<li>时间(时钟)：频率统一后，双方的时钟必须一致，否则会出错。</li>
+<li>数据起点(起始位、帧头）：双方必须从同一起点测量数据线上电平的变化。</li>
+<li>数据终点(终止位、帧尾)：让收方知道数据何时结束。</li>
+</ol>
+<p>电平信号的传输速度接近光速，因此发方发出一个信号，收方几乎同时收到。</p>
+<p>假设要发送以下数据：12，23，34，45，56，67，78，89。<br>
+收方就必须知道数据什么时候开始发送，什么时候结束等信息，否则，可能会将数据接收成22，33，44，55，66，77，88。</p>
+<p>同步方法主要有： ##### 1. 位同步法（同步传输） 对于每一位数据，收方都要和发方保持同步。</p>
+<p>实现位同步的方法，分为： ###### 外同步（专门的同步脉冲，帧头/帧尾，帧包含了多个字符或较长的位流） + 发方先发同步脉冲（帧头），再发数据（字符/位流），最后发帧尾。<br>
++ 收方根据同步脉冲计算出：频率（脉宽）、数据起点等同步信息。<br>
++ 收方与发方在帧头处同步，之后开始接收数据， + 如果帧的字符数或比特数过大，发收双方可能无法保持同步，但可以在帧尾再次同步。</p>
+<h6 id="自同步数据脉冲自带同步信息">自同步（数据脉冲自带同步信息）</h6>
+<ul>
+<li>收方从数据信号中提取同步信号。<br>
+</li>
+<li>每一个码元都是同步的。</li>
+</ul>
+<p>比如：<br>
+曼彻斯特编码：<br>
+每一个脉冲中间有一个电平跳变，这就是时钟信号，从高-&gt;低跳变表示1，从低-&gt;高跳变表示0。<br>
+跳变既是时钟信号，又是数据信号。</p>
+<p>差分曼彻斯特编码：<br>
+每个脉冲中间的电平跳变提供时钟信号。<br>
+根据脉冲开头有无跳变来决定数据是0还是1。<br>
+同样，中间跳变是时钟信号，开头跳变是数据。</p>
+<p>勘误：<br>
+&gt; 曼彻斯特编码和差分曼彻斯特编码的每一个码元都被调制成两个电平，所以数据传输速率只有调制速率的1/2。</p>
+<p>这句话是错误的：<br>
+波特率：即调制速率，单位时间内传输码元符号的个数（传符号率）。<br>
+以曼彻斯特编码为例，每个中间跳变（从高到低/从低到高）的脉冲都只是一个符号，只能视为一个码元。<br>
+而不是 电平数/单位时间。 数据传输速率：每个码元符号代表的二进制位数 * 波特率。也称为信息传输速率（传信率）。</p>
+<p>对于同步通讯协议，发送方在发送数据之前先发出一个特殊的电信号，让接收方准备好接收数据，然后发送方就将以上数据全部连续发出，发送完毕后，再发送一个特殊的电信号表示数据发送结束。我们可以用下图表示同步信号通讯。 <code>开始 1223344556677889 结束</code> 然后，接收方按照事先约定，即每两位一个数值，将数据包分成一个个数值。</p>
+<h5 id="群同步法异步传输每次传输一个字符也称为起止式传输">2. 群同步法（异步传输，每次传输一个字符，也称为“起止式传输”）</h5>
+<ul>
+<li>以“群”为单位发送数据，通常一个群就是一个字符（5~8个比特位）。<br>
+</li>
+<li>群前加起始位，群后加终止位。起始位+群的字符位+终止位 = 一个字节。<br>
+</li>
+<li>群的间隔时间任意，此期间，收方和发方可能不同步，也无需同步。</li>
+<li>群内，收方以一个固定的频率接收比特位(严格来说，收方与发方不可能完全同步，但对于一个字符这么短的数据流来说，可以视为同步）</li>
+</ul>
+<p>对于异步通讯协议，发送方每发送一个数据都要发一“开始”标志，每个数据发送结束后都发出一个“结束”标志。<br>
+用下图表示异步通讯信号： <code>开始 12 结束 开始 23 结束 开始 34 结束 ...</code></p>
+<p>因此，对于发送方发送数据的时间不确定的情况，适合采用异步通讯。</p>
+<p>同步传输和异步传输的比较：<br>
++同步传输的编码效率较高，信道利用率高，适合高速传输 + 异步传输的编码效率较低，信道利用率低，适合低速传输</p>
+<p>需要说明一下：<br>
+教材上说的同步和异步，和正常的理解存在偏差。</p>
+<p>一般人的理解：<br>
++ 收发双方根据同步信号校准，称为同步。比如曼彻斯特编码、差分曼彻斯特编码。 + 通过帧头/起始位，双方实现同步后，按照自己的时钟各自发/收数据，直到遇到帧尾或终止位，这段时间内的传输应该叫异步，因为可能出现双方不同步的情况。</p>
+<p>但教材的理解是：<br>
++ 收发双方根据同步信号校准后，就一直处于同步状态。同步传输中的外同步“接收端按照这一时钟的脉冲频率和时序锁定接收端的接收频率”，以及异步传输中的“字符中比特之间的同步定时”就是这么来的。 + 而没有同步信号的时间段内，称为异步。群同步中的”字符间的异步定时和......“就属于这种。</p>
+<p>网上看到的另一种对同步、异步的解释： 我们看最典型的SPI、I2C，这两种方式都有一个专用的CLK信号线。<br>
+发方产生一个CLK信号，通过CLK信号线传给收方方，收方根据CLK信号与发方同步：<br>
++ CLK的宽度就是一个数据位的宽度，<br>
++ CLK的上升或下降沿就是“起点”标志。 这种在通信过程中有CLK线专门传送同步信号的方式，就是同步通信。</p>
+<p>同步通信由于有专用的CLK线控制，通信双方比较容易实现“同步”，速度比较快。</p>
+<p>但是对于长距离的通信，同步方式就不行了：<br>
+1. 需要专门一个信号线，成本提高。<br>
+2. 通信线越长，干扰就越多，通信的速度也上不去。<br>
+因此同步方式多是同一PCB板上芯片级之间的通信使用。</p>
+<p>而长距离通信多使用“异步”通信方式，这里的“异步”不是指通信双方不需要同步，而是指双方不使用专用的同步信号线传送CLK，而是各自仅依赖于自己的系统时钟（这个就是异步的！），再根据约定的规程，调节自己的“步伐”达到双方的同步。</p>
+<h3 id="模拟数据的数字信号编码">2. 模拟数据的数字信号编码</h3>
+<h4 id="采样定理">采样定理</h4>
+<p>模拟信号转换成数字信号，通常采用脉码调制PCM（Pulse Code Modulation）的方式。</p>
+<p>PCM的数学原理是采样定理：<br>
+只要采样频率大于等于模拟信号的最高频率，或模拟信号带宽的两倍，采样值就可以包含原始信号的全部信息。 以数学形式表示如下<br>
+<span class="math inline">\(F_{d}\)</span>：数字信号采样频率， <span class="math inline">\(F_{a-min}\)</span>：模拟信号的最低频率， <span class="math inline">\(F_{a-max}\)</span>：模拟信号的最高频率，<br>
+<span class="math inline">\(H_{a} = F_{a-max} - F_{a-min}\)</span>：模拟信号的带宽</p>
+<p><span class="math display">\[
+\begin{equation}
+\begin{aligned}
+F_{d} \ge 2 \cdot H_{a}  \\
+\\ F_{d} \ge  F_{a-max}
+\end{aligned}
+\end{equation}
+\]</span></p>
+<h4 id="发送端模拟信号转为数字信号">发送端，模拟信号转为数字信号</h4>
+<ol type="1">
+<li><p>采样 以采样频率<span class="math inline">\(F_{d}\)</span>采样模拟信号，得到时间轴上各模拟量的值。</p></li>
+<li><p>量化 把模拟信号的波幅划分为多个离散的量级（2的N次方），把采到的模拟量“取整”归入各个量级。</p></li>
+<li><p>编码 将离散值写作2进制形式，从而将模拟值转换成数字值。</p></li>
+</ol>
+<p>如果有N个量化级，则每一个采样值将使用 <span class="math inline">\(log_{2}{N}\)</span> 个二进制位。<br>
+每一个采样后得到的二进制码组称为“码字”，二进制位数 <span class="math inline">\(log_{2}{N}\)</span> 称为字长。</p>
+<h4 id="接收端数字信号转为模拟信号">接收端，数字信号转为模拟信号</h4>
+<p>把收到的每一个码字，转换为对应量级的脉冲，得到数字脉冲形态的“波形”。<br>
+最后采用低通滤波得到模拟信号（只允许脉冲的峰值电平通过）。</p>
+<p>数字信号的优点： 1. 抗干扰性强<br>
+模拟信号的有用信号，与噪声混合后，难以再分开，信噪比会降低。<br>
+数字信号也会受到噪声干扰，但只要原始低电平叠加噪声后仍低于判决门限电平，或原始高电平叠加后仍高于判决门限电平，则信号不会受到影响。 2. 保密性好<br>
+数字信号的二进制序列 <span class="math inline">\(I_{(t)}\)</span>，数字密码机产生二进制密码序列<span class="math inline">\(C_{(t)}\)</span>，对两者进行“模2加”运算，得到传输序列<span class="math inline">\(B_{(t)}\)</span>。 只要密码序列不被人知道，原始数字信号序列的内容就无法得知。<br>
+而且密码序列可以随时变换，保密性大大增强。</p>
+<h2 id="调制解调器">3.4.2 调制解调器</h2>
+<h3 id="电话系统介绍">电话系统介绍</h3>
+<h4 id="电话系统的组成">电话系统的组成</h4>
+<ol start="0" type="1">
+<li>计算机</li>
+<li>计算机到调制解调器的数字线路：比如RS-232C接口</li>
+<li>调制解调器</li>
+<li><p>本地回路：从调制解调器到端局的双线本地回路，常称为“最后一公里”，但实际长度可能几公里。 本地回路通常采用双绞线，传输模拟信号。</p></li>
+<li>端局：编解码器(CODEC），有用于切换电话的交换设备</li>
+<li>端局到长途局的干线：中带宽数字线路</li>
+<li>长途局：有用于切换电话的交换设备</li>
+<li><p>长途局之间的干线：高带宽数字线路</p></li>
+</ol>
+<h4 id="电话系统的信号传输与转换过程">电话系统的信号传输与转换过程：</h4>
+<ol type="1">
+<li>计算机产生数字信号，通过信源的调制解调器MDOEM转换成模拟信号，传输到端局<br>
+</li>
+<li>端局的编解码器CODEC，将模拟信号转换为数字信号，通过光纤等数字信道传输到长途局</li>
+<li>长途局将数字信号，通过光纤传给目的地端局，</li>
+<li>目的地端局通过CODEC，将数字信号转为模拟信号，发给目的地MODEM</li>
+<li>目的地MODEM将模拟信号，转为数字信号，发给目的地计算机。</li>
+</ol>
+<h4 id="传输线路的问题">传输线路的问题</h4>
+<p>传输线路存在3个问题： + 衰减：衰减就是信号传输时损失能量的现象，可表示为“多少分贝/公里”。波是由很多不同频率的傅里叶分量构成的，衰减量的多少与傅里叶分量的频率有关，因此信号传输中不同频率的傅里叶分量发生程度不同的衰减后，会导致波形变化。 + 延迟畸变：不同的傅里叶分量的传输速度不同，会导致波形变化。 + 噪声：线路中电子的随机运动，会造成热噪声。相距太近的线路的感应耦合会引起串音。尖峰干扰等原因会引起脉冲噪声。脉冲噪声可能会淹没几位数据。</p>
+<p><em>淹没：本应是低电平的脉冲，混合噪声后成为高电平。</em></p>
+<p>因此，发出的信号和收到的信号往往不会完全一致。</p>
+<h5 id="模拟用户线路的调制解调器">1. 模拟用户线路的调制解调器</h5>
+<p>标题应该简化为：模拟线路的调制解调器，之所以叫用户线路是因为从计算机到调制解调器这段线路往往由用户购置建设，且物理上位于用户户内。</p>
+<p>衰减和延迟畸变与信号频率有关，而数字信号的方波有一个很宽的频谱，其衰减和延迟畸变会很严重。因此，数字信号采用基带传输并不合适，除非是低速、短距离情况下。</p>
+<p>数字信号不采用基带传输，又应该怎么传输呢？<br>
+在模拟线路上（比如电话线），可以用调制的办法将数字信号转为模拟信号。</p>
+<p>首先采用一个1Khz~2Khz的正弦波载波，再使用不同的调制方法得到调制信号：<br>
++ 调幅（AM,Amplitude Modulation)<br>
+用两种不同的振幅来表示0和1。</p>
+<ul>
+<li>调频(FM,Frequency Modulation) 将波调制为两种频率，来表示0和1。</li>
+</ul>
+<p>调频也称为移频键控（Shift Keying）,键控Keying 是工业界使用的术语，是调制Modulation的同义词。</p>
+<ul>
+<li>调相(Phase Modulation) 每一个码元，用载波的不同相位来表示不同的逻辑值。</li>
+</ul>
+<p>比如：<br>
+用90°和180°相位来表示0和1。（90°相位就是正方向的最大振幅，180°相位是0振幅）</p>
+<p>更好的方案是采用45°、135°、225°、315°相位，从而每一个码元表示2位二进制数。</p>
+<h6 id="调制解调器-1">调制解调器</h6>
+<div style="border:2px dashed #000;">
+<p>调制解调器的定义：<br><br>
+输入<span style="border-bottom:2px solid red;">位序列</span>，输出<span class="math inline">\(\underline{调幅、调频、调相的调制载波}\)</span>的设备（或者输入输出相反的设备）。</p>
+</div>
+<p>MODEM位于<span class="math inline">\(\underline{\textrm{数字信源（计算机）}}\)</span>和<span class="math inline">\(\underline{模拟线路（电话线路）}\)</span>之间。</p>
+<p>我们知道，波特是码元速率、调制速率，表示了每秒钟有多少个码元在线路上传输，时信号传输速率。<br>
+同时，波特表示了调制解调器的采样率（每秒钟采样生成多少个码元）。</p>
+<p>需要说明一下：<br>
+码元不单止脉冲，调制得到的符号都叫码元，比如调制得到的模拟波。<br>
+模拟信号转数字信号，有采样、量化、编码3个步骤。数字信号通过调制解调器转为模拟信号，也有采样过程，通过控制采样率，可以得到数量不同的调制码元。</p>
+<p>结论:<br>
+线路的波特率=调制解调器的采样率。</p>
+<h6 id="提高模拟信道数据传输速率r的办法">提高模拟信道数据传输速率R的办法</h6>
+<p>提高采样率的作用有限，<br>
+提高码元代表的二进制位数的作用无限。</p>
+<p>推导如下：<br>
+根据奈奎斯特定理<span class="math inline">\(B=2 \cdot H\)</span>可知，一条信道的最大波特率只有其带宽的2倍。</p>
+<p>因此：调制解调器的采样率超过线路带宽的2倍后，就无法继续提高数据传输速率了。</p>
+<p>要进一步提高数据传输速率，根据奈奎斯特公式（即理想信道的容量）<span class="math inline">\(C=B \cdot log_{2}{N}\)</span>可知：<br>
+只有提高每一个码元表示的二进制位数。</p>
+<p>比如：<br>
+（调幅）用2种电压表示1位二进制数，扩展为用4种电压表示2位二进制数。 （调相）用4个相位表示2位二进制数，称为正交相移键控（QPSK,Quadrature Phrase Shift Keying）。</p>
+<h6 id="星座图">星座图</h6>
+<p>实际应用中，调制解调器会综合运用多种调制方法来实现“一个码元表达多个二进制位”。<br>
+通常是把调幅AM和调相PM结合起来。</p>
+<p>调幅和调相结合的调制方式可以用星座图来表示：<br>
++ 点到原点（0，0）的距离，是该点在信号波上的振幅。<br>
++ 点到原点的直线，与正向X轴（0,0出发到+∞,0)的夹角，就是相位角。 + 一个点就是一个码元可能表示的状态</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190710141825287_26967.png">
+<ol type="1">
+<li>QPSK(Quadrature Phrase Shift Keying)，正交相移键控 4个点，每个码元表示2位二进制数。</li>
+</ol>
+<p>P.S. 移频键控(Frequency Shift Keying)</p>
+<ol start="2" type="1">
+<li><p>QAM-16(Quardrature Amplitude Modulation)，正交振幅调制 16个点，每个码元可以表示4位二进制数。</p></li>
+<li><p>QAM-64 64个点，每个码元可以表示6位二进制数。</p></li>
+</ol>
+<h6 id="星座模型的纠错机制">星座模型的纠错机制</h6>
+<p>传输中的噪声会导致模拟信号的相位、振幅发生变化，接收方的调制解调器会收到错误的模拟信号，转化为数字信号后，在星座图中成为位置错误的点。<br>
+星座图的点越多越密集，即使很小的噪声也容易导致这种点位错误。</p>
+<p>而每一个点位错误在二进制码中对应了多个二进制位出现错误。</p>
+<p>为解决此问题引入了纠错机制：<br>
+在发送方将数字信号转化为模拟信号时，就对数字信号的二进制形式附加额外的二进制用于纠错。</p>
+<p>随着数字信号的二进制串的变长，原本只需要N个点即可表示的星座图，就需要N+X个点来表示。 举例说明：<br>
+V.32调制解调器标准<br>
+每个码元传输4个数据位和1个奇偶校验位。<br>
+原来4个数据位只需要<span class="math inline">\(2^4=16\)</span>个点，现在使用了<span class="math inline">\(2^{(4+1)}=32\)</span>个点。 QAM-32，</p>
+<p>注意：在计算数据传输速率时，只计算数据位，不考虑纠错位。</p>
+<p>假设 B=2400 Baud ，则数据传输速率R等于<br>
+<span class="math inline">\(R=2400 \cdot log_{2}{16}=9600 bps\)</span></p>
+<div style="border:2px dashed #5DAF0E;">
+V.32bis调制解调器标准
+</div>
+<p>每个码元传输6个数据位和1个奇偶校验位，最终使用128个点，QAM-128。</p>
+<p>数据传输速率 2400 * 6 = 14400 bps<br>
+传真机就使用此速度传输位图。</p>
+<p>V.34调制解调器<br>
+每个码元传输12个数据位，1个奇偶校验位，最终使用8192个点。QAM-8192。 数据传输速率 2400 * 12 = 28800 bps</p>
+<p>V.34bis调制解调器<br>
+每个码元传输14个数据位，1个奇偶校验位，最终使用 32768个点。QAM-32768。<br>
+数据传输速率 2400 * 14 = 33600 bps</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190711112458850_24221.png">
+<p>上图的点，绕着原点逆时针旋转了45°，是出于工程的需要。旋转的星座图具有相同的数据传输能力。</p>
+<h6 id="两个本地回路模拟信道的最大容量35kbps标准调制解调器最大数据传输速度33.6kbps">两个本地回路模拟信道的最大容量35Kbps，标准调制解调器最大数据传输速度33.6Kbps</h6>
+<p>标准调制解调器的数据传输速度，最大是33.6kbps。</p>
+<p>这是由传输信道（电话系统）的物理特性（带宽）决定的，根据香农定理可以计算出电话系统的信道容量是35kbps，这个速度与本地回路的平均长度、线路的质量有关。</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190710163912154_11781.png">
+<ol type="1">
+<li><p>两个计算机通信时，两个本地回路（计算机连接的调制解调器 -- 端局的编码解码器）都传输模拟信号，模拟信号比数字信号更容易受到信道噪声干扰的影响。如果去掉一个本地回路，则噪声影响减少一半，信道容量提高一倍。<br>
+通过计算，两个计算机通过调制解调器相互通信的最大数据传输率是35Kbps。</p></li>
+<li><p>单个计算机和ISP通信时，ISP和端局之间使用光纤传输数字信号，没有调制解调器，没有模拟信道，光纤受到噪音干扰的影响可以视为0，相当于去掉了一个本地回路，此时的数据传输速率最大可达到70Kbps。</p></li>
+</ol>
+<h6 id="如何突破35kbps的信道容量">如何突破35Kbps的信道容量</h6>
+<p>为了进一步提高模拟线路的数据传输速率，可以采用：</p>
+<ul>
+<li><p>传输压缩过的数据，实际的MODEM数据传输速率仍然是33.6Kbps，但压缩后的数据传输速率会高于33.6Kbps</p></li>
+<li><p>提高采样率，电话信道的带宽大约是4000Hz，最大采样率（波特率）可以达到8000Hz。</p></li>
+</ul>
+<div style="border:1px dashed #000;">
+V.90 调制解调器
+</div>
+<p>在美洲，每个码元有7个数据位+1个控制位，最终的数据传输速率：<br>
+<span class="math inline">\(R= 2 \cdot 4000 \cdot log_{2}{128} = 56000 bps\)</span> 。</p>
+<p>在欧洲，每个码元有8个数据位，数据传输速率：<br>
+<span class="math inline">\(R= 2 \cdot 4000 \cdot log_{2}{256} = 64000 bps\)</span> 。</p>
+<p>为了统一，国际标准最终确定为56000bps，这种调制解调器标准称为 V.90。</p>
+<p>在V.90标准中，上行的数据传输速率是33.6Kbps（用户计算机到ISP），下行的数据传输速率是56Kbps（ISP到用户计算机）。因为下行数据量远大于上行数据量。</p>
+<div style="border:2px dashed #5DAF0E;">
+V.92调制解调器
+</div>
+<p>在V.90基础上，把上行数据传输率增大到了48Kbps。</p>
+<h5 id="数字用户线路xdsl">2.数字用户线路（xDSL)</h5>
+<p>调制解调器可以提供最大56Kbps的数据传输速率，但同时期的有线电视（10Mbps）、卫星公司（50Mbps）可以提供非常高速的数据传输服务，电话公司不得不推出更有竞争力的产品：宽带（Broad Band）。</p>
+<p>宽带：利用本地回路，提供比传统调制解调器更大的带宽。</p>
+<h6 id="传统电话线路为语音而生宽带为数据而生">传统电话线路为语音而生，宽带为数据而生</h6>
+<p>传统电话线路，是为传输语音信号而设计，因此在端局设立了一个滤波器，滤掉了300Hz~3400Hz的信号，使本地回路带宽限制在3100Hz的宽度（常被当做4000Hz来使用）。</p>
+<p>而数字用户线路（xDSL，Digital Subscriber Line）去掉了滤波器，充分发挥了本地回路的全部带宽（大约1.1Mhz)。</p>
+<p>本地回路的带宽取决于：<br>
++ 长度 + 粗细 + 线路质量</p>
+<p>xDSL带宽与距离成反比 <img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712162223352_30893.png"></p>
+<p>上图说明：带宽以端局为圆心，本地回路的带宽随半径而降低。</p>
+<h6 id="dsl利用频分多路复用实现设计目标">DSL利用频分多路复用实现设计目标</h6>
+<p>xDSL服务的设计目标：<br>
+1. 必须在现有的本地回路上工作 2. 不影响传统的电话和传真机 3. 比56Kbps快 4. 采用月租收费，而不是时长收费</p>
+<p>通过频分多路复用可以实现设计目标。<br>
+以最常见的ADSL为例，它采用了“分离式多信道调制DMT（Discrete MultiTone)”的频带划分方法，将本地回路上的频谱分为三个频带： 1. POTS（Plain Old Telephone Service，简单老式电话服务） 2. 上行数据流（用户到端局） 3. 下行数据流（端局到用户）</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712162612394_6279.png">
+<p>将1.1Mhz的信道划分成256条独立信道，每条信道4312.5Hz： + 信道0传输电话信号POTS + 信道1~5不传输数据，用于隔离保护 + 1条用于上行控制， + 1条用于下行控制， + 248条信道用于传输用户数据</p>
+<p>理论上，248条信道都可以作为全双工信道，但实际传输会受到各种影响而达不到理论性能，因此都只作为单工信道使用。<br>
+又因为上行和下行数据量的不同，ISP通常将多数信道用作下行，少数信道用作上行。这就是非对称的由来。</p>
+<p>常见的作法是：32条用于上行，216条用于下行。</p>
+<h6 id="adsl标准">ADSL标准</h6>
+<p>ADSL标准允许的速度：下行速度 8Mbps ，上行速度 1Mbps。</p>
+<p>但通常ISP提供的速度远低于ADSL标准： + 普通：512Kbps下行，64Kbps上行 + 高级：1Mbps下行，256Kbps上行</p>
+<p>在DMT划分的每条信道中，调制方案类似于V.34：<br>
++ 采样率不是2400 Baud，而是4000 Baud。 + 每条信道采用QAM-32768调制，每个波特可以表示15位二进制数据， + ADSL会监视每条信道的线路质量，随时调整信道的数据传输速率</p>
+<p>假设有224条下行信道，每条信道4000Baud，每个波特传输15位二进制数据。则理论下行带宽为13.44Mbps。 实际中，可能达到8Mbps的下行数据传输率。</p>
+<h6 id="adsl的部署结构">ADSL的部署结构</h6>
+<p>ADSL的部署结构有两种：</p>
+<ol type="1">
+<li>带网络接口设备NID和分离器Splitter 用户家中： 需要安装NID和分离器。<br>
+分离器将POTS信号分离出来，路由给电话机和传真机，并把数据信号分离并路由到ADSL调制解调器中。<br>
+ADSL调制解调器本质上是一组传统调制解调器，每个都工作在不同频率的信道上。</li>
+</ol>
+<p>端局：<br>
+也需要安装分离器。<br>
+语音信号被分离并路由到语音交换机。<br>
+数字信号被路由到数字用户线路访问复用器（DSLAM,Digital Subscriber Line Access Multiplexer）。<br>
+DSLAM类似于ADSL调制解调器，将模拟信号解调为数字信号，发送给ISP。</p>
+<img src="/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/20190712173538351_2608.png">
+<ol start="2" type="1">
+<li>不带NID和分离器（非正式名称 G.lite) 在电话插孔中放置了低通滤波器，消除了数据。<br>
+ADSL调制解调器中放置了高通滤波器，消除了语音信号。</li>
+</ol>
+<p>缺点：可靠性不如方式1，数据传输速率只能达到 1.5Mbps。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/" title="网原 3.4 数据编码">https://roro4ever.github.io/2019/12/01/网原-3-4-数据编码/网原-3-4-数据编码/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-3-0-通信基础知识/网原-3-0-通信基础知识/" rel="next" title="网原 3.0 通信基础知识">
+                  <i class="fa fa-chevron-left"></i> 网原 3.0 通信基础知识
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-3-5-数据交换技术/网原-3-5-数据交换技术/" rel="prev" title="网原 3.5 数据交换技术">
+                  网原 3.5 数据交换技术 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据编码技术"><span class="nav-text">3.4.1 数据编码技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数字数据的数字信号编码"><span class="nav-text">1. 数字数据的数字信号编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基带和频带"><span class="nav-text">1.基带和频带</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数字数据的数字信号表示"><span class="nav-text">2.数字数据的数字信号表示</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#不归零码全宽码"><span class="nav-text">不归零码（全宽码）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#单极性不归零码"><span class="nav-text">单极性不归零码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#双极性不归零码"><span class="nav-text">双极性不归零码</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#归零码"><span class="nav-text">归零码</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#单极性归零码"><span class="nav-text">单极性归零码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#双极性归零码"><span class="nav-text">双极性归零码</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#单极性码和双极性码的比较"><span class="nav-text">单极性码和双极性码的比较</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#不归零翻转码或称反向不归零编码"><span class="nav-text">不归零翻转码（或称反向不归零编码）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#曼彻斯特编码"><span class="nav-text">曼彻斯特编码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#差分曼彻斯特编码"><span class="nav-text">差分曼彻斯特编码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收发两端的同步问题"><span class="nav-text">2.收发两端的同步问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#自同步数据脉冲自带同步信息"><span class="nav-text">自同步（数据脉冲自带同步信息）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#群同步法异步传输每次传输一个字符也称为起止式传输"><span class="nav-text">2. 群同步法（异步传输，每次传输一个字符，也称为“起止式传输”）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟数据的数字信号编码"><span class="nav-text">2. 模拟数据的数字信号编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#采样定理"><span class="nav-text">采样定理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发送端模拟信号转为数字信号"><span class="nav-text">发送端，模拟信号转为数字信号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接收端数字信号转为模拟信号"><span class="nav-text">接收端，数字信号转为模拟信号</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调制解调器"><span class="nav-text">3.4.2 调制解调器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#电话系统介绍"><span class="nav-text">电话系统介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#电话系统的组成"><span class="nav-text">电话系统的组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#电话系统的信号传输与转换过程"><span class="nav-text">电话系统的信号传输与转换过程：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#传输线路的问题"><span class="nav-text">传输线路的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#模拟用户线路的调制解调器"><span class="nav-text">1. 模拟用户线路的调制解调器</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#调制解调器-1"><span class="nav-text">调制解调器</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#提高模拟信道数据传输速率r的办法"><span class="nav-text">提高模拟信道数据传输速率R的办法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#星座图"><span class="nav-text">星座图</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#星座模型的纠错机制"><span class="nav-text">星座模型的纠错机制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#两个本地回路模拟信道的最大容量35kbps标准调制解调器最大数据传输速度33.6kbps"><span class="nav-text">两个本地回路模拟信道的最大容量35Kbps，标准调制解调器最大数据传输速度33.6Kbps</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#如何突破35kbps的信道容量"><span class="nav-text">如何突破35Kbps的信道容量</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数字用户线路xdsl"><span class="nav-text">2.数字用户线路（xDSL)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#传统电话线路为语音而生宽带为数据而生"><span class="nav-text">传统电话线路为语音而生，宽带为数据而生</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#dsl利用频分多路复用实现设计目标"><span class="nav-text">DSL利用频分多路复用实现设计目标</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#adsl标准"><span class="nav-text">ADSL标准</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#adsl的部署结构"><span class="nav-text">ADSL的部署结构</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: 'f32fa50454392442bbea0791d997a75d',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

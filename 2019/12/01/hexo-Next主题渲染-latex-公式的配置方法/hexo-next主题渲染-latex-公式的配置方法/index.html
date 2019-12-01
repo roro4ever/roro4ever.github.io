@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Next 主题可以使用 mathjax 和 katex 两种渲染 latex 的方式。   * katex 渲染速度更快，但仅支持 latex 的子集。      * mathjax 渲染速度稍慢，但对 latex 的支持较好。  Next 主题的配置文件 _config.yml 中：  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18   # Math F">
+<meta name="keywords" content="hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo Next主题渲染 Latex 公式的配置方法">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/hexo-Next主题渲染-latex-公式的配置方法/hexo-next主题渲染-latex-公式的配置方法/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="Next 主题可以使用 mathjax 和 katex 两种渲染 latex 的方式。   * katex 渲染速度更快，但仅支持 latex 的子集。      * mathjax 渲染速度稍慢，但对 latex 的支持较好。  Next 主题的配置文件 _config.yml 中：  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18   # Math F">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T07:36:59.514Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo Next主题渲染 Latex 公式的配置方法">
+<meta name="twitter:description" content="Next 主题可以使用 mathjax 和 katex 两种渲染 latex 的方式。   * katex 渲染速度更快，但仅支持 latex 的子集。      * mathjax 渲染速度稍慢，但对 latex 的支持较好。  Next 主题的配置文件 _config.yml 中：  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18   # Math F">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/hexo-Next主题渲染-latex-公式的配置方法/hexo-next主题渲染-latex-公式的配置方法/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Hexo Next主题渲染 Latex 公式的配置方法 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/hexo-Next主题渲染-latex-公式的配置方法/hexo-next主题渲染-latex-公式的配置方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo Next主题渲染 Latex 公式的配置方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:35:05 / 修改时间：15:36:59" itemprop="dateCreated datePublished" datetime="2019-12-01T15:35:05+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/应用软件/" itemprop="url" rel="index">
+                    <span itemprop="name">应用软件</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Next 主题可以使用 mathjax 和 katex 两种渲染 latex 的方式。</p>
+<ul>
+<li>katex 渲染速度更快，但仅支持 latex 的子集。<br>
+</li>
+<li>mathjax 渲染速度稍慢，但对 latex 的支持较好。</li>
+</ul>
+<p>Next 主题的配置文件 _config.yml 中：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Math Formulas Render Support</span></span><br><span class="line"><span class="attr">math:</span></span><br><span class="line">  <span class="comment"># Default (true) will load mathjax / katex script on demand.</span></span><br><span class="line">  <span class="comment"># That is it only render those page which has `mathjax: true` in Front-matter.</span></span><br><span class="line">  <span class="comment"># If you set it to false, it will load mathjax / katex srcipt EVERY PAGE.</span></span><br><span class="line"><span class="attr">  per_page:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># hexo-renderer-pandoc (or hexo-renderer-kramed) required for full MathJax support.</span></span><br><span class="line"><span class="attr">  mathjax:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># See: https://mhchem.github.io/MathJax-mhchem/</span></span><br><span class="line"><span class="attr">    mhchem:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># hexo-renderer-markdown-it-plus (or hexo-renderer-markdown-it with markdown-it-katex plugin) required for full Katex support.</span></span><br><span class="line"><span class="attr">  katex:</span></span><br><span class="line"><span class="attr">    enable:</span> <span class="literal">false</span></span><br><span class="line">    <span class="comment"># See: https://github.com/KaTeX/KaTeX/tree/master/contrib/copy-tex</span></span><br><span class="line"><span class="attr">    copy_tex:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>mathjax 和 katex 是互斥的两个选项，enable 不能同时 true或 false。</p>
+<p>如果设置 <code>mathjax : true</code> ，就需要更换渲染引擎， <code>hexo-renderer-pandoc</code> 或 <code>hexo-renderer-kramed</code>。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">uninstall</span> hexo-renderer-marked <span class="comment">--save</span></span><br><span class="line">npm <span class="keyword">install</span> hexo-renderer-pandoc <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
+<p>如果 <code>katex : true</code> ，则需要更换 hexo-renderer-markdown-it ，或者在原来的 hexo-renderer-marked 引擎下使用 markdown-it-katex plugin。</p>
+<p>另外需要注意，如果置 <code>mathjax: true</code>，且使用了 <code>hexo-renderer-kramed</code>渲染引擎，会遇到一行只能使用一个行内公式的情况。<br>
+解决方法是直接修改<code>hexo-renderer-kramed</code>相关源码，把文件 node_modules/kramed/lib/rules/inline.js 做如下修改：</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var inline = &#123;</span><br><span class="line">  escape: /^<span class="symbol">\\</span>([<span class="symbol">\\</span>`*&#123;&#125;<span class="symbol">\[</span><span class="symbol">\]</span>()#$+<span class="symbol">\-</span>.!_&gt;])/,</span><br><span class="line">  // ...</span><br><span class="line">  em: /^<span class="symbol">\b</span>_((?:__|[<span class="symbol">\s</span><span class="symbol">\S</span>])+?)_<span class="symbol">\b</span>|^<span class="symbol">\*</span>((?:<span class="symbol">\*</span><span class="symbol">\*</span>|[<span class="symbol">\s</span><span class="symbol">\S</span>])+?)<span class="symbol">\*</span>(?!<span class="symbol">\*</span>)/,</span><br><span class="line">  // ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>修改为:<br>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var inline = &#123;</span><br><span class="line">  escape: /^\\([<span class="string">`*\[\</span>](<span class="link"></span>)#$+\-.!_&gt;])/,</span><br><span class="line">  // ...</span><br><span class="line">  em: /^\<span class="emphasis">*((?:\*</span>\<span class="emphasis">*|[\s\S])+?)\*</span>(?!\*)/,</span><br><span class="line">  // ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>笔者有一些高数笔记，因此使用了 pandoc。 per_page 取值的差异在注释中已经说得很清楚了：</p>
+<ul>
+<li>true: 仅当 front-matter 中存在 <code>mathjax: true</code> 时，该页面才会被渲染。因为渲染会影响速度，推荐用“此选项 + front-matter”进行控制。</li>
+<li>false: 每篇文章都会进行渲染，不论其中有无公式。</li>
+</ul>
+<hr>
+<p>相关知识:</p>
+<h2 id="latex-行内公式行间公式">LaTex 行内公式、行间公式</h2>
+<p>行内公式：包含在行内的公式。</p>
+<p>行内公式统一使用 <code>$...$</code> 来表达，<code>$</code> 前后一般要有空格， 除非公式后面有标点符号。</p>
+<p>行间公式：独立成行的公式。</p>
+<h2 id="mhchem">mhchem</h2>
+<p><a href="https://mhchem.github.io/MathJax-mhchem/" target="_blank" rel="noopener">mhchem for MathJax</a></p>
+<p>显示化学公式的 JS库。</p>
+<h2 id="katex">Katex</h2>
+<p><a href="https://zh.wikipedia.org/wiki/KaTeX" target="_blank" rel="noopener">KaTex wiki</a></p>
+<p>katex 是一个JS库，可以在多种浏览器上显示数学公式。相对 Latex 更加轻量，但支持更少的数学符号。特点是轻量、快速、易于使用。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/hexo-Next主题渲染-latex-公式的配置方法/hexo-next主题渲染-latex-公式的配置方法/" title="Hexo Next主题渲染 Latex 公式的配置方法">https://roro4ever.github.io/2019/12/01/hexo-Next主题渲染-latex-公式的配置方法/hexo-next主题渲染-latex-公式的配置方法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              
+              <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/29/NotePad2打开文件乱码的原因和解决/notepad2打开文件乱码的原因和解决/" rel="next" title="NotePad2打开文件乱码的原因和解决">
+                  <i class="fa fa-chevron-left"></i> NotePad2打开文件乱码的原因和解决
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-1-4-计算机网络的标准化/网原-1-4-计算机网络的标准化/" rel="prev" title="网原 1.4 计算机网络的标准化">
+                  网原 1.4 计算机网络的标准化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#latex-行内公式行间公式"><span class="nav-text">LaTex 行内公式、行间公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mhchem"><span class="nav-text">mhchem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#katex"><span class="nav-text">Katex</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '2fd10d08c122a97b74e8ac9ea2f5b3f7',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

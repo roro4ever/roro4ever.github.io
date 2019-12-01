@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="3.3.1 通信信道 数据传输速率 R 数据传输速率：每秒钟传输的二进制位数。单位 bps。  1 2 3   $$ R = \frac{1}{T} log_{2}N $$   R表示Rate。  T是一个脉冲的宽度（即脉冲在时间轴上占据的宽度，单位秒）。\(\frac{1}{T}\)就是脉冲波的频率，也是后文要讲的码元传输速率B。  码元，本质上是一个脉冲信号。 因为脉冲的高低电平状态可以表示N">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 3.3 数据通信技术">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="3.3.1 通信信道 数据传输速率 R 数据传输速率：每秒钟传输的二进制位数。单位 bps。  1 2 3   $$ R = \frac{1}{T} log_{2}N $$   R表示Rate。  T是一个脉冲的宽度（即脉冲在时间轴上占据的宽度，单位秒）。\(\frac{1}{T}\)就是脉冲波的频率，也是后文要讲的码元传输速率B。  码元，本质上是一个脉冲信号。 因为脉冲的高低电平状态可以表示N">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/20190617121225131_8118.jpg">
+<meta property="og:updated_time" content="2019-12-01T14:28:12.338Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 3.3 数据通信技术">
+<meta name="twitter:description" content="3.3.1 通信信道 数据传输速率 R 数据传输速率：每秒钟传输的二进制位数。单位 bps。  1 2 3   $$ R = \frac{1}{T} log_{2}N $$   R表示Rate。  T是一个脉冲的宽度（即脉冲在时间轴上占据的宽度，单位秒）。\(\frac{1}{T}\)就是脉冲波的频率，也是后文要讲的码元传输速率B。  码元，本质上是一个脉冲信号。 因为脉冲的高低电平状态可以表示N">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/20190617121225131_8118.jpg">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 3.3 数据通信技术 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 3.3 数据通信技术
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 15:51:56 / 修改时间：22:28:12" itemprop="dateCreated datePublished" datetime="2019-12-01T15:51:56+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第三章-物理层/" itemprop="url" rel="index">
+                    <span itemprop="name">第三章 物理层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="通信信道">3.3.1 通信信道</h4>
+<h5 id="数据传输速率-r">数据传输速率 R</h5>
+<p>数据传输速率：每秒钟传输的二进制位数。单位 bps。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">R = \frac&#123;1&#125;&#123;T&#125; log_&#123;2&#125;N</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>R表示Rate。</p>
+<p>T是一个脉冲的宽度（即脉冲在时间轴上占据的宽度，单位秒）。<span class="math inline">\(\frac{1}{T}\)</span>就是脉冲波的频率，也是后文要讲的码元传输速率B。</p>
+<p><em>码元，本质上是一个脉冲信号。<br>
+因为脉冲的高低电平状态可以表示N进制数字——即某种码，而它又是信号的最小单元，因此称为码元。</em></p>
+<p>N是一个码元能够表达的离散值个数，通常是2的整数次方。<br>
+比如：</p>
+<ul>
+<li>N=2，电平对应的值可能是 0 1</li>
+<li>N=4，电平对应的值可能是 0 1 2 3</li>
+<li>N=8，电平对应的值可能是 0 1 2 3 4 5 6 7</li>
+</ul>
+<p>码元的离散值个数 N ，实际上是电平的N种高低状态，也称为“调制电平数”。 <img src="/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/20190617121225131_8118.jpg"></p>
+<p><span class="math inline">\(log_{2}N\)</span> 的含义：一个码元表示的二进制数，的位数。</p>
+<p>比如</p>
+<ul>
+<li>N=2，一个码元能表达1位二进制数<br>
+</li>
+<li>N=4，能够表达2位二进制数<br>
+</li>
+<li>N=8，能够表达3位二进制数</li>
+</ul>
+<h5 id="信号传输速率-b">信号传输速率 B</h5>
+<p>信号传输速率：单位时间内，通过信道的码元个数。单位是波特（Baud，简写为B）。</p>
+<p>信号传输速率，从本质上讲，是原始数据经过调制成为信道上的码元后，码元的传输速率。</p>
+<p>假设码元宽度为 T秒，则信号传输速率为：</p>
+<p><span class="math display">\[
+B = \frac{1}{T} 
+\]</span></p>
+<p>信号传输速率也称为“码元速率”、“调制速率”、“波特率”。</p>
+<h4 id="数据传输速率与信号传输速率的关系">数据传输速率与信号传输速率的关系</h4>
+<p><span class="math display">\[
+R = B \times log_{2}N
+\]</span></p>
+<p>在某些调幅和调频的调制解调器中，一个码元只能表达2种离散值，N=2，<span class="math inline">\(R=\frac{1}{T} \times log_{2}2= B\)</span>，此时，数据传输速率 R = 信号传输速率 B 。</p>
+<p>在调相的4相信号方式中，一个码元对应了两个二进制位，N=4，<span class="math inline">\(R= \frac{1}{T} \times log_{2}4 = B \times 2\)</span></p>
+<h4 id="信道容量">信道容量</h4>
+<p>信道容量：信道的最大数据传输速率。单位 bps。</p>
+<ul>
+<li>信道容量描述了：信道的极限数据传输速率。<br>
+</li>
+<li>数据传输速率描述了：信道中某时点实际的数据传输速率。</li>
+</ul>
+<h6 id="信道的最大信号传输速率">信道的最大信号传输速率</h6>
+<p>带宽H是信道的物理特性（单位Hz），物理信道一旦被生产出来，带宽就确定了。<br>
+<span class="math inline">\(H=f2 - f1\)</span> ，<br>
+f2是信道能够通过的最高频率，f1是信道能够通过的最低频率。</p>
+<p>在“无噪声”情况下，信道的最高码元速率 B 是信道带宽 H 的两倍：</p>
+<p><span class="math display">\[  
+B = 2 \cdot H
+\]</span></p>
+<p>此公式打通了模拟世界与数字世界。</p>
+<h6 id="奈奎斯特公式无噪声下的信道容量">奈奎斯特公式：无噪声下的信道容量</h6>
+<p>根据数据传输速率公式，可以推导出信道容量，即奈奎斯特公式：</p>
+<p><span class="math display">\[
+C = B \cdot log_{2}{N} = 2 \cdot H \cdot log_{2}{N}
+\]</span></p>
+<p>C是信道容量，单位 bps。</p>
+<p>信道的带宽H是无法改变的物理特性，要提高信道容量C，只能提高码元代表的离散值的个数N。</p>
+<h6 id="香农公式有噪声下的信道容量">香农公式：有噪声下的信道容量</h6>
+<p>实际的信道，会受到随机噪声的干扰。此时，信道容量：</p>
+<p><span class="math display">\[ 
+C = H \cdot log_{2}{(1+S/N)}
+\]</span></p>
+<p>S是信号的功率，N是噪声的功率，S/N是信噪比。</p>
+<p>因为信噪比 S/N 通常都很大，为了方便书写和阅读，往往将信噪比 S/N 书写成分贝形式，</p>
+<p><em>分贝：两个功率之比的对数。</em> <em>对数，为了更方便的表示、计算大数值而发明。</em></p>
+<p>即：<br>
+S/N 写做 <span class="math inline">\(10 \cdot log_{10}{(S/N)}\)</span></p>
+<p>因此，在计算有噪声干扰的信道容量时，如果信噪比 S/N 采用分贝表示，则需要先计算S/N的值。<br>
+比如：带宽为5KHz，信噪比为60分贝，信道容量计算如下： 首先，<span class="math inline">\(10 \times log_{10}{(S/N)} = 60(dB)\)</span>，<br>
+计算出 S/N = <span class="math inline">\(10^{(60/10)}\)</span></p>
+<p>，最后再计算信道容量<br>
+<span class="math inline">\(C=5000 \cdot log_{2}{(1+1000000)} = 99657.85006009246814572889 (bps)\)</span> 。</p>
+<p>由香农公式可知，只要提高信噪比 S/N，就可以提高信道容量。</p>
+<h4 id="误码率">误码率</h4>
+<p>误码率<span class="math inline">\(P_e\)</span>：数据传输中，比特位出现错误的概率。</p>
+<p><span class="math display">\[
+P_e = N_e / N
+\]</span></p>
+<h4 id="通信方式">通信方式</h4>
+<p>计算机内部各部件之间、计算机与外设之间、计算机与计算机之间的数据交换，都是以通信的方式完成的。</p>
+<p>通信方式分为： ###### 1. 并行通信 多根数据线连接发送设备和接收设备，数据的N个二进制位在N条数据线上并行发送，接收设备同时收到这些二进制位，无需转换直接使用。</p>
+<ul>
+<li>传输速度快，处理简单。适合于近距离传输。</li>
+<li>远距离传输时，线缆费用太高</li>
+</ul>
+<h6 id="串行通信">2. 串行通信</h6>
+<p>发送设备和接收设备之间只有一根连接线，发送设备通过“并-串转换硬件”先将并行的N位数据转换成串行方式，在线路上逐位传输，接收设备再将串行数据转换为并行方式。</p>
+<ul>
+<li>传输速度慢，处理较复杂</li>
+<li>远距离传输时，可以利用现有的电话网络，线缆建设费用少。</li>
+</ul>
+<h6 id="串行通信的方向性结构">串行通信的方向性结构</h6>
+<p>串行通信根据数据传输的方向性可以分为： + 单工：只能在一个方向传输数据 + 半双工：可以在两个方向传输，但在某个时点，只能单个方向传输 + 全双工：可以同时在两个方向传输数据。</p>
+<h4 id="模拟数据通信和数字数据通信">模拟数据通信和数字数据通信</h4>
+<h6 id="基本术语">基本术语</h6>
+<ol type="1">
+<li>数据：反映了事物的存在形式。<br>
+分为</li>
+</ol>
+<ul>
+<li>模拟数据：在某个区间内连续变化的值。比如温度、压力。模拟数据是时间的函数，并占有了一定的频率范围——频带，比如声音数据的频率范围是20Hz~20KHz。</li>
+<li>数字数据：离散的值，比如整数、文字。</li>
+</ul>
+<ol start="2" type="1">
+<li>信号：数据的电子、电磁、光特性形式的编码。</li>
+</ol>
+<ul>
+<li>模拟信号：利用随时间连续变化的电流、电压、电磁波的某一参量（幅度、频率、相位）来表示数据。</li>
+<li>数字信号：利用离散的电脉冲来表示数据。</li>
+</ul>
+<ol start="3" type="1">
+<li><p>信息：数据的含义，或者说如何解读这些数据。</p></li>
+<li><p>信源：产生和发送信息的设备。</p></li>
+<li><p>信宿：接收和处理信息的设备。</p></li>
+<li><p>信道：信源和信宿之间的通信线路。</p></li>
+</ol>
+<h6 id="模拟数据数字数据可以任意转换为模拟信号数字信号">模拟数据/数字数据，可以任意转换为模拟信号/数字信号</h6>
+<p>无论信源产生的是模拟数据还是数字数据，最终都要转换成信号，才能在信道上传输。<br>
+模拟数据和数字数据，都可以随意转换成模拟信号或数字信号。</p>
+<p>模拟数据可以直接用模拟信号来表示：<br>
+比如：电话系统将语音数据的频带(300Hz~3400Hz)，直接映射为信道上相同频带的电信号。</p>
+<p>模拟数据也可以用数字信号来表示：<br>
+发送方通过编码解码器CODEC(Coder Decoder)，将语音模拟数据编码转换成二进制位流近似表示的数字信号。接收方通过CODEC将数字信号解码成模拟数据。</p>
+<p>数字数据可以用模拟信号来表示：<br>
+通过调制解调器MODEM（Modulater Demodulater)，将数字数据调制成模拟信号。<br>
+接收方通过MODEM将模拟信号解调成数字数据。</p>
+<p>数字数据可以用数字信号来表示： 数字数据可以直接用二进制形式的数字脉冲信号来表示。但为了改善传播特性，一般会对二进制原始数据再编码。</p>
+<h6 id="信号的衰减放大器和中继器">信号的衰减，放大器和中继器</h6>
+<p>模拟信号经过一段距离的传输后会发生衰减，需要使用放大器来增强信号，但放大器也会增大噪音，引起信号畸变。 对某些模拟信号，一定程度的畸变是可以接受的。</p>
+<p>数字信号的传输距离是有限的，超出范围后，电平信号就无法识别，接收方会认为没有信号，直接影响数据的完整性。此时需要使用中继器，将衰减的电平信号恢复到正常值，从而增大传输距离。</p>
+<p>对于数字信号，传输中发生的畸变会直接影响数据的正确性，可以通过检错、纠错手段解决。</p>
+<p>数字传输在价格、质量方面，都比模拟传输优秀。</p>
+<h4 id="多路复用技术">3.3.3 多路复用技术</h4>
+<p>多路复用技术：<br>
+物理信道的带宽（模拟信道）或容量（数字信道）通常远超过传输一路信号的带宽需求，为了提高通信线路的利用率，将多路信号组合起来同时传输，这就是多路复用技术。</p>
+<h6 id="频分多路复用fdmfrequency-division-multiplexing">1.频分多路复用（FDM，Frequency Division Multiplexing)</h6>
+<p>频分多路复用主要用于模拟信道。</p>
+<p>当物理信道的带宽超过传输单路信号的带宽需求时（“带宽”表明是模拟信道），可以将物理信道的总带宽划分成多个“<u>子信道</u> ”，每个子信道的带宽等于或略大于<span style="border-bottom:2px dashed red;">传输单路信号所需的带宽</span>，每个子信道传输单路信号。</p>
+<p>P.S. 带宽是频率范围。因此，频分多路复用就是把物理信道的总频率带划分成了多个频率带。</p>
+<p>在实际应用中，多路复用器（MUX）把多路信号调制到多个不同的载波频率上，每个信号占用一个以它的载波频率为中心的子信道，每个子信道之间还有不使用的频谱区——保护带，避免干扰，这就是频谱搬移技术。</p>
+<h6 id="时分多路复用tdmtime-division-multiplexing">2.时分多路复用（TDM，Time Division Multiplexing)</h6>
+<p>时分多路复用主要用于数字信道。</p>
+<p>当物理信道的信道容量大于单路信号的数据传输速率时，就可以采用时分多路复用技术。 解释：<br>
+一般情况下，单个脉冲的有效离散值N=2（一个脉冲仅代表一个二进制位），当信道容量C 大于 单路信号的数据传输速率R时，说明单位时间内的脉冲密度还可以提高，这就是TDM的实现基础。</p>
+<p>时分多路复用技术：<br>
+把物理信道划分成多个时间片，轮流分配给多路信号使用，从而在一条物理线路上传输多路数字信号。每一个时间片内可以传输一个二进制位，也可以传输一个字节、或者更大的比特组合。</p>
+<ul>
+<li>同步时分多路复用：预先划分好固定长度的时间片。</li>
+<li>异步时分多路复用：动态划分长度不定的时间片。</li>
+</ul>
+<p>宽带局域网中，可以混用：频分多路复用FDM + 时分多路复用TDM ：<br>
+物理信道上先用频分多路复用FDM划分出子信道，子信道中采用时分多路复用TDM交替传输多路信号。</p>
+<p>注意：<br>
+Mbps和bps的转换，是1000，而不是1024。</p>
+<h6 id="波分多路复用wdmwavelength-division-multiplexing">3.波分多路复用（WDM,Wavelength Division Multiplexing)</h6>
+<p>波分多路复用运用于光纤。</p>
+<p>光，就是一种极高频率的波。频率不同，则波长不同（频率和波长成反比）、颜色不同。</p>
+<p>波分多路复用，就是光纤上的频分多路复用技术：<br>
+多路光信号，由组合器(combiner)汇聚到一条主干光纤，通过频谱搬移技术分布在不同频率的子信道中，同时传输到主干光纤的另一头。<br>
+另一头的分离器把光信号分配到多条目的地子光纤中。<br>
+每条子光纤上的过滤器可以过滤出特定频率的光，从而得到某路原始光信号。</p>
+<h4 id="异步传输和同步传输">3.3.4 异步传输和同步传输</h4>
+<p>通信过程中，收发双方需要在多个方面保持同步： 1. 时间同步：双方的时间必须一致</p>
+<ol start="2" type="1">
+<li>时钟同步：时钟就是频率，将收发双方视作两块手表，当时间调到相同以后，只有秒针跳动的频率保持一致，才可能一直保持时间同步。</li>
+</ol>
+<p>时间同步和时钟同步，是通信的重要基础条件，比如在时分多路复用中，如果发方和收方的时钟不同步，则接收方会采集到错误的数据。</p>
+<ol start="3" type="1">
+<li><p>码元同步：也称为位同步。<br>
+码元同步用于保证收、发端的主时钟频率相同。<br>
+码元同步的方法过于专业，就不讲了。</p></li>
+<li>由码元组成的“字符、数据块”的起止同步： ###### 异步传输 也称为“群同步传输“，</li>
+</ol>
+<ul>
+<li>发送方一次只发送一个字符（5<sub>8二进制组成，假设一个码元可以取的有效离散值N=2,那么就是5</sub>8个码元）。</li>
+<li>每个字符都有一个起始位、一个停止位。<br>
+</li>
+<li>不发送字符时，发送方就连续的发送停止位。<br>
+</li>
+<li>接收方根据起始位来判断字符流中新字符的开始，然后接收字符中的所有位，直到停止位。</li>
+</ul>
+<p>特点：<br>
++ 发送方可以在任何时刻发送字符，而接收方不直到字符会在什么时候达到，只能根据起始位和停止位来判断。 + 实现比较简单 + 每个字符都带上了同步信息——起始位，而且字符位流的长度短（5~8位），收发两端的时钟误差几乎没有。 + 缺点是位开销较大：每个字符会消耗掉2~3个比特位作为起始位和停止位。</p>
+<p>假设，每8个比特要多传送2个比特，总的传输负载就增加25%。<br>
+对于数据传输量很小的低速设备来说问题不大，但对于那些数据传输量很大的高速设备来说，25%的负载增值就相当严重了。因此，异步传输常用于低速设备。</p>
+<h6 id="同步传输">同步传输</h6>
+<p>同步传输是给数据块加上帧头和帧尾，它们合在一起称为一帧（Frame）。</p>
+<p>帧头的作用： + 接收方通过帧头来得知有数据过来了，和异步传输中的起始位相同 + 接收方通过帧头计算出采样频率，与发送方同步时间和时钟，最终收发双方进入同步。</p>
+<p>同步传输通常要比异步传输快速得多。接收方不必对每个字符进行开始和停止的操作。一旦检测到帧同步字符，它就在接下来的数据到达时接收它们。另外，同步传输的开销也比较少。例如，一个典型的帧可能有500字节（即4000比特）的数据，其中可能只包含100比特的开销。这时，增加的比特位使传输的比特总数增加2.5%，这与异步传输中25 %的增值要小得多。随着数据帧中实际数据比特位的增加，开销比特所占的百分比将相应地减少。但是，数据比特位越长，缓存数据所需要的缓冲区也越大，这就限制了一个帧的大小。另外，帧越大，它占据传输媒体的连续时间也越长。在极端的情况下，这将导致其他用户等得太久。</p>
+<p>3， 区别 同步传输方式中发送方和接收方的时钟是统一的、字符与字符间的传输是同步无间隔的。同步传输要求发送方和接收方的时钟频率必须严格一致。具体表现在收发双方在硬件上的时钟端是连接在一起的。 异步传输方式并不要求发送方和接收方的时钟完全一样，字符与字符间的传输是异步的，即字符间相隔的时间是不固定的，数据传输是通过起止位来同步的，但字符中每一个bit的时间间隔必须是相同的。双方的时钟不需要严格同步，即使有百分之几的差异(差异不能太大)也可以保证数据的可靠传输。在硬件上收发双方没有时钟端相连。</p>
+<p>在具体实现上，根据数据块是字符还是“位序列”，帧头和帧尾有所不同：<br>
+1. 数据块是字符，称为面向字符： + 每个数据块以一个同步字符作为起始（同步字符称为SYN）。<br>
++ 帧头和帧尾都具有唯一的位模式，与数据的位模式完全不同。<br>
++ 接收方根据帧头、帧尾即可判别字符的开始和结束。</p>
+<ol start="2" type="1">
+<li>数据块是不定长的位流，称为面向位序列：<br>
+</li>
+</ol>
+<ul>
+<li>内部的数据块不是字符，而是任意长度、任意排列组合的位流。</li>
+<li>帧头和帧尾规定为特殊的模式：01111110</li>
+<li>发送方，内部数据位一旦出现5个1，就添加一位0，从而避免和帧头帧尾混淆</li>
+<li>接收方，一旦接收到5个1，就看下一位，如果是0，就删掉，如果是1，就表示是帧头或帧尾，从而实现同步。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/" title="网原 3.3 数据通信技术">https://roro4ever.github.io/2019/12/01/网原-3-3-数据通信技术/网原-3-3-数据通信技术/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-3-2-传输介质/网原-3-2-传输介质/" rel="next" title="网原 3.2 传输介质">
+                  <i class="fa fa-chevron-left"></i> 网原 3.2 传输介质
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-3-0-通信基础知识/网原-3-0-通信基础知识/" rel="prev" title="网原 3.0 通信基础知识">
+                  网原 3.0 通信基础知识 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#通信信道"><span class="nav-text">3.3.1 通信信道</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数据传输速率-r"><span class="nav-text">数据传输速率 R</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#信号传输速率-b"><span class="nav-text">信号传输速率 B</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据传输速率与信号传输速率的关系"><span class="nav-text">数据传输速率与信号传输速率的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信道容量"><span class="nav-text">信道容量</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#信道的最大信号传输速率"><span class="nav-text">信道的最大信号传输速率</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#奈奎斯特公式无噪声下的信道容量"><span class="nav-text">奈奎斯特公式：无噪声下的信道容量</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#香农公式有噪声下的信道容量"><span class="nav-text">香农公式：有噪声下的信道容量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#误码率"><span class="nav-text">误码率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通信方式"><span class="nav-text">通信方式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#串行通信"><span class="nav-text">2. 串行通信</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#串行通信的方向性结构"><span class="nav-text">串行通信的方向性结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模拟数据通信和数字数据通信"><span class="nav-text">模拟数据通信和数字数据通信</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#基本术语"><span class="nav-text">基本术语</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#模拟数据数字数据可以任意转换为模拟信号数字信号"><span class="nav-text">模拟数据/数字数据，可以任意转换为模拟信号/数字信号</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#信号的衰减放大器和中继器"><span class="nav-text">信号的衰减，放大器和中继器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多路复用技术"><span class="nav-text">3.3.3 多路复用技术</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#频分多路复用fdmfrequency-division-multiplexing"><span class="nav-text">1.频分多路复用（FDM，Frequency Division Multiplexing)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#时分多路复用tdmtime-division-multiplexing"><span class="nav-text">2.时分多路复用（TDM，Time Division Multiplexing)</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#波分多路复用wdmwavelength-division-multiplexing"><span class="nav-text">3.波分多路复用（WDM,Wavelength Division Multiplexing)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异步传输和同步传输"><span class="nav-text">3.3.4 异步传输和同步传输</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#同步传输"><span class="nav-text">同步传输</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '2d10e5a20cdd8a75a895313ea0e899c8',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

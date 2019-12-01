@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Stream(Flow)：从信源到信宿的分组流。  如果子网采用虚电路操作方式，同一个流的分组会走同一条路径。 如果子网采用数据报操作方式，同一个流的分组也会走不同的路由路径。  每个流对通信子网的传输性能是有要求的，称为服务质量。  服务质量: QOS，Quality of Service ，描述通信子网为流提供服务的性能指标。  QOS包括了4个方面：   * 可靠性：误码率要求高，甚至不允许">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.4 服务质量">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="Stream(Flow)：从信源到信宿的分组流。  如果子网采用虚电路操作方式，同一个流的分组会走同一条路径。 如果子网采用数据报操作方式，同一个流的分组也会走不同的路由路径。  每个流对通信子网的传输性能是有要求的，称为服务质量。  服务质量: QOS，Quality of Service ，描述通信子网为流提供服务的性能指标。  QOS包括了4个方面：   * 可靠性：误码率要求高，甚至不允许">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T08:14:51.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.4 服务质量">
+<meta name="twitter:description" content="Stream(Flow)：从信源到信宿的分组流。  如果子网采用虚电路操作方式，同一个流的分组会走同一条路径。 如果子网采用数据报操作方式，同一个流的分组也会走不同的路由路径。  每个流对通信子网的传输性能是有要求的，称为服务质量。  服务质量: QOS，Quality of Service ，描述通信子网为流提供服务的性能指标。  QOS包括了4个方面：   * 可靠性：误码率要求高，甚至不允许">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.4 服务质量 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.4 服务质量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:06:53 / 修改时间：16:14:51" itemprop="dateCreated datePublished" datetime="2019-12-01T16:06:53+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Stream(Flow)：从信源到信宿的分组流。</p>
+<p>如果子网采用虚电路操作方式，同一个流的分组会走同一条路径。<br>
+如果子网采用数据报操作方式，同一个流的分组也会走不同的路由路径。</p>
+<p>每个流对通信子网的传输性能是有要求的，称为服务质量。</p>
+<p>服务质量: QOS，Quality of Service ，描述通信子网为流提供服务的性能指标。</p>
+<p>QOS包括了4个方面：</p>
+<ul>
+<li>可靠性：误码率要求高，甚至不允许出错。</li>
+<li>延迟</li>
+<li>抖动</li>
+<li>带宽</li>
+</ul>
+<p>不同的应用对于QOS的要求不同，具体要求如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th>应用</th>
+<th>可靠性</th>
+<th>延迟</th>
+<th>抖动</th>
+<th>带宽</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>电子邮件</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+<td>低</td>
+</tr>
+<tr class="even">
+<td>文件传输</td>
+<td>高</td>
+<td>低</td>
+<td>低</td>
+<td>中</td>
+</tr>
+<tr class="odd">
+<td>Web访问</td>
+<td>高</td>
+<td>中</td>
+<td>低</td>
+<td>中</td>
+</tr>
+<tr class="even">
+<td>远程登录</td>
+<td>高</td>
+<td>中</td>
+<td>中</td>
+<td>低</td>
+</tr>
+<tr class="odd">
+<td>音频点播</td>
+<td>低</td>
+<td>低</td>
+<td>高</td>
+<td>中</td>
+</tr>
+<tr class="even">
+<td>视频点播</td>
+<td>低</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr class="odd">
+<td>电话</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr class="even">
+<td>视频会议</td>
+<td>低</td>
+<td>高</td>
+<td>高</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p>在可靠性要求高的应用中，发送方会计算分组的校验和，校验和与分组一并送出，收方验证校验和，如果有差错，要求重发。注：这里的校验和可以是任何校验算法，不限于CRC。</p>
+<p>其他几项要求就不详述。</p>
+<p>目前，还没有一种技术能够以最优的办法提供高效的、可靠的QOS，只能综合运用多种技术手段来尽量满足应用的需求。</p>
+<h2 id="qos体系结构集成服务和区分服务">5.4.1 QOS体系结构：集成服务和区分服务</h2>
+<p>为了保证流式多媒体应用的服务质量，IETF先后设计了两种QOS体系结构：集成服务、区分服务。</p>
+<h6 id="集成服务integrated-service">集成服务，Integrated Service</h6>
+<p>集成服务：针对单播和多播应用，设计了一些“基于流的算法(Flow-Based Algrorithm)”（单播可以看作是多播的一个特例）</p>
+<p>集成服务体系中，最重要的算法是资源预留协议(Resource reSerVation Protocal, RSVP)，提前预留资源，可以看作是提前建立流，类似于虚电路。</p>
+<p>RSVP的主要任务是为流提前预留资源：</p>
+<ul>
+<li>多个发送方可以给多个接受组传送数据</li>
+<li>接收方可以指定一个或多个数据源，</li>
+<li>接收方可以指定数据源是固定的，还是以后可变的。</li>
+<li>多个接收方使用同一个固定数据源的话，可以共享路径。</li>
+</ul>
+<p>路由器根据这些信息可以优化带宽的使用计划，甚至消除拥塞。</p>
+<ul>
+<li>优点：可以为少量的流提供非常好的服务质量。</li>
+<li>缺点：提前建立流（提前资源预留）。如果需要建立几千几万个流，则扩展性太差。</li>
+</ul>
+<p>因此，集成服务目前没有具体实现，甚至RSVP算法的实现也很少。</p>
+<h6 id="区分服务-differentiated-service">区分服务, Differentiated Service</h6>
+<p>区分服务是比集成服务更加简单的QOS体系，而且已经被IETF标准化。</p>
+<p>区分服务：不需要提前建立流，而是由每台路由器在局部范围内实现，不涉及整条路径。</p>
+<p>区分服务，是按照整个子网的路由器按照应用类型来预留资源，比如：所有节点为网络中所有的 IP电话应用预留资源，为所有的文件传输应用预留资源，但任何一个IP电话/文件传输的流都不会在某条路径上单独预留资源，因此也称为“基于类别的(class-based)”服务质量。</p>
+<h2 id="标签交换和-mpls">5.4.2 标签交换和 MPLS</h2>
+<p>IETF推出集成服务和区分服务的同时，各厂商也推出了一种更好的路由转发思想：标签交换。</p>
+<h6 id="标签交换label-switching-tag-switching">标签交换，Label Switching , Tag Switching</h6>
+<p>标签交换：给每个分组附加一个标签，路由器收到分组后不再根据分组中的目标 IP 地址做路由选择，而是到内部表中查询标签对应的输出线路，完成路由。</p>
+<p>标签交换和虚电路很相似：</p>
+<ul>
+<li>都需要给分组打上标签：比如 X.25、ATM、帧中继，以及所有包含虚电路子网的网络，都会给分组附上”虚电路标识符“。</li>
+<li>都需要查询内部表：比如虚电路表。</li>
+</ul>
+<p>但标签交换这种Internet构造路由的处理方法，和虚电路这种面向连接的网络构造路由的方法，存在本质区别：</p>
+<ul>
+<li>标签交换发生在数据链路层，属于2层交换。虚电路交换发生在网络层，属于IP交换。</li>
+</ul>
+<p>另外，标签交换因为发生在2层，所以速度比虚电路快，也容易实现资源预留（这个不太理解为什么更容易）。</p>
+<h6 id="mpls">MPLS</h6>
+<p>IETF 对标签交换进行了标准化，称为 MPLS。</p>
+<p>MPLS：Multi Protocol Label Swtiching，多协议标签交换。多协议是指支持 IPv4，IPv6，IPX等多种协议。</p>
+<p>MPLS是流量工程(Traffic Engineering)和VPS的重要手段。</p>
+<p>目前的通信网络中，存在两种交换节点：</p>
+<ul>
+<li>ATM（Asychronous Transfer Mode)异步传输模式交换机：面向连接的异步传输，信元长度固定53字节。</li>
+<li>路由器：无连接传输，信源是长度可变的IP分组。</li>
+</ul>
+<p>ATM交换具有高效的特点，IP交换具有信令简单的优点，而MPLS交换技术就可以将两者相结合：<br>
+把具有MPLS功能的IP路由器，和具有MPLS功能的ATM交换机结合起来，组建新的集成业务通信网，在新的网络中实现 IPOA（IP over ATM，即通过ATM网络来传输IP分组)。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/" title="网原 5.4 服务质量">https://roro4ever.github.io/2019/12/01/网原-5-4-服务质量/网原-5-4-服务质量/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/" rel="next" title="网原 5.3 拥塞控制">
+                  <i class="fa fa-chevron-left"></i> 网原 5.3 拥塞控制
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-5-网络互连/网原-5-5-网络互连/" rel="prev" title="网原 5.5 网络互连">
+                  网原 5.5 网络互连 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#qos体系结构集成服务和区分服务"><span class="nav-text">5.4.1 QOS体系结构：集成服务和区分服务</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#集成服务integrated-service"><span class="nav-text">集成服务，Integrated Service</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#区分服务-differentiated-service"><span class="nav-text">区分服务, Differentiated Service</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标签交换和-mpls"><span class="nav-text">5.4.2 标签交换和 MPLS</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#标签交换label-switching-tag-switching"><span class="nav-text">标签交换，Label Switching , Tag Switching</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#mpls"><span class="nav-text">MPLS</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '32f9ba38d26fb95839abaa218f3ec377',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="路由选择：源节点和目的节点之间有多条传输路径，为收到的分组确定传输路径的行为。  路由选择是网络层的基本功能。   * 数据报子网：进入通信子网的每个分组，始终需要每个节点为其进行路由选择。  * 虚电路子网：建立虚电路时，每个节点要为呼叫请求分组做路由选择，建立后，不再需要。  路由选择包含了2个基本操作：   1. 最佳路径的判定：相对2更复杂  2. 网间信息包的传送（这个还不理解）  路由">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 5.2 路由选择">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="路由选择：源节点和目的节点之间有多条传输路径，为收到的分组确定传输路径的行为。  路由选择是网络层的基本功能。   * 数据报子网：进入通信子网的每个分组，始终需要每个节点为其进行路由选择。  * 虚电路子网：建立虚电路时，每个节点要为呼叫请求分组做路由选择，建立后，不再需要。  路由选择包含了2个基本操作：   1. 最佳路径的判定：相对2更复杂  2. 网间信息包的传送（这个还不理解）  路由">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T08:27:35.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 5.2 路由选择">
+<meta name="twitter:description" content="路由选择：源节点和目的节点之间有多条传输路径，为收到的分组确定传输路径的行为。  路由选择是网络层的基本功能。   * 数据报子网：进入通信子网的每个分组，始终需要每个节点为其进行路由选择。  * 虚电路子网：建立虚电路时，每个节点要为呼叫请求分组做路由选择，建立后，不再需要。  路由选择包含了2个基本操作：   1. 最佳路径的判定：相对2更复杂  2. 网间信息包的传送（这个还不理解）  路由">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 5.2 路由选择 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 5.2 路由选择
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:06:27 / 修改时间：16:27:35" itemprop="dateCreated datePublished" datetime="2019-12-01T16:06:27+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第五章-网络层/" itemprop="url" rel="index">
+                    <span itemprop="name">第五章 网络层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>路由选择：源节点和目的节点之间有多条传输路径，为收到的分组确定传输路径的行为。</p>
+<p>路由选择是网络层的基本功能。</p>
+<ul>
+<li>数据报子网：进入通信子网的每个分组，始终需要每个节点为其进行路由选择。</li>
+<li>虚电路子网：建立虚电路时，每个节点要为呼叫请求分组做路由选择，建立后，不再需要。</li>
+</ul>
+<p>路由选择包含了2个基本操作：</p>
+<ol type="1">
+<li>最佳路径的判定：相对2更复杂</li>
+<li>网间信息包的传送（这个还不理解）</li>
+</ol>
+<h6 id="路由选择算法routing-algorithm">路由选择算法，Routing Algorithm</h6>
+<p>路由选择算法：路由选择的策略。</p>
+<p>路由选择算法需要考虑很多技术要素：</p>
+<ul>
+<li>选择最短路由，还是最佳路由</li>
+<li>通信子网采用虚电路操作方式还是数据报操作方式</li>
+<li>采用分布式路由算法，还是集中式路由算法：分布式——每个节点都参与路由，集中式——中央节点或始发节点决定路由</li>
+<li>考虑网络拓扑、流量、延迟等网络信息</li>
+<li>采用静态路由选择，还是动态路由选择</li>
+</ul>
+<h2 id="最优化原则optimality-principle">5.2.1 最优化原则，Optimality Principle</h2>
+<h6 id="最优化原则">最优化原则</h6>
+<p>假设：节点 I 和节点 K 之间的若干条路由中，存在一条最佳路由“I - K”，"I - K"又经过了节点 J，那么其中的“ J - K”部分，也是节点 J 到节点 K 的若干条路由中的最佳路由。</p>
+<h6 id="汇集树sink-tree">汇集树，Sink Tree</h6>
+<p>根据最优化原则，可以推导出汇集树。</p>
+<p>汇集树：目的节点作为根，网络中任一节点到该目的节点的最佳路由，组成的一棵树。</p>
+<p>一个目的节点的汇集树并不唯一！</p>
+<p>路由选择算法的目的：为所有节点找到汇集树。</p>
+<h6 id="汇集树的理论优势以及实际应用">汇集树的理论优势，以及实际应用</h6>
+<p>理论上讲：<br>
+汇集树是一棵树，其拓扑结构没有循环，因此分组沿汇集树传输必定在有限站数内到达目的节点，而且还是最佳路由。</p>
+<p>但实际运行情况特别复杂：</p>
+<ul>
+<li>链路经常被切断；</li>
+<li>路由器（节点）经常停止工作后又恢复工作；</li>
+</ul>
+<p>不同节点对子网的拓扑结构的理解不同。</p>
+<ul>
+<li>不同的节点获取子网信息和汇集树信息的方法不同</li>
+</ul>
+<p>最终，不同的节点对整个子网生成的汇集树可能差异很大。</p>
+<h2 id="静态路由选择算法">5.2.2 静态路由选择算法</h2>
+<p>静态路由选择算法：不需要测量，不依靠网络的实时状态信息，由网管按照某种规则，手工建立映射表。</p>
+<p>20世纪90年代以来，大多数优秀的路由选择算法都是动态的，但静态路由选择算法仍然有意义：<br>
+它能够为一些无法选择路由的数据包指定目标路由器，将其转发过去，弥补了动态路由选择算法的某些不足。</p>
+<h3 id="最短路由选择算法shortest-routing利用已知的静态距离">1. 最短路由选择算法，Shortest Routing（利用已知的静态”距离“）</h3>
+<p>最短路由算法简单易懂、应用广泛。</p>
+<p>最短路由选择算法的基本思想： 用子网图描述拓扑结构，每个节点代表路由器，弧线代表链路，弧线上的数字是链路的权重（这里可以理解为长度）。要为一对节点选择一条路由，只需找到它们之间权重和最小的路径即可(可以理解为最短路径)。</p>
+<p>链路的权重，在现实世界可能有多种含义：</p>
+<ul>
+<li>站点数量</li>
+<li>物理距离</li>
+<li>信道带宽</li>
+<li>平均通信量</li>
+<li>通信开销</li>
+<li>队列长度</li>
+<li>传播时延</li>
+</ul>
+<h4 id="dijkstra算法迪杰斯特拉算法">Dijkstra算法，迪杰斯特拉算法</h4>
+<p><strong>勘误</strong> 原文：<br>
+&gt;检查与B相邻的所有节点。如果B的标注与从B到所<strong>有</strong>检查的节点距离之和小于此节点的标注，就重新标注这个节点。”</p>
+<p>正确的应该是：<br>
+&gt;检查与B相邻的所有节点。如果B的标注与从B到所检查的节点距离之和小于此节点的标注，就重新标注这个节点。”</p>
+<p>断句如下：<br>
+检查与B相邻的所有节点。如果（B的标注）+（从B到所检查节点的距离）&lt; 所检查节点的初始标注（原标注），就以到B的距离重新标注这个节点。 每个节点都有一个标注值，代表了”从源节点沿着最佳路径到该节点”的权值（通常是距离）。</p>
+<h6 id="dijkstra算法的步骤">Dijkstra算法的步骤</h6>
+<p>根据源节点到“被检查节点”之间的距离（即链路的权重值），对“所检查节点”进行标注。</p>
+<p>标注分为暂时性的（空心圆点），和永久性的（实心圆点）——当发现该标注代表了：从源节点到该节点的最短路径时。被设定为永久性标注的节点会作为新的源节点。</p>
+<p>最开始时，不存在任何一条最佳路径，将除源节点外的所有节点都标注为无穷大（暂时性的）。</p>
+<p>随着“从源节点到其他节点”的最佳路径的不断发现，代表最短路径的节点标注也不断的从暂时性修改为永久性的。</p>
+<p>以书上的图为例，源节点为A，目的节点为D，中间节点若干。</p>
+<ol type="1">
+<li>将源节点A设为工作节点，标注为永久性的——实心圆点</li>
+<li>用权值（例中为距离）标注“与A相邻的每一个节点”，标注时除了写明节点的权值，还应该注明源节点，比如 B(2,A)</li>
+<li>检查完A以后，在已经标注的A相邻节点中，寻找标注最小的点（示例中为B），将其修改为永久标注，并作为新的工作点。</li>
+<li>检查与B相邻的所有节点（A不用检查了，A已经是永久节点了），如果：<span class="math inline">\(B的标注 + 从B到所检查点的距离 \lt 所检查点的标注\)</span>，那么：应该修改所检查点的标注=从B到所检查点的距离</li>
+</ol>
+<p>在示例中，B的标注=2，从B到E的距离=4 ，E的标注=无穷，因此应该将E的标注修改为（4,B）</p>
+<ol start="5" type="1">
+<li>寻找与B相邻的所有节点中，标注最小的，将其设为永久性，并作为新的工作点。</li>
+</ol>
+<h6 id="值得一说的是-图5-3-d-和-图5-3-e">值得一说的是： 图5-3 d 和 图5-3 e</h6>
+<p>G点在第一次和A的检查中，被标注为G(6,A）——图b</p>
+<p>图d中，以E(4,B)为新的工作点，标注出 F(6,E) G(5,E)。</p>
+<p>因为 E(4 + G(5 &lt; G(6 ，因此应该重新标注G点，由此得到 G(5,E)!</p>
+<h3 id="扩散法flooding不需要测量依靠固定规则">2. 扩散法，Flooding（不需要测量，依靠固定规则）</h3>
+<p>扩散法，又叫“泛射路由选择法”、“洪泛法”，是最简单的静态路由选择算法。</p>
+<p>源节点发出一个分组，子网中的某个节点收到该分组后，向“除来路外的所有链路”发送该分组（每经过一个节点，就会复制出新的分组，分组数量等于“节点相连的链路数-1”），最先到达目的节点的分组必定走过了最短的路径。而且，所有到达目的节点的分组所经路径的集合，就是所有可能的路径。</p>
+<p>扩散法存在一个严重的问题：产生大量的重复分组，甚至无穷个分组。</p>
+<h6 id="解决重复分组的办法">解决重复分组的办法</h6>
+<p><strong>1. 让分组携带站计数器</strong> 节点在转发分组前，会将其站计数器 - 1，对做减法后“站计数器=0”的分组，节点将其丢弃不再转发。</p>
+<p>Q.如何设置站计数器的初值呢？<br>
+A.理想的情况：站计数器初值=源节点到目的节点的路径长度（站数量）。<br>
+实际上很多时候不知道路径长度，可以把站计数器初值设置成“子网直径（即网络中最大链路段数）”。</p>
+<p>子网直径：从任一源节点到任一目的节点的最大中间链路段数。</p>
+<p><strong>2. 在节点记录分组，避免重复</strong> 基本思想：记录下分组传输的路径，避免分组被扩散进历史路径。</p>
+<p>通信子网中，与主机相连的节点，称为“源端节点”，其余称为“非源端节点”。<br>
+每个非源端节点，对应每个源端节点都有一张记录表。</p>
+<p>主机向源端节点发送多个分组，源节点赋予每个分组一个序号，再扩散出去。</p>
+<p>非源端节点每次收到分组时，会在“相应的源端节点记录表”中记下分组序号，得到“源端节点：序号”这样一个表项。 据此，可以判断收到的分组是不是重复分组，如果是就丢弃，从而避免了再次扩散。</p>
+<p>因此每收到一个分组就要写入表中，源端节点记录表会不断增长，为控制表的长度，加入一个计数器 K ，表示K的序号已经看到。序号小于K的分组为复制品，不再存放。（但这里有点儿问题，数据报并非按序到达，序号小于K的分组可能在后续到达吧，不理解这里的K是什么意思）。</p>
+<h6 id="扩散法的应用">扩散法的应用</h6>
+<p>扩散法很少被实际应用，但也有它特定的用途：</p>
+<ul>
+<li>对强壮性要求很高的网络：军事网络，网络的拓扑结构可能被破坏</li>
+<li>广播式数据交换：无线网络、分布式数据库应用——同步更新所有数据库</li>
+<li>寻找网络的最短路径、最小传输延迟</li>
+</ul>
+<h4 id="选择扩散法selective-flooding">选择扩散法（Selective Flooding）</h4>
+<p>选择扩散法是扩散法的改进版，节点不会把分组向每一条非来路链路发送，而只向与目标方向接近的那些链路发送（也会复制出多个分组）。</p>
+<h3 id="基于流量的路由选择flow-based-routing">3. 基于流量的路由选择，Flow-based Routing</h3>
+<p>网络负载：单位时间内流经设备（单一节点、多个节点、通信链路、通信子网）的数据量，单位 bps。</p>
+<p>最短路径路由选择算法和扩散法，只考虑了网络的拓扑结构，没有考虑网络负载。</p>
+<p>在一些网络中，节点间的平均流量是相对稳定的或可预测的。进行静态路由选择时，完全可以把网络负载考虑进去。</p>
+<p>基于流量的静态路由选择算法，兼顾了拓扑结构和网络负载。</p>
+<p>基于流量的路由选择法的基本思想：<br>
+如果已知某条线路的负载和平均流量，就可以根据排队论计算出它的平均分组延迟。根据所有线路的平均分组延迟，可计算出流量的加权平均值，从而得到整个网络的平均分组延迟。（不懂排队论，这里并不真正的理解），具有最小平均延迟的线路（负载和节点处理能力匹配较好）自然是最佳线路。</p>
+<p>至此，基于流量的路由选择问题，转化为：“寻找最小平均延迟线路”的路由选择算法。</p>
+<p>P.S. 分组延迟：分组进入路由器后，先在缓冲区中排队，节点处理后再转发出去，这段时间称为延迟。</p>
+<p>运用此方法的前提：</p>
+<ul>
+<li>拓扑结构已知</li>
+<li>通信量矩阵、线路容量矩阵已知</li>
+</ul>
+<h2 id="动态路由选择算法">5.2.3 动态路由选择算法</h2>
+<p>因为静态路由选择算法不考虑网络的实时状态，因此实际运用中，动态路由选择算法才是主流。</p>
+<p>动态路由选择算法：根据网络的实时状态进行路由选择的算法，也称为自适应路由选择算法。</p>
+<ul>
+<li>优点：能适应网络流量、拓扑结构的变化，有助于改善网络性能。</li>
+<li>缺点：算法复杂，会增加网络的负担，开销大。</li>
+</ul>
+<h3 id="距离矢量路由算法">1. 距离矢量路由算法</h3>
+<p>每个路由器都保存、维护了一张路由表（即矢量），其中记录了3个要素：</p>
+<ul>
+<li>当前已知的所有路由器（包括自身）：作为目标路由表，这些路由器也是路由表的索引。“当前已知”表明子网中的路由器存在动态变化</li>
+<li>从自身出发，“到达目标路由器的最佳线路”所要经过的相邻路由器</li>
+<li>从自身出发，通过最佳线路到达相邻路由器的“距离”</li>
+</ul>
+<p>路由表的更新，是通过与相邻路由器的不断的信息交换来实现的。</p>
+<p>工作步骤：<br>
+假设：以“延迟”作为距离的度量标准，路由器A 具有3个邻居：XYZ，A知道它到XYZ的延迟。每隔T毫秒：</p>
+<ul>
+<li>路由器A就向它的每个邻居发送一个列表（列表不是路由表），其中记录了从A到子网中任一路由器i（目标路由器）的延迟估计值 <span class="math inline">\(A_{i}\)</span>。<br>
+</li>
+<li>同时，XYZ也向A发送它们自己的列表。 X 向 A 发送的一个列表中的一个表项显示：从 X 到目标路由器 i 的延迟估计值为 <span class="math inline">\(X_i\)</span> 毫秒。<br>
+如果 A 到 X 的延迟是 <span class="math inline">\(X_{A}\)</span>，可以得知：从 A 经过 X 到达目标路由器 i 的延迟估计值最大为 <span class="math inline">\(X_{i} + X_{A}\)</span> 毫秒。 A 从 XYZ 都收到各自的列表，最终通过从 <span class="math inline">\(X_{i}+X_{A}\)</span>、<span class="math inline">\(Y_{i}+Y_{A}\)</span>、<span class="math inline">\(Z_{i}+Z_{A}\)</span> 取最小值，作为从 A 到目标路由器 i 的延迟估计值<span class="math inline">\(A_{i}\)</span>，写入 A 的路由表中。</li>
+</ul>
+<p>在下一次的 T 毫秒间隔后，路由器A 将更新后的 <span class="math inline">\(A_{i}\)</span>发送给XYZ，供它们计算、更新自己到目标路由器 i 的路由表。</p>
+<p>说明：<br>
+如果 <span class="math inline">\(X_i\)</span> 是 X 经过 A 到达 i 的延迟估计值，那么 A 到 i 的延迟估计值应该为 <span class="math inline">\(X_{i} - X_{A}\)</span> ，此时从 A 经过 X 到达目标路由器 i 的延迟估计值为 <span class="math inline">\(X_{i} - X_{A} + 2\cdot X_{A} = X_{i}+X_{A}\)</span>。</p>
+<p>早期的ARPANET，和因特网的 RIP 路由信息协议，都使用了“距离矢量路由算法”。</p>
+<h3 id="链路状态路由算法link-state-routing">2. 链路状态路由算法，Link State Routing</h3>
+<p>1979年以前，ARPANET一直使用距离矢量路由算法，之后，采用了链路状态路由算法。</p>
+<p>至今，链路状态路由算法是主流的动态路由选择算法。比如广泛应用的开放式最短路径优先协议OSPF(Open Shortest Path First)，就采用了链路状态路由算法。</p>
+<h6 id="第一步.发现邻居节点">第一步.发现邻居节点</h6>
+<p>每个路由器向连接自身的每一条点到点线路，发送一个特殊的HELLO分组，线路另一端的路由器回送一个包含它唯一名称等信息的应答信息。</p>
+<p>路由器记录下应答信息即建立了邻居节点的数据库。</p>
+<h6 id="第二步.测量线路开销延迟">第二步.测量线路开销（延迟）</h6>
+<p>路由器在线路上发送一个特殊的ECHO分组，另一端立即回送一个应答，将这个时间除以2，发送方路由器就记录下这个延迟的估计值。</p>
+<h6 id="第三步.创建链路状态分组">第三步.创建链路状态分组</h6>
+<p>根据前两步收集到的数据，路由器就可以创建出“链路状态分组”，分组包含了：</p>
+<ul>
+<li>发送方的标识：发出分组的源路由器的唯一名称，比如A</li>
+<li>链路状态分组的序列号：源路由器每次收集到新的邻居节点、线路开销，都会生成新的链路状态分组，第一个的序号为1，以此类推，从而进行区别。</li>
+<li>年龄：这个不知道是什么</li>
+<li>邻居列表、自身到邻居的延迟</li>
+</ul>
+<h6 id="第四步.发布链路状态分组">第四步.发布链路状态分组</h6>
+<p>源路由器生成了链路状态分组后，就需要用扩散法将其发布到子网中。</p>
+<p>每个路由器在收到链路状态分组后，会在一个表中记录下源路由器和序列号，当扩散产生的重复分组再次到达路由器时，通过查询记录表会发现它是重复分组，从而将其丢弃。<br>
+而且，序列号还有记录分组产生时间的作用：如果一个路由器已经收到了某源路由器产生的序号为 k 的分组，随后又收到了同一源路由器序号为 j 的分组，j&lt;k ，那么可以直接将其丢弃，因为 j 所记录的链路状态已经过时了。</p>
+<h6 id="第五步.计算新的路由">第五步.计算新的路由</h6>
+<p>如果一个路由器，已经在扩散法的影响下，收到了子网中所有路由器产生的链路状态分组，那么就可以构造出完整的子网图（包括拓扑结构、线路开销等信息）。</p>
+<p>此时，在自身节点上运用最短路由选择算法（比如Dijkstra算法），就可以生成自身的路由表。<br>
+最终，每一个路由器都生成了自己的路由表，网络开始正常工作。</p>
+<h2 id="移动主机的路由选择">5.2.4 移动主机的路由选择</h2>
+<p>固定主机：物理位置几乎永远固定的主机，通常具有永久性的地址。</p>
+<p>迁移主机：经常从一个固定位置迁移到另一个固定位置，移动中与网络断开，到达位置后才接入网络。</p>
+<p>漫游主机(Mobile Host)：有原始接入点（路由器）、可以随时移动，移动中也利用网络传输数据的主机。或者说，离开了原始站点还继续连接网络的主机。通常具有变化的地址。</p>
+<p>移动主机只是网络中的一部分，仍然还有很多固定主机。<br>
+对这些包含移动主机的网络来说，移动主机的路由算法的目标是：<br>
+能够在“地址不变的固定主机”和“地址可变的移动主机”之间进行路由选择，将分组正确的送达。</p>
+<p>移动式主机的出现，引出了一个问题：</p>
+<h6 id="网络如何找到移动主机或者说如何把移动主机接入网络">网络如何找到移动主机，或者说，如何把移动主机接入网络</h6>
+<p>假设有一个网络系统，若干的LAN、MAN、无线蜂窝单元，通过一个WAN（内含路由器和主机）连接在一起。这些LAN、无线蜂窝单元称为“区域”。</p>
+<p>每个区域中，有两种代理：</p>
+<ol type="1">
+<li>一个主代理：管理属于本区域，但此时移动到其他区域的移动主机。</li>
+<li>一个或多个外地代理：管理不属于本区域但来到该区域的移动主机。</li>
+</ol>
+<p>一个移动用户进入其他区域时，以有线或无线的方式接入网络时，必须在该区域的外地代理中进行登记，称为登录。</p>
+<p>登录过程：</p>
+<ol type="1">
+<li>外地代理定期向区域广播一个分组，告知各主机自己的地址等信息，新来的移动主机可以被动等待这个消息。移动主机也可以广播一个分组，主动询问外地代理的信息。</li>
+<li>与外地代理联系上以后，移动主机需要提供：原区域的信息（比如在原区域的地址）、当前数据链路层地址（类似于物理地址）、一些安全性信息</li>
+<li>外地代理与移动主机所属的原区域的主代理联系，核实移动主机是否真的来自那里。</li>
+<li>外地代理从主代理得到确认后，在它的记录表中增加一项，并通知移动主机登录成功</li>
+</ol>
+<p>至此，就完成了移动主机接入其他区域的工作。</p>
+<p>当用户离开其他区域时，应该告知外地代理注销自己，但大多数情况下都不是这样。</p>
+<p>发给移动主机的分组，会先被原区域的主代理收到，然后它再转发给移动主机，如果此时移动主机已经移动到其他区域，那么主代理会查找移动主机的新位置，找到目前登录的外地代理。之后，主代理会做2件事：</p>
+<ol type="1">
+<li>将发给移动主机的分组，装入一个外地分组的有效载荷中（用外地代理地址再次封装了一个分组），再将该外地分组发给外地代理。</li>
+<li>告诉发送者，将分组装入外地分组的有效载荷字段，直接发往外地代理所在的地址。</li>
+</ol>
+<p>外地代理最终会把分组转发给移动主机。</p>
+<h2 id="广播路由选择-broadcasting">5.2.5 广播路由选择 , Broadcasting</h2>
+<p>广播：给子网中所有的路由器发送分组。</p>
+<p>实现广播路由的方法有几种。</p>
+<h6 id="逐个发送最笨的办法">1. 逐个发送，最笨的办法</h6>
+<p>源节点向每个节点依次发送分组，实现广播。</p>
+<p>缺点：</p>
+<ul>
+<li>浪费带宽：节点可能会共享链路，而这种方法重复使用了链路</li>
+<li>源节点必须知道所有目标节点的地址</li>
+</ul>
+<h6 id="扩散法">2. 扩散法</h6>
+<p>扩散法不适合点对点的通信，但很适合广播式通信。</p>
+<p>扩散法的缺点：产生大量重复分组，浪费带宽。</p>
+<h6 id="多目标路由multi-destination-routing">3. 多目标路由，Multi-destination Routing</h6>
+<p>发出的每个分组，或者包含了多个目标地址，或者包含了一个指示了目标节点的位图(bitmap)。</p>
+<p>当路由器收到一个多目标分组时，会计算出所有的“必要的输出线路”（必要线路：到达至少一个目标节点的最佳线路）。</p>
+<p>假设计算出3条必要线路：甲乙丙，甲通向目标 i，乙通向目标 j 和目标 k，丙通向目标 l 和目标 m 目标 n 。<br>
+路由器会为每一条必要线路生成原分组的副本，但仅包含了“该条线路所连接目标的地址”：</p>
+<ul>
+<li>线路甲的分组副本 P1：仅包含了地址 i</li>
+<li>线路乙的分组副本 P2：仅包含了地址 j k</li>
+<li>线路丙的分组副本 P3：仅包含了地址 l m n 。</li>
+</ul>
+<p>这样，原分组中的目标集合被分散到了各必要线路上。多目标分组每经历一个节点的拆解后，最终只包含一个目标，就和普通分组没有区别了。</p>
+<blockquote>
+<p>多目标路由方法就如同单个地址的分组一样，只不过当多个分组必须沿着同样的路径被转发的时候，其中一个分组承担全部的费用，而其他的分组都是免费搭乘的。</p>
+</blockquote>
+<p>这段话不理解，多目标分组是在一个分组内包含了多个目标地址，这和多个分组都需要经过一段链路有什么关系呢(不论它们最终的目标是否相同）？所以感觉这段话没有意义。</p>
+<h6 id="显式利用以广播源节点为根的生成树">4. 显式利用：以“广播源”节点为根的生成树</h6>
+<p>生成树 (Spanning Tree) 是子网的子集，由：所有的路由器 + 不构成环的部分链路（没有循环）所构成。</p>
+<p>P.S. 生成树包括了汇集树。</p>
+<p>每个路由器都知道自己的哪些链路属于“以广播源为根的生成树”，当广播分组到来时，它就将其复制并发送到“生成树中除来路以外的”所有链路中。</p>
+<p>注意：</p>
+<ol type="1">
+<li>以广播源节点为根的生成树并不唯一，但在这里不影响，只要找出一个就行了</li>
+<li>所有的路由器都必须使用以广播源节点为根的同一棵树！否则会出问题</li>
+</ol>
+<p>优点：1. 最佳的利用了带宽（涉及的线路必要又不多余）； 2. 复制出了最少的分组。（最优化原则）</p>
+<p>缺点：子网中的每个路由器都必须知道：以广播源为根的同一棵生成树，这就要求每个节点必须获取整个网络的状态信息——比如采用链路状态路由算法。如果采用了距离矢量路由算法，则无法获取生成树信息。</p>
+<h6 id="逆向路径转发reverse-path-forwarding">5. 逆向路径转发，Reverse Path Forwarding</h6>
+<p>如果路由器不知道生成树的信息，根据“广播分组的来路”是否是“当前路由与源节点的首选链路”，也可以实现“利用以广播源为根的生成树方法”近似的效果。</p>
+<p>基本思想：<br>
+当一个广播分组到达某个路由器时，路由器对分组的来路进行检查：</p>
+<ul>
+<li>如果来路是当前路由器向源节点发送分组的首选线路：说明广播分组是沿着最佳路径过来的，是到达当前路由器的第一份副本（最佳路径必然最先到达）。</li>
+<li>如果来路不是当前路由器向源节点发送分组的首选线路：该分组属于非最佳路径的其他节点生成的重复分组，应该丢弃。</li>
+</ul>
+<p>具体操作不再描述，其实就是根据生成树来判断分组是否重复。</p>
+<p>优点：不需要路由器都知道生成树（只需要知道与源节点的最短路径即可），也不需要分组中携带多个目标地址或位图，也不需要扩散法中对重复分组的控制。因此它效率相对合理，容易实现。</p>
+<h2 id="多播路由选择">5.2.6 多播路由选择</h2>
+<h6 id="什么叫多播和广播的区别">什么叫多播，和广播的区别</h6>
+<p>多点播送，简称多播，又称组播，Multicasting。</p>
+<p>分布在各主机的进程，以组的方式协同工作。<br>
+组中的进程经常需要给组中其他所有的成员发送信息。</p>
+<p>P.S. 组实际容纳的是进程，而非主机！多个进程可以共存于一台主机中，也可以分散在多个主机中。</p>
+<p>如果组的规模比较小，那么可以用点对点的方式每个其他成员发送信息。</p>
+<p>如果组的规模比较大，那么就不能逐个点对点的发送了，可以采用广播，但可能产生一些问题，比如：</p>
+<ul>
+<li>组的成员数量虽然多，但相对整个网络却很小，大多数节点对该分组没有兴趣：组有1000台主机，网络有100万个节点</li>
+<li>组内的信息不应该让整个网络的节点看到</li>
+</ul>
+<h6 id="多播路由选择-1">多播路由选择</h6>
+<p>适用于多播的路由算法，称为多播路由选择 Multicast Routing。</p>
+<p>多播传输需要对组进行管理：</p>
+<ul>
+<li>需要创建、销毁组的方法</li>
+<li>允许进程加入、离开组</li>
+</ul>
+<p>对于主机来所，自己是否有进程加入了某个组，需要由进程来告知它。</p>
+<p>对于路由器，它连接的哪些主机属于哪个组时需要明确的。</p>
+<p>当主机和组的从属关系发生变化时，要么是主机告诉路由器，要么是路由器定期询问自己连接的主机。</p>
+<p>路由器获取到自己的主机属于哪些组后，将其告知邻居（类似于链路状态分组）。</p>
+<h6 id="如何实现多播">如何实现多播</h6>
+<p>子网中的每个路由器，都需要生成一棵以自己为根的生成树。</p>
+<p>当某个主机中的某个进程向自己所在的组发送多播分组时，与主机相连的第一个路由器就检查以自己为根的生成树，把该树中“不通向该组其他成员主机的路由器”的链路修剪掉，得到一棵只通向同一组的成员主机的生成树。多播分组最终沿着修剪后的生成树传播。</p>
+<p>修剪链路的工作，应该从每条路径的末端开始，逐步向根节点前进，去掉所有不属于改组的路由器。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/" title="网原 5.2 路由选择">https://roro4ever.github.io/2019/12/01/网原-5-2-路由选择/网原-5-2-路由选择/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-5-1-通信子网的操作方式和网络层提供的服务/网原-5-1-通信子网的操作方式和网络层提供的服务/" rel="next" title="网原 5.1 通信子网的操作方式和网络层提供的服务">
+                  <i class="fa fa-chevron-left"></i> 网原 5.1 通信子网的操作方式和网络层提供的服务
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-5-3-拥塞控制/网原-5-3-拥塞控制/" rel="prev" title="网原 5.3 拥塞控制">
+                  网原 5.3 拥塞控制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-6"><a class="nav-link" href="#路由选择算法routing-algorithm"><span class="nav-text">路由选择算法，Routing Algorithm</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最优化原则optimality-principle"><span class="nav-text">5.2.1 最优化原则，Optimality Principle</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#最优化原则"><span class="nav-text">最优化原则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#汇集树sink-tree"><span class="nav-text">汇集树，Sink Tree</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#汇集树的理论优势以及实际应用"><span class="nav-text">汇集树的理论优势，以及实际应用</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态路由选择算法"><span class="nav-text">5.2.2 静态路由选择算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最短路由选择算法shortest-routing利用已知的静态距离"><span class="nav-text">1. 最短路由选择算法，Shortest Routing（利用已知的静态”距离“）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dijkstra算法迪杰斯特拉算法"><span class="nav-text">Dijkstra算法，迪杰斯特拉算法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#dijkstra算法的步骤"><span class="nav-text">Dijkstra算法的步骤</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#值得一说的是-图5-3-d-和-图5-3-e"><span class="nav-text">值得一说的是： 图5-3 d 和 图5-3 e</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩散法flooding不需要测量依靠固定规则"><span class="nav-text">2. 扩散法，Flooding（不需要测量，依靠固定规则）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#解决重复分组的办法"><span class="nav-text">解决重复分组的办法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#扩散法的应用"><span class="nav-text">扩散法的应用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择扩散法selective-flooding"><span class="nav-text">选择扩散法（Selective Flooding）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于流量的路由选择flow-based-routing"><span class="nav-text">3. 基于流量的路由选择，Flow-based Routing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态路由选择算法"><span class="nav-text">5.2.3 动态路由选择算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#距离矢量路由算法"><span class="nav-text">1. 距离矢量路由算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链路状态路由算法link-state-routing"><span class="nav-text">2. 链路状态路由算法，Link State Routing</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第一步.发现邻居节点"><span class="nav-text">第一步.发现邻居节点</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二步.测量线路开销延迟"><span class="nav-text">第二步.测量线路开销（延迟）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第三步.创建链路状态分组"><span class="nav-text">第三步.创建链路状态分组</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第四步.发布链路状态分组"><span class="nav-text">第四步.发布链路状态分组</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第五步.计算新的路由"><span class="nav-text">第五步.计算新的路由</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移动主机的路由选择"><span class="nav-text">5.2.4 移动主机的路由选择</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#网络如何找到移动主机或者说如何把移动主机接入网络"><span class="nav-text">网络如何找到移动主机，或者说，如何把移动主机接入网络</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播路由选择-broadcasting"><span class="nav-text">5.2.5 广播路由选择 , Broadcasting</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#逐个发送最笨的办法"><span class="nav-text">1. 逐个发送，最笨的办法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#扩散法"><span class="nav-text">2. 扩散法</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#多目标路由multi-destination-routing"><span class="nav-text">3. 多目标路由，Multi-destination Routing</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#显式利用以广播源节点为根的生成树"><span class="nav-text">4. 显式利用：以“广播源”节点为根的生成树</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#逆向路径转发reverse-path-forwarding"><span class="nav-text">5. 逆向路径转发，Reverse Path Forwarding</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多播路由选择"><span class="nav-text">5.2.6 多播路由选择</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#什么叫多播和广播的区别"><span class="nav-text">什么叫多播，和广播的区别</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#多播路由选择-1"><span class="nav-text">多播路由选择</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#如何实现多播"><span class="nav-text">如何实现多播</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '4cc219546d4b066323bf58dbed25b1ae',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

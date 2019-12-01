@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="应用层包括了各种应用协议。  人和应用程序，通过应用协议来使用网络。  7.1.1 IP地址和域名 1.IP地址 Internet上的每台主机，都必须有一个唯一的标识——IP地址。  题外话：网络上的路由器也必须有IP地址。  TCP/IP模型中网际层的IP协议，就利用IP地址来传递信息。  IPv4的地址由32位(4个字节)构成，通常采用点分十进制写法。  点分十进制(Dotted decima">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 7.1 域名系统">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="应用层包括了各种应用协议。  人和应用程序，通过应用协议来使用网络。  7.1.1 IP地址和域名 1.IP地址 Internet上的每台主机，都必须有一个唯一的标识——IP地址。  题外话：网络上的路由器也必须有IP地址。  TCP/IP模型中网际层的IP协议，就利用IP地址来传递信息。  IPv4的地址由32位(4个字节)构成，通常采用点分十进制写法。  点分十进制(Dotted decima">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191105163812582_9610.jpg">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191107153146131_20817.png">
+<meta property="og:image" content="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191107153952963_4372.jpg">
+<meta property="og:updated_time" content="2019-12-01T16:10:50.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 7.1 域名系统">
+<meta name="twitter:description" content="应用层包括了各种应用协议。  人和应用程序，通过应用协议来使用网络。  7.1.1 IP地址和域名 1.IP地址 Internet上的每台主机，都必须有一个唯一的标识——IP地址。  题外话：网络上的路由器也必须有IP地址。  TCP/IP模型中网际层的IP协议，就利用IP地址来传递信息。  IPv4的地址由32位(4个字节)构成，通常采用点分十进制写法。  点分十进制(Dotted decima">
+<meta name="twitter:image" content="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191105163812582_9610.jpg">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 7.1 域名系统 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 7.1 域名系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-01 16:17:32" itemprop="dateCreated datePublished" datetime="2019-12-01T16:17:32+08:00">2019-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-02 00:10:50" itemprop="dateModified" datetime="2019-12-02T00:10:50+08:00">2019-12-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第七章-应用层/" itemprop="url" rel="index">
+                    <span itemprop="name">第七章 应用层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>应用层包括了各种应用协议。</p>
+<p>人和应用程序，通过应用协议来使用网络。</p>
+<h2 id="ip地址和域名">7.1.1 IP地址和域名</h2>
+<h3 id="ip地址">1.IP地址</h3>
+<p>Internet上的每台主机，都必须有一个唯一的标识——IP地址。</p>
+<p>题外话：网络上的路由器也必须有IP地址。</p>
+<p>TCP/IP模型中网际层的IP协议，就利用IP地址来传递信息。</p>
+<p>IPv4的地址由32位(4个字节)构成，通常采用点分十进制写法。</p>
+<p>点分十进制(Dotted decimal notation)：IP地址以10进制(0~255)按4个字节写做4段，以 <code>.</code> 分隔。</p>
+<p>IPv4的点分十进制是和IPv6的冒分十进制相区别的。比如：<code>3FFE:FFFF:7654:FEDA:1245:BA98:3210:4562</code></p>
+<p>IP地址的语义由2部分构成：</p>
+<ul>
+<li>网络标识：</li>
+<li>主机标识：</li>
+</ul>
+<p>IP地址按地域(国家、地区）分配和管理，管理机构是 Inter NIC(Internet Network Information Center)。</p>
+<p>IP地址分为了5类：<br>
+<img src="/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191105163812582_9610.jpg"></p>
+<p>ABC类是分配给主机/路由器的普通IP地址，D类是组播(或称多播)IP地址。E类是实验性地址。</p>
+<p>因为ABCDE类的开头比特位绝不相同，因此：理论上不存在相同IP不同主机的情况。</p>
+<p>由IP地址的结构可以计算出各类地址的范围：</p>
+<table>
+<thead>
+<tr class="header">
+<th>地址分类</th>
+<th>范围下限</th>
+<th>范围上限</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A类</td>
+<td>0.0.0.0</td>
+<td>127.255.255.255</td>
+</tr>
+<tr class="even">
+<td>B类</td>
+<td>128.0.0.0</td>
+<td>191.255.255.255</td>
+</tr>
+<tr class="odd">
+<td>C类</td>
+<td>192.0.0.0</td>
+<td>223.255.255.255</td>
+</tr>
+</tbody>
+</table>
+<p>注意：<br>
+理论上，A类地址的范围是 0.0.0.0 ~ 127.255.255.255，网络标识的范围 0 ~ 127。</p>
+<p>但实际上， A类地址的网络标识范围只有 1~126，因为：</p>
+<ul>
+<li>网络标识 127(0111 1111)+任意主机号=127.x.x.x ：是环回地址。</li>
+<li>网络标识段为全0(0000 0000)的也是主机地址，但比较特殊。
+<ul>
+<li>主机号也为全0(0.0.0.0) : 可以做源端但不可以做目的端，代表的是网络上的主机。</li>
+<li>主机号不全为0：可以做源端但不可以做目的端，只是它代表的是网络上特定的主机。</li>
+</ul></li>
+</ul>
+<p>因此，A类地址中，网络标识 1(0000 0001) ~ 126(0111 1110) 是非特殊的网络标识范围。</p>
+<p>另外，对于任意的网络号，主机号全1的地址是广播地址。<br>
+广播地址不可以做源端，只能做目的端。<br>
+根据网络号的不同，广播地址分为：</p>
+<ul>
+<li>网络号全1，主机号全1：受限的广播，广播信号不会被路由器转发</li>
+<li>网络号非全1全0，主机号全1：向网络号所在的网络广播</li>
+<li>网络号非全1/全0，主机号全1，存在子网划分：向子网广播</li>
+</ul>
+<p><em>广播这一块还太粗糙，需要后续整理归纳，todo。</em></p>
+<h6 id="子网掩码">子网掩码</h6>
+<p>即使是C类地址，可分配的主机IP地址仍然非常大，而IP资源是有限的，为了节约IP资源，可以在主机标识部分用子网掩码再划分出子网(subnet)。</p>
+<p>子网掩码和IP地址一样，也是32位，但它的主机标识部分为全0，仅ABC地址网络标识段+子网段有值。</p>
+<p><code>IP地址 AND(逻辑与) 子网掩码 = 带子网的网络标识段</code></p>
+<p>可以把子网掩码的二进制位数写在IP地址后面 <code>IP/n</code>。</p>
+<ul>
+<li>A类的默认子网掩码: 255.0.0.0（255=1111 1111，缩写成“/8”，表示网络标识占了8位）;</li>
+<li>B类的默认子网掩码: 255.255.0.0（/16）;</li>
+<li>C类的默认子网掩码: 255.255.255.0(/24)</li>
+</ul>
+<p>/30 = /(24 +6): C类地址的基础上，再占用6位来划分子网，255.255.255.252，<br>
+/32 = /(24+8): C类地址基础上，再占用8位划分子网，255.255.255.255</p>
+<p>问题：<a href="https://www.zhihu.com/question/285680797" target="_blank" rel="noopener">子网掩码必须从高位开始，连续的1吗？</a></p>
+<p>回答：必须这样！这样才能够从父级子网中划分。</p>
+<p>问题： <a href="https://www.zhihu.com/question/30470752" target="_blank" rel="noopener">IP相同，子网掩码不同可能吗？</a></p>
+<p>回答：<br>
+<img src="/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191107153146131_20817.png"></p>
+<p>不可能。<br>
+定义了 0xxxxxxx这个子网，其他子网就不能使用0开头，不能再定义00xxxxxx和01xxxxxx，但允许继续定义10xxxxxx或者11xxxxxx。<br>
+如果把 0xxxxxxx 和 1xxxxxxx 都定义了，就不能再定义其他子网了。</p>
+<img src="/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/20191107153952963_4372.jpg">
+<h3 id="域名">2.域名</h3>
+<p>TCP/IP网络中的主机和网络设备使用IP地址进行通信，但IP地址不方便人类记忆和使用，因此引入了域名系统，在IP地址和域名之间建立了映射关系。</p>
+<p>域名只是一个逻辑概念，和具体的IP地址无关，只要管理机构允许，任意IP和任意域名都可以建立对应关系。<br>
+域名和物理网络、主机的物理位置都无关。</p>
+<p>域名采用了层次结构的、基于“域”的命名方案。</p>
+<p>扩展： 什么是域？windows domain vs network domain 回答：<br>
+<a href="https://en.wikipedia.org/wiki/Network_domain" target="_blank" rel="noopener">Network domain</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Windows_domain" target="_blank" rel="noopener">Windows domain</a></p>
+<p>简单的说，Windows 域只是域的一种形式而已。</p>
+<h2 id="域名系统的概念">7.1.2 域名系统的概念</h2>
+<p>域名系统(DNS，Domain Name System)管理了Internet上的域名。</p>
+<p>注意：<br>
+独立于Internet的局域网，也可以通过架设 DNS服务器，建立主机和域名之间的映射，方便局域网内的用户记忆和访问主机，此情况下，可以使用 Internet上已经存在的域名，或者使用从未存在过的域名，因为这个域名仅仅在局域网内使用，并不会和 Internet 上的域名有何关系，所以没有影响。</p>
+<p>DNS是一个分布式数据库系统(DBS,DataBase System)，包括：</p>
+<ul>
+<li>域名空间：是指域名+网站空间（虚拟主机），而非字面意义：域名的空间</li>
+<li>域名服务器：</li>
+<li>地址转换请求程序</li>
+</ul>
+<p>域名是一个树状结构，根节点是顶级域名，下面是二级域名，最下面的是主机名称。</p>
+<p>域名的书写方法：<code>主机名. ... N级域名. ... 二级域名.顶级域名</code></p>
+<p>说明：<br>
+顶级域名就是1级域名，N级域名就是 N-1级域名的前缀。</p>
+<p>在域名树中，：</p>
+<ul>
+<li>主机域名：叶节点，是某个域中某台主机的名称。比如：www.ecust.edu.cn(注意：www只是是主机名称而未标明所在域，完整的写法才叫主机域名)</li>
+<li>网络域名：非叶节点，是某个网络域的名称。比如：ecust.edu.cn</li>
+</ul>
+<p>同一域中的主机，有着相同的网络域名，仅主机名不同。<br>
+不同域中的主机，可以采用相同的主机名。<br>
+因此，Internet中的两台主机，其域名必定唯一。</p>
+<p>顶级域名（1级域名）有3类：</p>
+<ul>
+<li>国家地区顶级域名：cn, us, hk...</li>
+<li>国际顶级域名：int (国际性组织)</li>
+<li>分类顶级域名：com, net , org, edu</li>
+</ul>
+<p>二级域名由各国家自行制订。比如我国就由：</p>
+<ul>
+<li>类别域名：6个, ac, com, edu , gov, net, org</li>
+<li>行政区域域名：34个, bj, sh, cd</li>
+</ul>
+<p>强调：</p>
+<ol type="1">
+<li>域名和物理网络没有关系，而是与DNS系统如何管理网络中的主机有关，比如同一物理网络中，某些主机可以分配域名，某些则没有域名。</li>
+<li>域名和IP地址中的子网叶没有关系，理由同上。</li>
+<li>一台主机可以拥有多个域名。可能是一个IP映射多个域名，也可能该主机有多个IP(多个网卡)，每个IP对应一个域名。</li>
+</ol>
+<h2 id="域名解析原理">7.1.3 域名解析原理</h2>
+<p>运行了域名服务器程序的主机，称为域名服务器。</p>
+<p>域名服务器通常是网络中专设的主机。</p>
+<p>域名解析过程：</p>
+<p>应用程序要将一个域名解析为IP地址时，就会调用域名解析函数(Resolve)。<br>
+域名解析函数把要解析的域名放在DNS请求中，以UDP报文的形式发送给本地域名服务器。</p>
+<p>如果本地域名服务器查找到该域名对应的IP地址，就返回UDP应答报文，应用程序获得IP地址后就进行通信。 如果本地域名服务器不能找到对应的 IP，就会向更上级域名服务器发送DNS请求。</p>
+<p>如果上级域名服务器也不能解析，DNS请求会发送到根域名服务器</p>
+<p>根域名服务器管辖了顶级域名，但它通常不负责域名解析，不过它记录了待解析域名中下级域名的IP地址，并将DNS请求转发到该下级域名服务器，下级域名服务器同样将DNS请求转发到再下级域名服务器，最终抵达授权域名服务器，由授权域名服务器返回IP地址。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/" title="网原 7.1 域名系统">https://roro4ever.github.io/2019/12/01/网原-7-1-域名系统/网原-7-1-域名系统/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-6-3-用户数据报传输协议/网原-6-3-用户数据报传输协议/" rel="next" title="网原 6.3 用户数据报传输协议">
+                  <i class="fa fa-chevron-left"></i> 网原 6.3 用户数据报传输协议
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ip地址和域名"><span class="nav-text">7.1.1 IP地址和域名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ip地址"><span class="nav-text">1.IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#子网掩码"><span class="nav-text">子网掩码</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名"><span class="nav-text">2.域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名系统的概念"><span class="nav-text">7.1.2 域名系统的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名解析原理"><span class="nav-text">7.1.3 域名解析原理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '0971ca9d579936f5d98f092efaca7c5d',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>

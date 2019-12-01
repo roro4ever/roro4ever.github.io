@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32_meat.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16_meat.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="o5Fj6MuyH_ac2FXBmWcHS7v2vnkKrd8-C81R1jQTX1U">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="数据链路控制协议，也称为“数据链路通信规程”（规程：规定的程序，操作序列）。 它是OSI参考模型中数据链路层的协议。  说明： 在TCP/IP模型中，物理层和数据链路层并称为“主机-网络层”，而这里所讲的协议，仅仅是数据链路层的协议，因此说：属于OSI参考模型。  数据链路控制协议分为：   1. 异步协议：以字符（实际应该是群）为基本传输单位，加上起始位（0）和结束位（1），实现“起止式传输”。">
+<meta name="keywords" content="Computer Science,计算机科学,笔记,生活感悟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网原 4.4 链路控制规程">
+<meta property="og:url" content="https://roro4ever.github.io/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/index.html">
+<meta property="og:site_name" content="桑园巷">
+<meta property="og:description" content="数据链路控制协议，也称为“数据链路通信规程”（规程：规定的程序，操作序列）。 它是OSI参考模型中数据链路层的协议。  说明： 在TCP/IP模型中，物理层和数据链路层并称为“主机-网络层”，而这里所讲的协议，仅仅是数据链路层的协议，因此说：属于OSI参考模型。  数据链路控制协议分为：   1. 异步协议：以字符（实际应该是群）为基本传输单位，加上起始位（0）和结束位（1），实现“起止式传输”。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-01T08:27:25.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网原 4.4 链路控制规程">
+<meta name="twitter:description" content="数据链路控制协议，也称为“数据链路通信规程”（规程：规定的程序，操作序列）。 它是OSI参考模型中数据链路层的协议。  说明： 在TCP/IP模型中，物理层和数据链路层并称为“主机-网络层”，而这里所讲的协议，仅仅是数据链路层的协议，因此说：属于OSI参考模型。  数据链路控制协议分为：   1. 异步协议：以字符（实际应该是群）为基本传输单位，加上起始位（0）和结束位（1），实现“起止式传输”。">
+
+<link rel="canonical" href="https://roro4ever.github.io/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>网原 4.4 链路控制规程 | 桑园巷</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153489721-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-153489721-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桑园巷</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">一切都会好起来的……</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://roro4ever.github.io/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.vgy.me/IFgaK9.jpg">
+      <meta itemprop="name" content="roro">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桑园巷">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网原 4.4 链路控制规程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-01 16:04:39 / 修改时间：16:27:25" itemprop="dateCreated datePublished" datetime="2019-12-01T16:04:39+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络原理</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机网络原理/第四章-数据链路层/" itemprop="url" rel="index">
+                    <span itemprop="name">第四章 数据链路层</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>数据链路控制协议，也称为“数据链路通信规程”（规程：规定的程序，操作序列）。<br>
+它是OSI参考模型中数据链路层的协议。</p>
+<p>说明：<br>
+<em>在TCP/IP模型中，物理层和数据链路层并称为“主机-网络层”，而这里所讲的协议，仅仅是数据链路层的协议，因此说：属于OSI参考模型。</em></p>
+<p>数据链路控制协议分为：</p>
+<ol type="1">
+<li>异步协议：以字符（实际应该是群）为基本传输单位，加上起始位（0）和结束位（1），实现“起止式传输”。缺点：每个传输字符都要添加起始位、校验位、停止位等冗余位，信道利用率太低，只适合低速通信场合。</li>
+<li>同步协议：以帧为单位（一帧包含多个字符或较长的位流），发收双方通过帧头实现同步。优势：信道利用率较高，利用帧可以实现差错控制、流量控制。</li>
+</ol>
+<p>在4.1.1 帧同步功能一节中，已经介绍了几种帧定界法：</p>
+<ol type="1">
+<li>字符填充的首尾定界符法</li>
+<li>比特填充的首尾标志法</li>
+<li>违法编码法</li>
+<li>字节计数法</li>
+</ol>
+<p>该节已经较详细的介绍了4. 字节计数法。<br>
+下面详细讲解 1.字符填充的定界符法 2.比特填充的定界符法。</p>
+<p>任何链路层控制协议都包含3部分内容：建立链路、数据传输、拆除链路。</p>
+<h2 id="二进制同步通信协议">4.4.1 二进制同步通信协议</h2>
+<p>字符填充的定界符法，也称为“面向字符的同步协议”。</p>
+<p>面向字符的同步协议是最早提出的同步协议，典型代表是IBM公司推出的BSC协议。</p>
+<h6 id="bsc协议binary-synchronous-communication二进制同步通信协议">BSC协议（Binary Synchronous Communication），二进制同步通信协议。</h6>
+<p>为了实现建链、同步、拆链等功能，就必须引入控制字符。</p>
+<p>BSC协议中的控制字符，采用了 ASCII 或 EBCDIC 字符集。</p>
+<p>BSC的传输控制字符：</p>
+<ul>
+<li>SOH: Start Of Head, 序始，报文的标题，或报头的开始</li>
+<li>STX: Start Of Text, 文始，标题信息的结束，或报文正文的开始。</li>
+<li>ETX: End Of Text, 文终，报文文本的结束。</li>
+<li>ETB： End of Transmission Block，块终（帧终），当报文分成多个数据块（帧）时，一个数据块的结束。</li>
+<li>EOT：End Of Transmission，送毕，一个或多个数据块的结束，并拆除链路。</li>
+<li>ENQ：Enquire, 询问，请求远程站给出响应，响应内容包括：远程站的身份、状态。</li>
+<li>ACK：Acknowledge，确认，接收方发出的，对正确接收的报文的响应。</li>
+<li>NAK：Negative Acknowledge，否认，接收方发出的，对未正确接收的报文的响应。</li>
+<li>DLE：Data Link Escape，转义，对紧跟其后的有限个字符进行转移，从而实现BSC协议的透明传输，或者当原有的传输控制字符不够用时，利用转义提供新的传输控制字符。</li>
+<li>SYN：Sychronous，同步，放在帧头，实现节点间的字符同步，或者，无数据传输时保持同步（换句话说，SYN也可以用作无数据的空白帧？)</li>
+<li>BCC：Block Check Character，块校验字符。可以是垂直奇偶校验，也可以是16位CRC，校验范围从 STX 开始到 ETX 或 ETB为止。</li>
+</ul>
+<p>BSC协议把报文分为数据报文和监控报文两类。<br>
+报文必然包含传输控制字符，用于确定报文中信息的性质，或实现控制作用。</p>
+<p>BSC的任何报文都以2个 SYN 开头，以便接收方实现字符同步。</p>
+<h6 id="数据报文">数据报文</h6>
+<p>数据报文由报头和文本组成：</p>
+<ul>
+<li>报头：可选的辅助信息，与文本的传输、处理有关。主要包括：报文的包识别符（序号）、地址</li>
+<li>文本：是要传输的有效数据。</li>
+</ul>
+<p>如果报文短于数据块（帧），可以只用一个来传输，否则需要切割成多个数据块（帧）传输。</p>
+<p>BSC协议的数据块有如下4种格式：<br>
+1.不带报头的单块报文，或，分块传输的最后一块报文 SYN| SYN| STX | 报文 | ETX | BCC</p>
+<p>2.带报头的单块报文 SYN | SYN | SOH | 报头 | STX | 报文 | ETX | BCC</p>
+<p>3.带报头的分块传输中的第一块报文 SYN| SYN | SOH | 报头 | STX | 报文 | ETB | BCC</p>
+<p>4.分块传输中的中间报文<br>
+SYN | SYN | STX | 报文 | ETB | BCC</p>
+<p>如果报文不是字符，而是二进制位流，就可能包括与控制字符相同的二进制位串组合，为了区分，采取：</p>
+<ul>
+<li>SYN，DLE ：不加DLE，保持原样。</li>
+<li>DLE + 控制字符：表示真正的控制字符</li>
+<li>DLE + DLE : 表示数据的 DLE</li>
+</ul>
+<h6 id="监控报文">监控报文</h6>
+<p>监控报文又分为：正向监控和反向监控。</p>
+<p><em>书上没细讲区分，估计是主站对从站监控，或从站请求主站。</em></p>
+<p>监控报文只含有单个控制字符。 （或者是，若干个其他字符做前缀 + 单个控制字符）</p>
+<p>前缀字符包括了：识别号(序号)、地址、状态、其他所需信息。</p>
+<p>监控报文有4种格式： 1.肯定确认 / 选择响应 SYN | SYN | ACK</p>
+<p>肯定确认：对先前发来的帧正确接收的响应，ACK种必然包含序号。 选择响应：主站选择此从站进行监控，从站所返回的响应信息。</p>
+<p>2.否定确认 / 选择响应 SYN | SYN | NAK</p>
+<p>3.轮询 / 选择请求 SYN | SYN | P/S 前缀 | 站地址 | ENQ</p>
+<p>主站轮询从站。<br>
+主站选择某个从站进行监控。</p>
+<p>4.拆链 SYN | SYN | EOT</p>
+<p>表示两站间的报文交换结束，并拆除链路。</p>
+<h6 id="bsc协议的优缺点">BSC协议的优缺点</h6>
+<p>与字符集关系过于密切。<br>
+字符填充法实现比较麻烦。<br>
+半双工协议，链路传输效率很低。</p>
+<p>需要的缓冲存储空间小，适合用于面向终端的网络系统（终端的硬件配置低）。</p>
+<h2 id="高级数据链路控制协议">4.4.2 高级数据链路控制协议</h2>
+<p>ISO 发布了高级数据链路控制协议 HDLC（High-Level Data Link Control）。</p>
+<p>HDLC属于面向比特的同步协议（即使用<strong>特定的二进制模式</strong>作为帧定界符）。</p>
+<p>HDLC具有很多优势，是目前普遍采用的数据链路层控制协议。</p>
+<h3 id="hdlc的操作方式">1.HDLC的操作方式</h3>
+<p>HDLC在建立数据链路时，可以选择站点的操作方式。</p>
+<p>Q. 什么叫“站点的操作方式”？<br>
+A. 站点在通信中的身份。一个站点可以是主站、从站、或二者兼备。</p>
+<p>主站：控制从站、轮询其他站的站点。</p>
+<p>主站的功能：组织数据流、恢复链路上的差错。</p>
+<p>从站：受主站控制的站点。</p>
+<ul>
+<li>命令帧：主站发往从站的帧。</li>
+<li>响应帧：从站发往主站的帧。</li>
+</ul>
+<p>需要说明：<br>
+主站和从站仅仅是从信息传输的控制角度来看，并不是主站=发方、从站=收方。<br>
+在数据发送的角度来看，谁发出数据谁就是发方，谁接收数据谁就是收方。</p>
+<h6 id="主站和从站的关系并非绝对">主站和从站的关系并非绝对</h6>
+<ul>
+<li>连有多个站点、采用轮询技术的网络（疑指广播型？总树环无卫）中，轮询其他站点的站就是主站。</li>
+<li>点-点的链路中（星环树网），每个站都可以成为主站。</li>
+<li>主机-终端网络中，主机是主站，终端是从站。</li>
+<li>一个发散出多条链路的站点，对于一些链路可能是主站，对另一些可能是从站。</li>
+<li>有些站兼备主站和从站的功能，称为组合站。</li>
+</ul>
+<h6 id="平衡操作和非平衡操作">平衡操作和非平衡操作</h6>
+<p>从通信双方和链路的整体来看，分为：</p>
+<ul>
+<li>平衡操作：双方都是组合站，通信协议是对称的。</li>
+<li>非平衡操作：双方有主从之分，各自角色不同。</li>
+</ul>
+<h6 id="hdlc的操作方式-1">HDLC的操作方式</h6>
+<p>1.正常响应方式 NRM (Normal Response Mode)<br>
+NRM是一种非平衡操作方式，适用于面向终端的1对1、1对多的链路。</p>
+<p>主站管理整个链路，具有轮询、选择从站、发送命令帧的功能，也负责管理超时、重传及各类恢复操作。</p>
+<p>整个传输过程由主站发起：主站对从站发出命令帧；从站对命令帧做出响应，向主站传输信息。</p>
+<p>2.异步响应方式 ARM (Asynchronous Response Mode)<br>
+ARM也是一种非平衡操作方式。</p>
+<p>从站主动向主站发送一个或多个帧，这些帧可以是包含了信息的数据帧，也可以是控制帧。</p>
+<p>此时，从站管理了这些帧的传输过程，包括：超时、重发等。</p>
+<p>对于采用轮询的链路，ARM方式必不可少。</p>
+<p>3.异步平衡方式 ABM (Asynchonous Balance Mode)<br>
+链路中的节点都是组合站，都可以作为主站和从站，都可以发起传输过程，发出命令帧和响应帧，每个站都可以对超时、重传、差错恢复进行控制。</p>
+<h3 id="hdlc的帧格式">2.HDLC的帧格式</h3>
+<p>BSC采用不同的帧格式传输数据报文和监控报文（控制报文）。<br>
+HDLC 采用统一格式传输数据报文和控制报文，同样，命令帧和响应帧也具有统一的帧格式。</p>
+<p>完整的HDLC帧包括：</p>
+<ol type="1">
+<li>标志字段<br>
+01111110。<br>
+标志着一帧的开始和结束。<br>
+当没有数据传输时，可以作为同步控制使用：在无数据的时刻，信道仍处于激活状态，此时发送“只有开头和结束的标志字段，没有其他字段”的空帧，如果接收方发现某一帧的开头标志字段后接续的不是标志字段，说明新的一帧到来了。</li>
+</ol>
+<p>2.地址字段<br>
+字段内容取决于发出该帧的站的操作方式。</p>
+<p>操作方式分为：主站、从站、组合站。</p>
+<p>从站、组合站具有唯一的地址。</p>
+<ul>
+<li>命令帧的地址字段内容：是对方站的地址（从站/组合站）。</li>
+<li>响应帧的地址字段内容：是本站的地址。</li>
+</ul>
+<p>组地址：可以分配给多个站的地址。</p>
+<p>携带组地址的帧可以被一个组的全部站点接收。但当一个从站/组合站对这种组地址发回响应帧时，应该应该使用它自己的唯一地址——换句话说：一个站可以拥有多个地址。</p>
+<p>广播地址：全1，包含了所有站。<br>
+无站地址：全0，不分配给任何站，仅用作测试。</p>
+<p>3.控制字段<br>
+控制字段是HDLC的关键字段。<br>
+包含了各种控制命令和对命令的响应。</p>
+<p>主站/组合站利用控制字段通知从站/组合站执行操作。 从站/组合站利用控制字段报告已完成的操作、状态的变化。</p>
+<p>4.信息字段<br>
+长度不限的任意的二进制位串。</p>
+<p>但在实际应用中，其长度受限于FCS字段和站点的缓冲器容量。</p>
+<p>对于监控帧，信息字段必须为0。</p>
+<p>5.帧校验序列字段<br>
+使用16位CRC，对首尾标志字段之间的内容进行校验。</p>
+<p>0比特插入法：<br>
+可以实现数据的透明传输。发送端检测除标志字段外的所有字段，如果出现连续的5个1就添加0。接收端如果收到5个1+1个0，则去掉0。</p>
+<h3 id="hdlc的帧类型">3.HDLC的帧类型</h3>
+<p>HDLC的帧分为3种类型：信息帧、监控帧、无编号帧。<br>
+3种帧的控制字段中，各比特位的含义不同（格式不同）：</p>
+<ul>
+<li>第1、第1+2位：帧的类型。<br>
+</li>
+<li>第5位： P/F 位，Poll/Final 位，轮询位/终止位。如果是主站发出的命令帧，P/F位为1时，起轮询的作用，要求被轮询的从站给与响应；如果是从站发出的响应帧，P/F位为1时，表示从站的响应、或传输的终止。</li>
+<li>帧编号位：为了实现连续传输，需要对帧进行编号，因此控制字段还包括了帧的编号。</li>
+</ul>
+<h6 id="信息帧i帧">信息帧，I帧</h6>
+<p>用于传输数据的帧，通常简称为 I 帧。</p>
+<ul>
+<li>第一位：为0。表示信息帧。</li>
+<li>N(S)位：Number(Sender)。如果当前帧是发送方发出的，那么这里就存放发送帧序号，已方便实现重发、滑动窗口等控制。</li>
+<li>N(R)位：Number(Receiver)。如果当前帧是接收方发出的，那么这里就存放了准备接收的下一帧的序号，也暗示了前面的帧已经正确接收。</li>
+</ul>
+<h6 id="监控帧s帧">监控帧，S帧</h6>
+<p>监控帧实现了差错控制、流量控制。简称为 S 帧。<br>
+监控帧只有6个字段：标志位(1)+地址(1)+控制(1)+ 信息(0)+帧校验（2）+标志位(1)</p>
+<p>需要说明：<br>
+主站/从站是从操作方式，即控制与受控的角度来讲，它主要与监控帧相关。<br>
+发方/收方主要是从信息帧的角度来讲。<br>
+两个概念并不太相关。</p>
+<ul>
+<li>第1，2位：10，表示监控帧。</li>
+<li>第3，4位有4种组合：
+<ul>
+<li>00：接收就绪 RR，Receiver Ready。主从站都可发出此帧。主站用控制字段7.8位帧序号=N(R)的RR帧轮询从站，希望被轮询的从站发送帧序号为N(R)的信息帧；从站也可以发送RR帧，表示从站等待接收的下一帧的编号是N(R)。</li>
+<li>01：拒绝 REJ，Rejection。主从站都可发出此帧。要求发方重发N(R)及后续的所有帧。同时也暗示了N(R)-1的帧都已经正确接收。</li>
+<li>10：接收未就绪 RNR，Receicver Not Ready。主从站都可以发出此帧。表示 N(R)-1的信息帧已经收到，但目前收方正忙，尚未准备好接收 N(R)的信息帧。此帧用于实现流量控制。</li>
+<li>11：选择拒绝 SREJ，Selective Rejection。主从站都可发出此帧。要求发方重发编号为 N(R)的单个信息帧。暗示其他编号的信息帧已经正确接收。</li>
+</ul></li>
+</ul>
+<p>总结：<br>
+RR和RNR监控帧有两个共同的功能：</p>
+<ol type="1">
+<li>当主站向从站轮询状态时，从站向主站描述自己当前的状态。</li>
+<li>从站向主站确认序号 N(R)-1 的帧都已经正确接收</li>
+</ol>
+<p>RR还具有主站请求从站发送N(R)的I帧的作用，同时还确认了N(R)都已正确接收。</p>
+<p>REJ和SREJ监控帧的功能：</p>
+<ol type="1">
+<li>向发方指明发生了错误</li>
+<li>REJ对应了GBN策略</li>
+<li>SREJ对应了SR策略</li>
+</ol>
+<h6 id="无编号帧u帧">无编号帧，U帧</h6>
+<p>因为控制字段没有N(S)N(R)这2个编号而得名，简称为U帧。</p>
+<p>作用是：提供链路的建立、拆除、其他控制功能。</p>
+<p>U帧带有 <span class="math inline">\(M_1\)</span>~<span class="math inline">\(M_5\)</span> 5个修正位，通过修正位的组合，实现了32种控制命令。</p>
+
+    </div>
+
+    
+    
+    
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>roro
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://roro4ever.github.io/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/" title="网原 4.4 链路控制规程">https://roro4ever.github.io/2019/12/01/网原-4-4-链路控制规程/网原-4-4-链路控制规程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/12/01/网原-4-3-基本数据链路协议/网原-4-3-基本数据链路协议/" rel="next" title="网原 4.3 基本数据链路协议">
+                  <i class="fa fa-chevron-left"></i> 网原 4.3 基本数据链路协议
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/12/01/网原-4-5-Internet-的数据链路层协议/网原-4-5-internet-的数据链路层协议/" rel="prev" title="网原 4.5 Internet 的数据链路层协议">
+                  网原 4.5 Internet 的数据链路层协议 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二进制同步通信协议"><span class="nav-text">4.4.1 二进制同步通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#bsc协议binary-synchronous-communication二进制同步通信协议"><span class="nav-text">BSC协议（Binary Synchronous Communication），二进制同步通信协议。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据报文"><span class="nav-text">数据报文</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#监控报文"><span class="nav-text">监控报文</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bsc协议的优缺点"><span class="nav-text">BSC协议的优缺点</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级数据链路控制协议"><span class="nav-text">4.4.2 高级数据链路控制协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hdlc的操作方式"><span class="nav-text">1.HDLC的操作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#主站和从站的关系并非绝对"><span class="nav-text">主站和从站的关系并非绝对</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#平衡操作和非平衡操作"><span class="nav-text">平衡操作和非平衡操作</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#hdlc的操作方式-1"><span class="nav-text">HDLC的操作方式</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdlc的帧格式"><span class="nav-text">2.HDLC的帧格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdlc的帧类型"><span class="nav-text">3.HDLC的帧类型</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#信息帧i帧"><span class="nav-text">信息帧，I帧</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#监控帧s帧"><span class="nav-text">监控帧，S帧</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#无编号帧u帧"><span class="nav-text">无编号帧，U帧</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="roro"
+      src="https://i.vgy.me/IFgaK9.jpg">
+  <p class="site-author-name" itemprop="name">roro</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/roro4ever" title="GitHub → https://github.com/roro4ever" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">roro</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">134k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5dd23d5baf587e52" async="async"></script>
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '12cebf7206657abef61c',
+      clientSecret: 'c12408c12530a65053de050f3fa08e1c8820e5e3',
+      repo: 'roro4ever.github.io',
+      owner: 'roro4ever',
+      admin: ['roro4ever'],
+      id: '7bcdceab8a2e065604ea5b5ebbbfccec',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+</body>
+</html>
